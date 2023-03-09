@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>esup-transferts</artifactId>
@@ -14,7 +14,7 @@
 		<repository>
 			<id>prime-repo</id>
 			<name>Prime Technology Maven Repository</name>
-			<url>http://repository.primefaces.org</url>
+			<url>https://repository.primefaces.org</url>
 			<layout>default</layout>
 		</repository>
 	</repositories>
@@ -59,11 +59,11 @@
 			<artifactId>primefaces</artifactId>
 			<version>6.0</version>
 		</dependency>
-<!--		<dependency>-->
-<!--		<groupId>org.primefaces.themes</groupId>-->
-<!--		<artifactId>all-themes</artifactId>-->
-<!--		<version>1.0.10</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>all-themes</artifactId>
+			<version>1.0.10</version>
+		</dependency>
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
 			<artifactId>primefaces-extensions</artifactId>
@@ -106,15 +106,15 @@
 			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/rennes1-core-0.2.4.jar
 			</systemPath>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>local</groupId>-->
-<!--			&lt;!&ndash; <groupId>internal</groupId> &ndash;&gt;-->
-<!--			<artifactId>apo-webservicesclient</artifactId>-->
-<!--			<version>1.0.0</version>-->
-<!--			<scope>system</scope>-->
-<!--			&lt;!&ndash; apo-webservicesclient450la.jar &ndash;&gt;-->
-<!--			<systemPath>${basedir}/../esup-transferts-web-jsf-servlet/src/main/webapp/WEB-INF/lib/apo-webservicesclient.jar</systemPath>-->
-<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>local</groupId>-->
+		<!--			&lt;!&ndash; <groupId>internal</groupId> &ndash;&gt;-->
+		<!--			<artifactId>apo-webservicesclient</artifactId>-->
+		<!--			<version>1.0.0</version>-->
+		<!--			<scope>system</scope>-->
+		<!--			&lt;!&ndash; apo-webservicesclient450la.jar &ndash;&gt;-->
+		<!--			<systemPath>${basedir}/../esup-transferts-web-jsf-servlet/src/main/webapp/WEB-INF/lib/apo-webservicesclient.jar</systemPath>-->
+		<!--		</dependency>-->
 		<dependency>
 			<groupId>local</groupId>
 			<artifactId>rennes1-export</artifactId>
@@ -128,7 +128,7 @@
 			<artifactId>ws-mds-beans</artifactId>
 			<version>1.0.0</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ws-mds-domain-beans-1.0.jar	
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ws-mds-domain-beans-1.0.jar
 			</systemPath>
 		</dependency>
 		<dependency>

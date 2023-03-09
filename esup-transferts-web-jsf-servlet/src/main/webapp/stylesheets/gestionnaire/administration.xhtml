@@ -1,0 +1,452 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:t="http://myfaces.apache.org/tomahawk"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+	<ui:define name="corps">
+		<center>
+			<h:form id="configuration"
+					rendered="#{administrationController.personnel}" styleClass="panel"
+					style="text-align:left;width:80%;">
+
+				<p:growl id="messages" showDetail="false"/>
+				<p:messages id="msgs" showDetail="false"/>
+
+				<p:panel id="pnl"
+						 header="Esup-transferts #{msgs['ABOUT.VERSION']} #{applicationService.version}">
+				</p:panel>
+				<p:panelGrid style="width: 100%">
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							Liste des paramètres généraux de l'application transferts
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Choix de l'affichage du voeu par composante / dipôme</p:column>
+						<p:column><p:inputSwitch value="#{sessionController.choixDuVoeuParComposante}" onLabel="Composante" offLabel="Diplôme" /></p:column>
+						<p:column />
+						<p:column><p:commandButton id="modalDialogButton" onclick="PF('choixVoeuParComposante').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Mise à jour automatique de l'offre de formation</p:column>
+						<p:column><p:inputSwitch value="#{sessionController.majOdfAuto}" onLabel="Oui" offLabel="Non" /></p:column>
+						<p:column rendered="#{sessionController.majOdfAuto}"><h:outputText value="Tâche planifiée : #{sessionController.schedulerCronExpression}" rendered="#{sessionController.majOdfAuto}" /></p:column>
+						<p:column rendered="#{!sessionController.majOdfAuto}"><p:commandButton value="Lancer" rendered="#{!sessionController.majOdfAuto}" action="#{businessManager.majOdfManuelle}" /></p:column>
+						<p:column><p:commandButton id="majOdfAutoButton" onclick="PF('majOdfAuto').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Planning des périodes de fermeture</p:column>
+						<p:column><p:inputSwitch value="#{sessionController.planningFermeturesAuto}" onLabel="Oui" offLabel="Non" /></p:column>
+						<p:column />
+						<p:column><p:commandButton id="planningFermetureAutoButton" onclick="PF('planningFermetureAuto').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Liste des établissements ajoutés manuellement</p:column>
+						<p:column>
+							<p:inputSwitch value="#{sessionController.activEtablissementManuellement}" onLabel="Oui" offLabel="Non" />
+						</p:column>
+						<p:column>
+							<p:inplace id="ajax2" editor="true" emptyLabel="RNE@Libellé,RNE@libellé">
+								<p:inputText value="#{sessionController.ajoutEtablissementManuellement}" label="text" />
+							</p:inplace>
+						</p:column>
+						<p:column><p:commandButton id="ajoutEtablissementManuellementAutoButton" onclick="PF('ajoutEtablissementManuellementAuto').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Liste des supers gestionnaires</p:column>
+						<p:column>
+							<p:inputSwitch value="#{sessionController.useSuperGestionnaire}" onLabel="Oui" offLabel="Non" />
+						</p:column>
+						<p:column>
+							<p:inplace id="ajoutSuperGestionnaire" editor="true" emptyLabel="Ajoutez un super gestionnaire">
+								<p:inputText value="#{sessionController.superGestionnaire}" label="text" />
+							</p:inplace>
+						</p:column>
+						<p:column><p:commandButton id="ajoutSuperGestionnaireAutoButton" onclick="PF('ajoutSuperGestionnaireWidget').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Envoi d'un mail global au contact fonctionnel (résumé SVA)</p:column>
+						<p:column><p:inputSwitch value="#{sessionController.useRelanceResumeSVA}" onLabel="Oui" offLabel="Non" /></p:column>
+						<p:column rendered="#{sessionController.useRelanceResumeSVA}"><h:outputText value="Tâche planifiée : #{sessionController.schedulerCronExpression}" rendered="#{sessionController.useRelanceResumeSVA}" /></p:column>
+						<p:column rendered="#{!sessionController.useRelanceResumeSVA}"><p:commandButton value="Lancer" rendered="#{!sessionController.useRelanceResumeSVA}" action="#{businessManager.relanceResumeSVAManuelle}" /></p:column>
+						<p:column><p:commandButton id="relanceResumeSVAAutoButton" onclick="PF('relanceResumeSVAAuto').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							Module transferts départ
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Relance automatique des demandes de transferts départ en echec</p:column>
+						<p:column><p:inputSwitch value="#{sessionController.reloadDemandeTransfertsDepartEchecAuto}" onLabel="Oui" offLabel="Non" /></p:column>
+						<p:column rendered="#{sessionController.reloadDemandeTransfertsDepartEchecAuto}"><h:outputText value="Tâche planifiée : #{sessionController.schedulerCronExpression}" rendered="#{sessionController.reloadDemandeTransfertsDepartEchecAuto}" /></p:column>
+						<p:column rendered="#{!sessionController.reloadDemandeTransfertsDepartEchecAuto}"><p:commandButton value="Lancer" rendered="#{!sessionController.reloadDemandeTransfertsDepartEchecAuto}" action="#{businessManager.reloadDemandeTransfertsDepartEchecManuelle}" /></p:column>
+						<p:column><p:commandButton id="reloadDemandeTransfertsDepartEchecAutoButton" onclick="PF('reloadDemandeTransfertsDepartEchecAuto').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Envoi d'un mail aux personnels concernés (loi SVA) pour les transferts départ</p:column>
+						<p:column><p:inputSwitch value="#{sessionController.useRelanceDepartPersonnelConcerneSVA}" onLabel="Oui" offLabel="Non" /></p:column>
+						<p:column rendered="#{sessionController.useRelanceDepartPersonnelConcerneSVA}"><h:outputText value="Tâche planifiée : #{sessionController.schedulerCronExpression}" rendered="#{sessionController.useRelanceDepartPersonnelConcerneSVA}" /></p:column>
+						<p:column rendered="#{!sessionController.useRelanceDepartPersonnelConcerneSVA}"><p:commandButton value="Lancer" rendered="#{!sessionController.useRelanceDepartPersonnelConcerneSVA}" action="#{businessManager.relanceDepartPersonnelConcerneSVAManuelle}" /></p:column>
+						<p:column><p:commandButton id="relanceDepartPersonnelConcerneSVAAutoButton" onclick="PF('relanceDepartPersonnelConcerneSVAAuto').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							Module transferts accueil
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Relance automatique des demandes de transferts accueil en echec</p:column>
+						<p:column><p:inputSwitch value="#{sessionController.reloadDemandeTransfertsAccueilEchecAuto}" onLabel="Oui" offLabel="Non" /></p:column>
+						<p:column rendered="#{sessionController.reloadDemandeTransfertsAccueilEchecAuto}"><h:outputText value="Tâche planifiée : #{sessionController.schedulerCronExpression}" rendered="#{sessionController.reloadDemandeTransfertsAccueilEchecAuto}" /></p:column>
+						<p:column rendered="#{!sessionController.reloadDemandeTransfertsAccueilEchecAuto}"><p:commandButton value="Lancer" rendered="#{!sessionController.reloadDemandeTransfertsAccueilEchecAuto}" action="#{businessManager.reloadDemandeTransfertsAccueilEchecManuelle}" /></p:column>
+						<p:column><p:commandButton id="reloadDemandeTransfertsAccueilEchecAutoButton" onclick="PF('reloadDemandeTransfertsAccueilEchecAuto').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Envoi d'un mail aux personnels concernés (loi SVA) pour les transferts accueil</p:column>
+						<p:column><p:inputSwitch value="#{sessionController.useRelanceAccueilPersonnelConcerneSVA}" onLabel="Oui" offLabel="Non" /></p:column>
+						<p:column rendered="#{sessionController.useRelanceAccueilPersonnelConcerneSVA}"><h:outputText value="Tâche planifiée : #{sessionController.schedulerCronExpression}" rendered="#{sessionController.useRelanceAccueilPersonnelConcerneSVA}" /></p:column>
+						<p:column rendered="#{!sessionController.useRelanceAccueilPersonnelConcerneSVA}"><p:commandButton value="Lancer" rendered="#{!sessionController.useRelanceAccueilPersonnelConcerneSVA}" action="#{businessManager.relanceAccueilPersonnelConcerneSVAManuelle}" /></p:column>
+						<p:column><p:commandButton id="relanceAccueilPersonnelConcerneSVAAutoButton" onclick="PF('relanceAccueilPersonnelConcerneSVAAuto').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							Liste des paramètres d'intéropérabilité
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">WebService Interdiction BU</p:column>
+						<p:column>
+							<p:inputSwitch value="#{sessionController.useWsBu}" onLabel="WebService" offLabel="local" rendered="#{sessionController.currentUser.informaticien}" />
+						</p:column>
+						<p:column rendered="#{!sessionController.useWsBu}">
+							<h:outputText value="Table (DATAS_EXTERNE niveau interdit 1)" label="text" /> - <h:outputText rendered="#{sessionController.useWsBu}" value="#{administrationController.checkWsBu}" /><h:outputText rendered="#{!sessionController.useWsBu}" value="total : #{administrationController.totalNombreDatasExterneNiveau1}" />
+						</p:column>
+						<p:column rendered="#{sessionController.useWsBu}">
+							<h:outputText value="#{administrationController.checkWsBu}" />
+						</p:column>
+						<p:column>
+							<p:commandButton value="Ajouter/Modifier" icon="ui-icon-extlink" action="#{administrationController.saisieWs}" update="messages,msgs,msgs2" rendered="#{sessionController.currentUser.informaticien and sessionController.useWsBu}">
+								<f:param name="source_ws" value="bu" />
+								<p:ajax event="dialogReturn" listener="#{administrationController.onSaisieWs}" update="configuration" />
+							</p:commandButton>
+							<p:commandButton id="id_aideDatasExterneNiveau1" rendered="#{!sessionController.useWsBu}" onclick="PF('dialog_aideDatasExterneNiveau1').show();" type="button" icon="ui-icon-help" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="font-weight: bold;">WebService Candidatures</p:column>
+						<p:column>
+							<p:inputSwitch value="#{sessionController.useWsCandidatures}" onLabel="WebService" offLabel="local" rendered="#{sessionController.currentUser.informaticien}" />
+						</p:column>
+						<p:column rendered="#{!sessionController.useWsCandidatures}">
+							<h:outputText value="Table (DATAS_EXTERNE niveau interdit 2)" label="text" /> - <h:outputText rendered="#{sessionController.useWsCandidatures}" value="#{administrationController.checkWsCandidatures}" /><h:outputText rendered="#{!sessionController.useWsCandidatures}" value="total : #{administrationController.totalNombreDatasExterneNiveau2}" />
+						</p:column>
+						<p:column rendered="#{sessionController.useWsCandidatures}">
+							<h:outputText value="#{administrationController.checkWsCandidatures}" />
+						</p:column>
+						<p:column>
+							<p:commandButton value="Ajouter/Modifier" icon="ui-icon-extlink" action="#{administrationController.saisieWs}" update="messages,msgs,msgs2" rendered="#{sessionController.currentUser.informaticien and sessionController.useWsCandidatures}" >
+								<f:param name="source_ws" value="candidature" />
+								<p:ajax event="dialogReturn" listener="#{administrationController.onSaisieWs}" update="configuration" />
+							</p:commandButton>
+							<p:commandButton id="id_aideDatasExterneNiveau2" rendered="#{!sessionController.useWsCandidatures}" onclick="PF('dialog_aideDatasExterneNiveau2').show();" type="button" icon="ui-icon-help" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">WebService APB (PostBac)</p:column>
+						<p:column>
+							<p:inputSwitch value="#{sessionController.useWsPostBac}" onLabel="WebService" offLabel="local" rendered="#{sessionController.currentUser.informaticien}" />
+						</p:column>
+						<p:column rendered="#{!sessionController.useWsPostBac}">
+							<h:outputText value="Table (DATAS_EXTERNE niveau interdit 3)" label="text" /> - <h:outputText rendered="#{sessionController.useWsPostBac}" value="#{administrationController.checkWsPostBac}" /><h:outputText rendered="#{!sessionController.useWsPostBac}" value="total : #{administrationController.totalNombreDatasExterneNiveau3}" />
+						</p:column>
+						<p:column rendered="#{sessionController.useWsPostBac}">
+							<h:outputText value="#{administrationController.checkWsPostBac}" />
+						</p:column>
+						<p:column>
+							<p:commandButton value="Ajouter/Modifier" icon="ui-icon-extlink" action="#{administrationController.saisieWs}" update="messages,msgs,msgs2" rendered="#{sessionController.currentUser.informaticien and sessionController.useWsPostBac}" >
+								<f:param name="source_ws" value="postbac" />
+								<p:ajax event="dialogReturn" listener="#{administrationController.onSaisieWs}" update="configuration" />
+							</p:commandButton>
+							<p:commandButton id="id_aideDatasExterneNiveau3" rendered="#{!sessionController.useWsPostBac}" onclick="PF('dialog_aideDatasExterneNiveau3').show();" type="button" icon="ui-icon-help" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="font-weight: bold;">Time out de connexion (en ms)</p:column>
+						<p:column>
+							<p:inputSwitch value="#{sessionController.useTimeOutConnexionWs}" onLabel="Oui" offLabel="Non" />
+						</p:column>
+						<p:column>
+							<p:inplace id="timeOutConnexionWs" editor="true" emptyLabel="Time out de connexion en ms">
+								<p:inputText value="#{sessionController.timeOutConnexionWs}" label="text" />
+							</p:inplace>
+						</p:column>
+						<p:column><p:commandButton id="timeOutConnexionWsAutoButton" onclick="PF('timeOutConnexionWsAutoButton').show();" type="button" icon="ui-icon-help" /></p:column>
+					</p:row>
+
+				</p:panelGrid>
+
+				<p:spacer style="padding-top: 3%"/>
+
+				<p:commandButton value="Modifier"
+								 update=":configuration,:configuration:messages,:configuration:msgs,:configuration:msgs2" partialSubmit="true"
+								 action="#{administrationController.updateConfiguration}" />
+
+				<p:messages id="msgs2" />
+
+				<p:dialog id="modalDialog" header="Choix du voeu par composante"
+						  widgetVar="choixVoeuParComposante" modal="true" height="640"
+						  width="850">
+					<center>
+						<p:galleria panelWidth="700" panelHeight="500" showCaption="true">
+							<p:graphicImage
+									value="/media/images/aide/choixvoeucomposante.jpg" width="700"
+									height="300" alt="Choix du voeu par composante" title="#{image}" />
+							<p:graphicImage value="/media/images/aide/choixvoeudiplome.jpg"
+											width="700" height="300" alt="Choix du voeu par diplôme"
+											title="#{image}" />
+						</p:galleria>
+					</center>
+				</p:dialog>
+
+				<p:dialog id="majOdfAuto"
+						  header="Mise à jour automatique de l'offre de formation"
+						  widgetVar="majOdfAuto" modal="true" height="640" width="850">
+					<h:outputText
+							value="Mise à jour automatique de l'offre de formation (exemple : 0 30 22 * * ? * correspond à tous les jours à 22h30) " />
+					<BR /><BR />
+					<center>
+						<p:galleria panelWidth="700" panelHeight="500" showCaption="true">
+							<p:graphicImage value="/media/images/aide/maj_odf_auto.png"
+											width="700" height="300" alt="Mise à jour automatique de l'offre de formations"
+											title="#{image}" />
+						</p:galleria>
+					</center>
+					<BR /><BR />
+					<h:outputText value="Dans le fichier esup-transferts-web-jsf-servlet/src/main/resources/properties/config.properties, renseigner la propriété scheduler.cronExpression= exemple(0 30 20 * * ? *, http://quartz-scheduler.org/api/2.2.0/org/quartz/CronExpression.html) " />
+				</p:dialog>
+
+				<p:dialog id="reloadDemandeTransfertsDepartEchecAuto"
+						  header="Relance automatique des demandes de transferts départ en echec"
+						  widgetVar="reloadDemandeTransfertsDepartEchecAuto" modal="true" height="640" width="850">
+						<h:outputText
+								value="Relance automatique des demandes de transferts départ en echec (exemple : 0 30 22 * * ? * correspond à tous les jours à 22h30) " />
+					<BR /><BR />
+					<center>
+						<p:galleria panelWidth="700" panelHeight="500" showCaption="true">
+							<p:graphicImage value="/media/images/aide/partenaire_offline.png"
+											width="700" height="300" alt="Exemple liste des partenaires avec un partenaire offline"
+											title="#{image}" />
+							<p:graphicImage value="/media/images/aide/depart_partenaire_offline.png"
+											width="700" height="300" alt="Exemple d'affichage d'une demande de transfert départ envoyé à un partenaire offline"
+											title="#{image}" />
+						</p:galleria>
+					</center>
+					<BR /><BR />
+					<h:outputText value="Dans le fichier esup-transferts-web-jsf-servlet/src/main/resources/properties/config.properties, renseigner la propriété scheduler.cronExpression= exemple(0 30 20 * * ? *, http://quartz-scheduler.org/api/2.2.0/org/quartz/CronExpression.html) " />
+				</p:dialog>
+
+				<p:dialog id="reloadDemandeTransfertsAccueilEchecAuto"
+						  header="Relance automatique des demandes de transferts accueil en echec"
+						  widgetVar="reloadDemandeTransfertsAccueilEchecAuto" modal="true" height="640" width="850">
+						<h:outputText
+								value="Relance automatique des demandes de transferts accueil en echec (exemple : 0 30 22 * * ? * correspond à tous les jours à 22h30) " />
+					<BR /><BR />
+					<center>
+						<h:outputText value="Idem transferts départ..." />
+					</center>
+					<BR /><BR />
+					<h:outputText value="Dans le fichier esup-transferts-web-jsf-servlet/src/main/resources/properties/config.properties, renseigner la propriété scheduler.cronExpression= exemple(0 30 20 * * ? *, http://quartz-scheduler.org/api/2.2.0/org/quartz/CronExpression.html) " />
+				</p:dialog>
+
+				<p:dialog id="relanceDepartPersonnelConcerneSVAAuto"
+						  header="Envoi d'un mail aux personnels concernés (loi SVA) pour les transferts départ"
+						  widgetVar="relanceDepartPersonnelConcerneSVAAuto" modal="true" height="640" width="850">
+						<h:outputText
+								value="Envoi d'un mail aux personnels concernés (loi SVA) pour les transferts départ (exemple : 0 30 22 * * ? * correspond à tous les jours à 22h30) " />
+					<BR /><BR />
+					<center>
+						<h:outputText value="Idem envoi d'un mail global qui résume toutes les demndes de transferts soumis à la SVA..." />
+					</center>
+					<BR /><BR />
+					<h:outputText value="Dans le fichier esup-transferts-web-jsf-servlet/src/main/resources/properties/config.properties, renseigner la propriété scheduler.cronExpression= exemple(0 30 20 * * ? *, http://quartz-scheduler.org/api/2.2.0/org/quartz/CronExpression.html) " />
+				</p:dialog>
+
+				<p:dialog id="relanceAccueilPersonnelConcerneSVAAuto"
+						  header="Envoi d'un mail aux personnels concernés (loi SVA) pour les transferts accueil"
+						  widgetVar="relanceAccueilPersonnelConcerneSVAAuto" modal="true" height="640" width="850">
+						<h:outputText
+								value="Envoi d'un mail aux personnels concernés (loi SVA) pour les transferts accueil (exemple : 0 30 22 * * ? * correspond à tous les jours à 22h30) " />
+					<BR /><BR />
+					<center>
+						<h:outputText value="Idem envoi d'un mail global qui résume toutes les demndes de transferts soumis à la SVA..." />
+					</center>
+					<BR /><BR />
+					<h:outputText value="Dans le fichier esup-transferts-web-jsf-servlet/src/main/resources/properties/config.properties, renseigner la propriété scheduler.cronExpression= exemple(0 30 20 * * ? *, http://quartz-scheduler.org/api/2.2.0/org/quartz/CronExpression.html) " />
+				</p:dialog>
+
+				<p:dialog id="relanceResumeSVAAuto"
+						  header="Envoi d'un mail global qui résume toutes les demndes de transferts soumis à la SVA"
+						  widgetVar="relanceResumeSVAAuto" modal="true" height="640" width="850">
+						<h:outputText
+								value="Envoi d'un mail global qui résume toutes les demndes de transferts soumis à la SVA (exemple : 0 30 22 * * ? * correspond à tous les jours à 22h30) " />
+					<BR /><BR />
+					<center>
+						<p:galleria panelWidth="700" panelHeight="500" showCaption="true">
+							<p:graphicImage value="/media/images/aide/liste_depart_sva.png"
+											width="700" height="300" alt="Exemple de demande de transfert départ avec délai de 6 semaines et de 2 mois dépassé (loi SVA)"
+											title="#{image}" />
+							<p:graphicImage value="/media/images/aide/envoi_mail_resume_sva.png"
+											width="700" height="300" alt="Envoi d'un mail global qui résume toutes les demndes de transferts soumis à la SVA"
+											title="#{image}" />
+							<p:graphicImage value="/media/images/aide/envoi_mail_resume_sva2.png"
+											width="700" height="300" alt="Envoi d'un mail global qui résume toutes les demndes de transferts soumis à la SVA"
+											title="#{image}" />
+						</p:galleria>
+					</center>
+					<BR /><BR />
+					<h:outputText value="Dans le fichier esup-transferts-web-jsf-servlet/src/main/resources/properties/config.properties, renseigner la propriété scheduler.cronExpression= exemple(0 30 20 * * ? *, http://quartz-scheduler.org/api/2.2.0/org/quartz/CronExpression.html) " />
+				</p:dialog>
+
+				<p:dialog id="planningFermetureAuto"
+						  header="Planning des périodes de fermeture"
+						  widgetVar="planningFermetureAuto" modal="true" height="640" width="850">
+					<center>
+						<p:galleria panelWidth="700" panelHeight="500" showCaption="true">
+							<p:graphicImage
+									value="/media/images/aide/fermeture_planning.png" width="700"
+									height="300" alt="Fermeture avec planning" title="#{image}" />
+							<p:graphicImage value="/media/images/aide/fermeture_sans_planning.png"
+											width="700" height="300" alt="Fermeture sans planning"
+											title="#{image}" />
+						</p:galleria>
+					</center>
+				</p:dialog>
+
+				<p:dialog id="ajoutEtablissementManuellementAuto"
+						  header="Ajout d'un établissement"
+						  widgetVar="ajoutEtablissementManuellementAuto" modal="true" height="640" width="850">
+						<h:outputText
+								value="Ajout d'un établissement : RNE@Libellé,RNE@libellé" />
+					<BR /><BR />
+					<center>
+						<p:galleria panelWidth="700" panelHeight="500" showCaption="true">
+							<p:graphicImage value="/media/images/aide/etablissements_ajoutes_manuellement.png"
+											width="700" height="300" alt="Exemple d'ajout d'établissement manuellement"
+											title="#{image}" />
+						</p:galleria>
+					</center>
+					<BR /><BR />
+					<h:outputText value="Vous pouvez égelement ajouter des établissements, modifier le fichier esup-transferts-web-jsf-servlet/src/main/resources/properties/config.properties, renseigner la propriété etab.type : exemple etab.type=00,CU ou etab.type=00,04,05,14,CU" />
+				</p:dialog>
+
+				<p:dialog id="ajoutSuperGestionnaireWidget"
+						  header="Ajout d'un super gestionnaire"
+						  widgetVar="ajoutSuperGestionnaireWidget" modal="true" height="640" width="850">
+					<center>
+						<h:outputText
+								value="Ajout d'un super gestionnaire (UID) : nom.prenom,non.prenom" />
+					</center>
+				</p:dialog>
+
+				<p:dialog id="dialog_aideDatasExterneNiveau1"
+						  header="Datas eterne de niveau 1"
+						  widgetVar="dialog_aideDatasExterneNiveau1" modal="true" height="640" width="850">
+						<h:outputText
+								value="Les datas esternes de niveau 1 sont des interndits blocants à l'authentification" />
+					<BR /><BR />
+					<center>
+						<p:galleria panelWidth="700" panelHeight="500" showCaption="true">
+							<p:graphicImage value="/media/images/aide/visu_frontend_datas_externe_niveau1.png"
+											width="700" height="300" alt="Exemple d'echec à l'authentification"
+											title="#{image}" />
+							<p:graphicImage value="/media/images/aide/visu_datas_externe_niveau1.png"
+											width="700" height="300" alt="Visualisation depuis la liste des paramètres"
+											title="#{image}" />
+							<p:graphicImage value="/media/images/aide/datas_externe_niveau1.png"
+											width="700" height="300" alt="Exemple de données dans la tables DATAS_EXTERNE"
+											title="#{image}" />
+						</p:galleria>
+					</center>
+				</p:dialog>
+
+				<p:dialog id="dialog_aideDatasExterneNiveau2"
+						  header="Datas eterne de niveau 2"
+						  widgetVar="dialog_aideDatasExterneNiveau2" modal="true" height="640" width="850">
+					<h:outputText
+							value="Les datas esternes de niveau 2 sont des warnings non blocants à l'authentification et concerne les transferts accueil uniquement" />
+					<BR /><BR />
+					<BR /><BR />
+					<center>
+						<p:galleria panelWidth="700" panelHeight="500" showCaption="true">
+							<p:graphicImage value="/media/images/aide/transfert_accueil_candidature.png"
+											width="700" height="300" alt="Exemple d'information sur la candidature lors d'une demande de transfert accueil"
+											title="#{image}" />
+							<p:graphicImage value="/media/images/aide/visu_datas_externe_niveau2.png"
+											width="700" height="300" alt="Visualisation depuis la liste des paramètres"
+											title="#{image}" />
+							<p:graphicImage value="/media/images/aide/datas_externe_niveau2.png"
+											width="700" height="300" alt="Exemple de données dans la tables DATAS_EXTERNE"
+											title="#{image}" />
+						</p:galleria>
+					</center>
+				</p:dialog>
+
+
+				<p:dialog id="dialog_aideDatasExterneNiveau3"
+						  header="Datas eterne de niveau 3"
+						  widgetVar="dialog_aideDatasExterneNiveau3" modal="true" height="640" width="850">
+					<h:outputText
+							value="Les datas esternes de niveau 3 sont des warnings non blocants à l'authentification et concerne les transferts accueil uniquement (le libellé d'interdit dans la table datas_externe doit correspondre au code OPI APB/PostBac pour envoi par mail à l'étudiant)" />
+					<BR /><BR />
+					<center>
+						<p:galleria panelWidth="700" panelHeight="500" showCaption="true">
+							<p:graphicImage value="/media/images/aide/transfert_accueil_postbac.png"
+											width="700" height="300" alt="Exemple d'information sur la présence d'une OPI APB (postBac) lors d'une demande de transfert accueil"
+											title="#{image}" />
+							<p:graphicImage value="/media/images/aide/visu_datas_externe_niveau3.png"
+											width="700" height="300" alt="Visualisation depuis la liste des paramètres"
+											title="#{image}" />
+							<p:graphicImage value="/media/images/aide/datas_externe_niveau3.png"
+											width="700" height="300" alt="Exemple de données dans la tables DATAS_EXTERNE"
+											title="#{image}" />
+						</p:galleria>
+					</center>
+				</p:dialog>
+
+				<p:dialog id="timeOutConnexionWsAuto"
+						  header="Datas eterne de niveau 3"
+						  widgetVar="timeOutConnexionWsAutoButton" modal="true" height="640" width="850">
+					<h:outputText
+							value="Délai de connexion maxinum autorisé" />
+				</p:dialog>
+
+			</h:form>
+		</center>
+	</ui:define>
+</ui:composition>
+</html>

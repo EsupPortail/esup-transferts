@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+	<ui:define name="corps">
+		<center>
+			<h:form rendered="#{administrationController.personnel}"
+				styleClass="panel" style="text-align:center;width:80%;">
+				<p:growl id="growl" showDetail="true" />
+				<p:messages id="msgs" />
+				<p:panel id="pnl"
+					header="A propos de l'application esup-transferts"
+					toggleable="true" closable="false" toggleSpeed="500"
+					closeSpeed="2000" widgetVar="panel">
+					<p:panelGrid id="p1" style="text-align: left;" >
+						<p:row>
+							<p:column >Version de l'application</p:column>
+							<p:column>#{applicationService.version}</p:column>
+						</p:row>
+						<p:row>
+							<p:column width="50%">Version de la base de données</p:column>
+							<p:column>#{administrationController.version.numero}</p:column>
+						</p:row>
+						<p:row>
+							<p:column width="50%">Liste de diffusion utilisateurs</p:column>
+							<p:column>transferts-user@esup-portail.org</p:column>
+						</p:row>
+						<p:row>
+							<p:column width="50%">Liste de diffusion informaticiens</p:column>
+							<p:column>transferts-dev@esup-portail.org</p:column>
+						</p:row>
+					</p:panelGrid>
+					<br />
+					<br />
+					<p:dataTable value="#{sessionController.propertiesSysteme}" var="propertiesSysteme">
+						<p:column style="text-align: left;">
+							<h:outputText value="#{propertiesSysteme.cle}" />
+						</p:column>
+						<p:column style="text-align: left;">
+							<h:outputText value="#{propertiesSysteme.valeur}" />
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+				<p:messages id="msgs2" />
+			</h:form>
+
+			<h:form rendered="#{!administrationController.personnel}"
+				styleClass="panel">
+				<p:panel id="pnl" header="Application transferts gestionnaire"
+					toggleable="true" style="width:70%; text-align:center;"
+					closable="false" toggleSpeed="500" closeSpeed="2000"
+					widgetVar="panel"
+					footer="Cette application est réservé au gestionnaire personnel de l'université">
+					<h:panelGrid columns="2" id="p1">
+						<h:outputText
+							value="- Bienvenue dans la partie gestion de l'application transferts." />
+					</h:panelGrid>
+				</p:panel>
+				<p:panel
+					style="font-size:0px;font-color:white;border:none;margin-left:150%;width:0px;height:0px;">
+					<p:messages id="msgs2" showDetail="false" />
+				</p:panel>
+			</h:form>
+		</center>
+	</ui:define>
+
+	<!-- 	<ui:define name="content"> -->
+	<!-- 		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include> -->
+	<!-- 	</ui:define> -->
+
+</ui:composition>
+</html>

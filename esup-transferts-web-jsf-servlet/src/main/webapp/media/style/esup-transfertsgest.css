@@ -1,0 +1,77 @@
+/* .ui-widget,.ui-widget .ui-widget { */
+/* 	font-size: 70% !important; */
+/* } */
+
+/* .ui-panel-titlebar { */
+/* 	font-size: 130% !important; */
+/* } */
+
+/* .ui-paneltitlebar.ui-widget-header { */
+/* 	font-size: 130% !important; */
+/* } */
+
+/* .custom .ui-panel-titlebar { */
+/* 	font-size: 130% !important; */
+/* } */
+.ui-panel-title, .ui-panel-titlebar {
+	text-align: center !important;
+}
+
+.datatable {
+	margin-left: 10%;
+	font-size: 70% !important;
+	width: 70%;
+	/*text-align:center;*/
+}
+
+.datatable2 {
+	/*margin-left:10%;*/
+	font-size: 70% !important;
+	width: 70%;
+	/*text-align:center;*/
+}
+
+.datatableOdf {
+	font-size: 60% !important;
+	width: 100%;
+	text-align: center;
+}
+
+.panel {
+	width: 70%;
+	font-size: 90% !important;
+}
+
+/* .panel2 { */
+/* 	width: 100%; */
+/* 	font-size: 90% !important; */
+/* } */
+
+.noBordersVap tr, .noBordersVap td {
+	background: none !important;
+	border: none !important;
+	color: red;
+	font-weight: bold;
+}
+
+.highlightTableRow {
+	/*    background-color: #E0EEEE !important; */
+	font-weight: bold;
+	background: #D8F6CE !important;
+	/*    color: yellow !important; */
+}
+
+.alertSilenceVautAccord {
+	/*    background-color: #E0EEEE !important; */
+	font-weight: bold;
+	background: #F3E2A9 !important;
+	/*    color: yellow !important; */
+}
+
+.alertDepassementSilenceVautAccord {
+	/*    background-color: #E0EEEE !important; */
+	font-weight: bold;
+	/* 	background: #FAFABF !important; */
+	background: #F6CECE !important;
+	/*    color: yellow !important; */
+}

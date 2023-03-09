@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<!-- /properties/jsf/navigation-rules.xml The configuration file of Java 
+	Server Faces that gives the navigation rules between views. This file is 
+	referenced by /webapp/WEB-INF/web.xml. It should not be modified but by the 
+	developers. -->
+<faces-config>
+	<navigation-rule>
+		<description>Gestion des exceptions</description>
+		<navigation-case>
+			<from-outcome>go_exception</from-outcome>
+			<to-view-id>/stylesheets/exceptions/exception.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>go_viewExpired_exception</from-outcome>
+			<!-- <to-view-id>/stylesheets/exceptions/exception.xhtml</to-view-id> -->
+			<to-view-id>/stylesheets/error.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToWelcome</from-outcome>
+			<to-view-id>/stylesheets/welcome.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<!-- Authentification CAS -->
+		<navigation-case>
+			<from-outcome>goToCas</from-outcome>
+			<to-view-id>/stylesheets/depart/welcome.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToEtatCivil</from-outcome>
+			<to-view-id>/stylesheets/depart/etatCivil.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToAdresse</from-outcome>
+			<to-view-id>/stylesheets/depart/adresse.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToVoeuxOrientation</from-outcome>
+			<to-view-id>/stylesheets/depart/voeuxOrientation.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToRecapitulatif</from-outcome>
+			<to-view-id>/stylesheets/depart/recapitulatif.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToCorrespondance</from-outcome>
+			<to-view-id>/stylesheets/depart/correspondance.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<!-- Authentification logiciel scolarité -->
+		<navigation-case>
+			<from-outcome>goToAdresseApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/adresse.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToEtatCivilApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/etatCivil.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>goToVoeuxOrientationApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/voeuxOrientation.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToRecapitulatifApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/recapitulatif.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToCorrespondanceApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/correspondance.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToAuthApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/authApogee.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToWelcomeApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/welcome.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToPbAnneeCodeSizeDefaut</from-outcome>
+			<to-view-id>/stylesheets/pbAnneeCodeSize.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<!-- Partie Gesionnaire -->
+		<navigation-case>
+			<from-outcome>goToValidationComposantesAutoTransfertsDepart</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/validationComposantesAutoTransfertsDepart.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToValidationCGEAutoTransfertsDepart</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/validationCGEAutoTransfertsDepart.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToWelcomeGestionnaire</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/welcome.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToTransfertsDepart</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/listeTransferts.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToValideMasseTransfertsDepart</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/listeTransfertsDepartSelectionMultiple.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToCurrentDemandeTransferts</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/currentTransferts.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToSaisirAvis</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/saisieAvis.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToTransfertsArrive</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/listeTransfertsEntrant.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToSignature</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/signature.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToChangeCodeSize</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/size.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToChangeAnnee</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/changeAnnee.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToFermetureAppli</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/fermeture.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+<!-- 		<navigation-case> -->
+<!-- 			<from-outcome>goToFermetureAppliScheduler</from-outcome> -->
+<!-- 			<to-view-id>/stylesheets/gestionnaire/fermeture.xhtml</to-view-id> -->
+<!-- 			<redirect /> -->
+<!-- 		</navigation-case> -->
+		<navigation-case>
+			<from-outcome>goToSynchroOdf</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/synchroOdf.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToTest</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/test.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToPartenaires</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/partenaires.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToListeManagerAccueil</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/manager.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToListeManagerDepart</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/manager.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToManagerRecherche</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/managerRecherche.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToManagerResultats</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/managerResultats.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToManagerChoixLicence</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/managerChoixLicences.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToTransfertsAccueil</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/listeTransfertsAccueil.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToCurrentDemandeTransfertsAccueil</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/currentTransfertsAccueil.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToSaisirDecision</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/saisieDecision.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToSaisirCorrespondance</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/saisieCorrespondance.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToStats</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/statistiques.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToInformationAppli</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/information.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToDetailDroits</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/detailsDroits.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToSignatureParDefautObligatoire</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/signatureParDefautObligatoire.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToValideMasseTransfertsAccueil</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/listeTransfertsAccueilSelectionMultiple.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToAdministration</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/administration.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToImportDonneesAnneesPrecedentes</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/importDonneesAnneesPrecedentes.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToAPropos</from-outcome>
+			<to-view-id>/stylesheets/gestionnaire/aPropos.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+	</navigation-rule>
+</faces-config>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:messages id="msgs" showDetail="false" />
+<p:growl id="growl" showDetail="false" sticky="true" />
+
+<h:form id="formAdresse">
+	<ui:include src="/stylesheets/_include/_fermetureAppli.xhtml" />
+	<p:panel id="adresse" header="Adresse"
+		rendered="#{userController.parametreAppli.bool}">
+		<h:panelGrid columns="2" columnClasses="column" cellpadding="5">
+			<h:panelGrid columns="2" columnClasses="column" cellpadding="5"
+				style="text-align:left !important;">
+				<h:outputText value="Nom de famille : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.nomPatronymique}" />
+
+				<h:outputText value="Nom d'usage : " />
+				<h:outputText value="#{userController.currentEtudiant.nomUsuel}" />
+
+				<h:outputText value="Prénom 1 : " />
+				<h:outputText value="#{userController.currentEtudiant.prenom1}" />
+
+				<h:outputText value="Prénom 2 : " />
+				<h:outputText value="#{userController.currentEtudiant.prenom2}" />
+
+				<h:outputText value="Date de naissance : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.dateNaissance}">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="#{sessionController.timezone}" />
+				</h:outputText>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" columnClasses="column" cellpadding="5"
+				style="margin-left:30%;text-align:left;">
+				<h:outputText value="Centre de gestion : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.libCge} (#{userController.currentEtudiant.codCge})" />
+
+				<h:outputText value="Composante : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.libComposante} (#{userController.currentEtudiant.composante})" />
+
+				<h:outputText value="Dernière I.A : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.libEtapePremiereLocal}" />
+
+				<h:outputText value="Numéro étudiant : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.numeroEtudiant}" />
+
+				<h:outputText value="Numéro I.N.E : " />
+				<h:outputText value="#{userController.currentEtudiant.numeroIne}" />
+
+			</h:panelGrid>			
+
+			<p:spacer height="10px" />
+			<p:spacer height="10px" />
+
+			<h:outputText value="* Adresse ligne 1 : " />
+			<p:inputText id="adresse1" required="true"
+				requiredMessage="#{msgs['ERREUR.LIBAD1']}" size="40" maxlength="32"
+				value="#{userController.currentEtudiant.adresse.libAd1}" />
+
+			<h:outputText value="Adresse ligne 2 : " />
+			<p:inputText id="adresse2" size="40" maxlength="32"
+				value="#{userController.currentEtudiant.adresse.libAd2}" />
+
+			<h:outputText value="Adresse ligne 3 : " />
+			<p:inputText id="adresse3" size="40" maxlength="32"
+				value="#{userController.currentEtudiant.adresse.libAd3}" />
+
+			<p:selectOneRadio id="sor" title="Selectionner"
+				value="#{userController.currentEtudiant.adresse.codPay}"
+				layout="pageDirection">
+				<f:selectItem id="france" itemLabel="France" itemValue="100" />
+				<f:selectItem id="etranger" itemLabel="Etranger"
+					itemValue="#{userController.itemValueCodePay}" />
+				<f:ajax event="change" render="adresse" />
+				<!-- 				<p:ajax event="change" update="test,msgs" /> -->
+			</p:selectOneRadio>
+
+			<p:panel id="test">
+				<p:panel id="fr"
+					rendered="#{userController.currentEtudiant.adresse.codPay==100}">
+					<h:panelGrid columns="2">
+						<h:outputText value="* Code postal : " />
+						<p:inputText id="input_france" required="true" size="5"
+							maxlength="5" requiredMessage="#{msgs['ERREUR.CODE_POSTAL']}"
+							value="#{userController.currentEtudiant.adresse.codePostal}">
+							<f:ajax event="change" render="input_france commune" />
+							<!-- 							<p:ajax event="blur" update="commune" /> -->
+						</p:inputText>
+						<h:outputText value="* Commune : " />
+						<p:selectOneMenu id="commune" 
+							value="#{userController.currentEtudiant.adresse.codeCommune}"
+							required="true" requiredMessage="#{msgs['ERREUR.NOM_COMMUNE']}">
+							<f:selectItem itemLabel="== Choix ==" itemValue="" />
+							<f:selectItems value="#{userController.listeCommunes}" />
+							<f:ajax event="change" render="commune" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:panel>
+				<p:panel id="et"
+					rendered="#{userController.currentEtudiant.adresse.codPay!=100}">
+					<h:panelGrid columns="2">
+						<h:outputText value="* Code et Ville à l'étranger : " />
+						<p:inputText id="input_etranger" required="true" size="40"
+							maxlength="32"
+							requiredMessage="#{msgs['ERREUR.CODE_VILLE_ETRANGER']}"
+							value="#{userController.currentEtudiant.adresse.codeVilleEtranger}">
+							<f:ajax event="change" render="input_etranger" />
+						</p:inputText>
+						<h:outputText value="* Pays : " />
+						<p:selectOneMenu id="pays" required="true" filter="true"
+							requiredMessage="#{msgs['ERREUR.CODE_PAYS']}"
+							value="#{userController.currentEtudiant.adresse.codPay}">
+							<f:selectItem itemLabel="== Choix ==" />
+							<f:selectItems value="#{userController.listePays}" />
+							<f:ajax event="change" render="pays" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:panel>
+			</p:panel>
+
+			<!-- 				bgcolor="#deedf7" width="100%"> -->
+			<h:outputText value=" Informations complémentaires" />
+			<!-- 			<p:spacer />		 -->
+			<p:separator style="width:500px;height:20px" />
+
+			<h:outputText value="Téléphone : " />
+			<!-- 			<p:inputText id="telephone" required="true" -->
+			<!-- 				value="#{userController.currentEtudiant.adresse.numTel}" /> -->
+			<p:inputMask id="telephone" size="15" maxlength="15"
+				value="#{userController.currentEtudiant.adresse.numTel}"
+				mask="99.99.99.99.99" />
+
+			<h:outputText value="Portable : " />
+			<!-- 			<p:inputText id="portable" required="true" -->
+			<!-- 				value="#{userController.currentEtudiant.adresse.numTelPortable}" /> -->
+			<p:inputMask id="portable" size="15" maxlength="15"
+				value="#{userController.currentEtudiant.adresse.numTelPortable}"
+				mask="99.99.99.99.99" />
+
+			<h:outputText value="* Courriel personnel : " />
+			<p:inputText id="email" size="40" maxlength="200"
+				value="#{userController.currentEtudiant.adresse.email}">
+				<f:validator binding="#{mailValidator}" />
+			</p:inputText>
+
+		</h:panelGrid>
+
+
+		<h:panelGrid columns="2">
+			<p:commandButton value="Précédent"
+				rendered="#{userController.etudiant}"
+				action="#{userController.goToEtatCivil}" immediate="true" />
+			<p:commandButton value="Précédent"
+				rendered="#{userController.verifDateNaisApogee}"
+				action="#{userController.goToEtatCivilApogee}" immediate="true" />
+
+			<p:commandButton value="Suivant"
+				update=":formAdresse,:msgs,:growl,:msgs2"
+				rendered="#{userController.etudiant}"
+				action="#{userController.goToVoeuxOrientation}">
+				<f:ajax event="click" render="adresse input_france msgs growl" />
+			</p:commandButton>
+
+			<p:commandButton value="Suivant"
+				update=":formAdresse,:msgs,:growl,:msgs2"
+				rendered="#{userController.verifDateNaisApogee}"
+				action="#{userController.goToVoeuxOrientationApogee}">
+				<f:ajax event="click" render="adresse input_france msgs growl" />
+			</p:commandButton>
+		</h:panelGrid>
+	</p:panel>
+</h:form>
+<p:messages id="msgs2" showDetail="false" />
+</html>

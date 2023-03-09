@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:spacer height="20px" />
+		<h:form id="form_decision">
+			<center>
+				<p:panel id="adresse" styleClass="panel"
+					style="width:80%;text-align:left;"
+					header="Demande de Transferts accueil #{sessionController.currentAnnee}/#{sessionController.currentAnnee+1}">
+					<p:messages id="msgs" showDetail="false" />
+					<p:growl id="growl" showDetail="false" sticky="true" />
+					<p:fieldset legend="Etat civil" toggleable="true" toggleSpeed="200">
+						<p:panelGrid
+							style="text-align:left;width:100%; border-style: hidden !important;">
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Nom de famille : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.nomPatronymique}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Date de la demande : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.transferts.dateDemandeTransfert}">
+										<f:convertDateTime pattern="dd/MM/yyyy à HH:mm:ss"
+											timeZone="#{sessionController.timezone}" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Nom d'usage : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.nomUsuel}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Numéro étudiant : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.numeroEtudiant}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Prénom 1 : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.prenom1}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Numéro I.N.E : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.numeroIne}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Prénom 2 : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.prenom2}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:graphicImage alt="Reprise d'étude"
+										title="Aucune inscription administrative universitaire"
+										value="/media/images/warning_40px.png" width="20px"
+										height="20px"
+										rendered="#{administrationController.repriseEtudes}" />
+									<p:spacer width="10px" />
+									<h:outputText
+										value="Aucune inscription administrative universitaire en #{sessionController.currentAnnee-sessionController.regleGestionTE02}/#{sessionController.currentAnnee-sessionController.regleGestionTE02+1}"
+										rendered="#{administrationController.repriseEtudes}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Date de naissance : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.dateNaissance}">
+										<f:convertDateTime pattern="dd/MM/yyyy"
+											timeZone="#{sessionController.timezone}" />
+									</h:outputText>
+								</p:column>
+								<p:column style="width:50%">
+									<h:graphicImage alt="Candidature" title="Candidature"
+										value="/media/images/warning_40px.png" width="20px"
+										height="20px"
+										rendered="#{administrationController.interditNiveau2}" />
+									<p:spacer width="10px" />
+									<h:outputText
+										value="#{administrationController.texteInterditNiveau2}"
+										escape="false"
+										rendered="#{administrationController.interditNiveau2}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value=" " />
+									<h:outputText value=" " />
+								</p:column>
+								<p:column style="width:50%">
+									<h:graphicImage alt="Post Bac" title="PostBac"
+										value="/media/images/warning_40px.png" width="20px"
+										height="20px"
+										rendered="#{administrationController.interditNiveau3}" />
+									<p:spacer width="10px" />
+									<h:outputText
+										value="Admission PostBac (#{administrationController.texteInterditNiveau3})"
+										escape="false"
+										rendered="#{administrationController.interditNiveau3}" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:fieldset>
+
+					<p:spacer height="10px" />
+					<p:separator style="width:500px;height:10px" />
+
+					<p:fieldset id="listeDecisionDetails"
+						legend="liste des décisions pour : #{administrationController.currentOdf.libVersionEtape}"
+						styleClass="panel" collapsed="false" toggleable="true"
+						style="width:700px;" toggleSpeed="200">
+						<p:dataList emptyMessage="Aucune décision"
+							value="#{administrationController.listeAccueilDecision}"
+							var="decision" paginator="true" rows="5" effectSpeed="fast"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15">
+
+							<f:facet name="header">  
+            Liste des décisions  
+        </f:facet>
+
+							<p:column>
+								<p:commandLink update=":form_decision:decisionDetail"
+									oncomplete="PF('decisionDialog').show()" title="View Detail">
+									<p:graphicImage value="/media/images/search.png" />
+									<f:setPropertyActionListener value="#{decision}"
+										target="#{administrationController.selectedDecision}" />
+								</p:commandLink>
+
+
+								<h:outputText value="#{decision.dateSaisie}"
+									style="margin-left:10px">
+									<f:convertDateTime pattern="dd/MM/yyyy à HH:mm:ss"
+										timeZone="#{sessionController.timezone}" />
+								</h:outputText>
+
+								<h:outputText value="#{decision.auteur}"
+									style="margin-left:10px">
+								</h:outputText>
+							</p:column>
+						</p:dataList>
+
+						<p:dialog header="Détail de la décision"
+							widgetVar="decisionDialog" modal="true" showEffect="fade">
+							<p:outputPanel id="decisionDetail">
+
+								<p:graphicImage value="/media/images/search.png" />
+
+								<h:panelGrid columns="2" cellpadding="5">
+									<h:outputLabel for="dateSaisie" value="Date de saisie : " />
+									<h:outputText id="dateSaisie"
+										value="#{administrationController.selectedDecision.dateSaisie}">
+										<f:convertDateTime pattern="dd/MM/yyyy à HH:mm:ss"
+											timeZone="#{sessionController.timezone}" />
+									</h:outputText>
+
+									<h:outputLabel for="auteur" value="Auteur : " />
+									<h:outputText id="auteur"
+										value="#{administrationController.selectedDecision.auteur}" />
+
+									<h:outputLabel for="Accueildecision" value="Décision : " />
+									<h:outputText id="Accueildecision"
+										value="#{administrationController.selectedDecision.decision}" />
+								</h:panelGrid>
+							</p:outputPanel>
+						</p:dialog>
+
+					</p:fieldset>
+
+					<p:spacer height="10px" />
+					<p:separator style="width:500px;height:10px"
+						rendered="#{(sessionController.currentUser.admin) || (administrationController.droitPC!=null and administrationController.droitPC.droitDecision=='oui')}" />
+
+					<p:fieldset id="decision" legend="Ajouter une Décision"
+						rendered="#{(sessionController.currentUser.admin) || (administrationController.droitPC!=null and administrationController.droitPC.droitDecision=='oui')}"
+						collapsed="true" toggleable="true" toggleSpeed="200">
+						<h:panelGrid columns="1" columnClasses="column" cellpadding="5"
+							style="text-align:left;">
+							<h:selectOneRadio id="voeux"
+								valueChangeListener="#{administrationController.decisionChange}"
+								disabled="#{administrationController.currentDemandeTransferts.transferts.temoinTransfertValide==2}"
+								value="#{administrationController.currentAccueilDecision.avis}"
+								layout="pageDirection">
+								<f:selectItem id="A" itemLabel="#{msgs['DECISION.FAVORABLE']}"
+									itemValue="A" />
+								<f:selectItem id="B" itemLabel="#{msgs['DECISION.DEFAVORABLE']}"
+									itemValue="B" />
+								<f:selectItem id="C" itemLabel="Autres" itemValue="C" />
+								<f:ajax immediate="true" event="change"
+									render="textareaDecision" />
+							</h:selectOneRadio>
+							<h:outputText id="libelle" style="color:red;"
+								value="#{msgs['DECISION.FAVORABLE_AIDE']}" />
+							<p:inputTextarea id="textareaDecision" rows="10" cols="100"
+								counter="counter"
+								disabled="#{administrationController.currentDemandeTransferts.transferts.temoinTransfertValide==2}"
+								value="#{administrationController.currentAccueilDecision.decision}"
+								maxlength="255" counterTemplate="{0} caractère(s) restant(s)."
+								autoResize="false" />
+							<h:outputText id="counter" />
+							<!--  <p:editor id="editor" value="#{administrationController.currentDemandeTransferts.accueilDecision.decision}" width="600"/>   -->
+						</h:panelGrid>
+
+						<center>
+							<p:commandButton value="Valider"
+								disabled="#{administrationController.currentDemandeTransferts.transferts.temoinTransfertValide==2}"
+								update="form_decision,msgs,msgs2,growl"
+								action="#{administrationController.addAccueilDecision}" />
+						</center>
+					</p:fieldset>
+
+					<p:spacer height="10px" />
+					<p:separator style="width:500px;height:10px" />
+
+					<center>
+						<h:panelGrid columns="4">
+							<p:commandButton value="Retour" immediate="true"
+								action="#{administrationController.goToCurrentDemandeTransfertsAccueil}" />
+							<p:commandButton value="Envoyer à l'étudiant"
+								rendered="#{ sessionController.transfertsAccueil and ((sessionController.currentUser.admin and not empty administrationController.listeAccueilDecision) || (administrationController.droitPC!=null and administrationController.droitPC.droitDecision=='oui' and administrationController.droitPC.typePersonnel==1 and not empty administrationController.listeAccueilDecision))}"
+								actionListener="#{administrationController.addAccueilDecisionDefinitif}"
+								update="form_decision,msgs,msgs2,growl">
+								<p:confirm header="Confirmation"
+									message="Attention, la saisie d'un avis favorable ou défavorable enverra un mél à l'étudiant et lui permettra d'imprimer sa demande de transferts"
+									icon="ui-icon-alert" />
+							</p:commandButton>
+						</h:panelGrid>
+					</center>
+					<p:messages id="msgs2" showDetail="false" />
+				</p:panel>
+			</center>
+
+		</h:form>
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+			<p:commandButton value="Oui" type="button"
+				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="Non" type="button"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+
+
+
+	</ui:define>
+
+	<ui:define name="content">
+		<ui:include src="/stylesheets/gestionnaire/_include/_footer.xhtml"></ui:include>
+	</ui:define>
+
+
+</ui:composition>
+</html>

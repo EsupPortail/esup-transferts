@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<!-- <ui:composition template="/stylesheets/gestionnaire/template.xhtml"> -->
+
+<!-- 	<ui:define name="navigation"> -->
+<!-- 		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include> -->
+<!-- 	</ui:define> -->
+
+<!-- 	<ui:define name="corps"> -->
+		<p:growl id="messages" showDetail="false" />
+		<p:messages id="msgs" showDetail="false" />
+		<center>
+			<p:panel rendered="#{!sessionController.currentUser.admin}">
+				<ui:include
+					src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+			</p:panel>
+			<h:form id="ouvertureAppli"
+				rendered="#{sessionController.currentUser.admin}">
+				<p:panel id="pnl" style="width:80%; text-align:center;"
+					styleClass="panel" header="Ouverture et fermeture de l'application">
+					<p:spacer height="10px" />
+					<p:panelGrid columns="1"
+						rendered="#{scheduleController.source=='D'}">
+						<h:outputText value="Transferts départ" />
+					</p:panelGrid>
+					<p:panelGrid columns="1"
+						rendered="#{scheduleController.source=='A'}">
+						<h:outputText value="Transferts accueil" />
+					</p:panelGrid>
+
+					<p:spacer height="20px" />
+
+<!-- 					<c:set var="product" value="#{productDAO.findByCode('code')}" scope="request" /> -->
+
+					<p:schedule id="schedule" value="#{scheduleController.eventModel}"
+						timeFormat="HH:mm" locale="fr" widgetVar="myschedule"
+						timeZone="GMT+1">
+						<p:ajax event="dateSelect"
+							listener="#{scheduleController.onDateSelect}"
+							update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventSelect"
+							listener="#{scheduleController.onEventSelect}"
+							update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventMove"
+							listener="#{scheduleController.onEventMove}"
+							update=":ouvertureAppli,:messages,:msgs,:msgs2" />
+						<p:ajax event="eventResize"
+							listener="#{scheduleController.onEventResize}"
+							update=":ouvertureAppli,:messages,:msgs,:msgs2" />
+					</p:schedule>
+
+					<p:spacer height="40px" />
+
+					<!-- 					<p:commandButton value="Modifier" -->
+					<!-- 						update=":ouvertureAppli,:messages,:msgs,:msgs2" -->
+					<!-- 						action="#{scheduleController.addPeriodeFermeture}" />						 -->
+				</p:panel>
+
+				<p:dialog widgetVar="eventDialog" header="Périodes de fermeture"
+					showEffect="clip" hideEffect="clip">
+					<h:panelGrid id="eventDetails" columns="2">
+						<p:outputLabel for="title" value="Titre:" />
+						<!--<p:inputText id="title" value="#{scheduleController.event.title}"-->
+							<!--required="false" />-->
+
+						<p:inputTextarea id="title" value="#{scheduleController.event.title}" placeholder="Veuillez saisir votre message"
+										 required="true" />
+
+						<!--<p:editor id="title" value="#{scheduleController.event.title}"-->
+								  <!--required="true" />-->
+
+						<p:outputLabel for="from" value="Du:" />
+						<p:calendar id="from"
+							value="#{scheduleController.event.startDate}" timeZone="GMT+1" locale="fr"
+							pattern="dd/MM/yyyy HH:mm" />
+
+						<p:outputLabel for="to" value="Au:" />
+						<p:calendar id="to" value="#{scheduleController.event.endDate}"
+							locale="fr" timeZone="GMT+1" pattern="dd/MM/yyyy HH:mm" />
+						<p:commandButton id="addButton" value="Enregistrer"
+							actionListener="#{scheduleController.addEvent}"
+							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+						<p:commandButton id="deleteButton" value="Suppression"
+							actionListener="#{scheduleController.deleteEvent}"
+							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+					</h:panelGrid>
+				</p:dialog>
+
+			</h:form>
+		</center>
+		<p:messages id="msgs2" showDetail="false" />
+
+		<script type="text/javascript">
+			// JavaScript Document
+			PrimeFaces.locales['fr'] = {
+				closeText : 'Fermer',
+				prevText : 'Précédent',
+				nextText : 'Suivant',
+				monthNames : [ 'Janvier', 'Février', 'Mars', 'Avril', 'Mai',
+						'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre',
+						'Novembre', 'Décembre' ],
+				monthNamesShort : [ 'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun',
+						'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc' ],
+				dayNames : [ 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi',
+						'Vendredi', 'Samedi' ],
+				dayNamesShort : [ 'Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven',
+						'Sam' ],
+				dayNamesMin : [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+				weekHeader : 'Semaine',
+				firstDay : 1,
+				isRTL : false,
+				showMonthAfterYear : false,
+				yearSuffix : '',
+				timeOnlyTitle : 'Choisir l\'heure',
+				timeText : 'Heure',
+				hourText : 'Heures',
+				minuteText : 'Minutes',
+				secondText : 'Secondes',
+				currentText : 'Maintenant',
+				ampm : false,
+				month : 'Mois',
+				week : 'Semaine',
+				day : 'Jour',
+				allDayText : 'Toute la journée'
+			};
+		</script>
+
+
+
+		<style type="text/css">
+.value {
+	width: 1000px;
+}
+</style>
+</html>

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:panel
+			rendered="#{!administrationController.personnel || (administrationController.source eq 'D' and !administrationController.droitsDepart and !sessionController.currentUser.admin) || (administrationController.source eq 'A' and !administrationController.droitsArrivee and !sessionController.currentUser.admin)}">
+			<h:outputText
+				value="Droits départ ==> #{administrationController.droitsDepart}-----" />
+			<h:outputText
+				value="Droits arrivée ==> #{administrationController.droitsArrivee}-----" />
+			<h:outputText value="Source ==> #{administrationController.source}" />
+			<ui:include
+				src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+		</p:panel>
+
+		<h:form id="test"
+			rendered="#{administrationController.personnel and (administrationController.source eq 'D' and administrationController.droitsDepart || sessionController.currentUser.admin) || (administrationController.source eq 'A' and administrationController.droitsArrivee || sessionController.currentUser.admin)}">
+
+			<p:messages id="msgs" showDetail="false" />
+			<p:growl id="growl" showDetail="false" sticky="true" />
+
+			<p:spacer height="20px" />
+
+			<center>
+				<p:panel id="adresse" styleClass="panel"
+					header="Offre de formation #{sessionController.currentAnnee}/#{sessionController.currentAnnee+1}"
+					style="width:80%; text-align:center;">
+
+					<p:fieldset id="vo" legend="Visualisation de l'offre de formation"
+						toggleable="true" toggleSpeed="200">
+
+						<p:panelGrid
+							style="text-align:left;width:100%; border-style: hidden !important;">
+
+							<p:row>
+								<p:column style="width:30%">
+									<h:outputText value="* Département : " />
+								</p:column>
+								<p:column style="width:65%">
+									<p:selectOneMenu id="departements" required="true" filterMatchMode="contains" 
+										filter="true" requiredMessage="#{msgs['ERREUR.DEPARTEMENT']}"
+										value="#{testController.etu.transferts.dept}">
+										<f:selectItem itemLabel="== Choix ==" itemValue="" />
+										<f:selectItems value="#{testController.listeDepartements}" />
+										<p:ajax event="change" update="vo,msgs,msgs2,growl"
+											listener="#{testController.resetGeneral}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:5%">
+									<h:outputText value=" " />
+								</p:column>
+							</p:row>
+
+							<p:row rendered="#{!testController.deptVide}">
+								<p:column style="width:30%">
+									<h:outputText value="* Etablissement : " />
+								</p:column>
+								<p:column style="width:65%">
+									<p:selectOneMenu id="etablissements" filter="true" filterMatchMode="contains"
+										disabled="#{testController.etu.transferts.temoinTransfertValide==2}"
+										value="#{testController.etu.transferts.rne}" required="true"
+										requiredMessage="#{msgs['ERREUR.ETABLISSEMENT']}">
+										<f:selectItem itemLabel="== Choix ==" itemValue="" />
+										<f:selectItems value="#{testController.listeEtablissements}" />
+										<p:ajax event="change" update="vo,msgs,msgs2,growl"
+											listener="#{testController.resetTypeDiplome}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:5%">
+									<p:commandButton id="modalDialogButton"
+										onclick="PF('dlg2').show();" type="button" icon="ui-icon-help" />
+								</p:column>
+							</p:row>
+
+							<p:row rendered="#{!testController.typesDiplomeVide}">
+								<p:column style="width:30%">
+									<h:outputText value="* Type de diplôme : " />
+								</p:column>
+								<p:column style="width:65%">
+									<p:selectOneMenu id="typesDiplome"
+										disabled="#{testController.etu.transferts.temoinTransfertValide==2}"
+										value="#{testController.codTypDip}" required="true"
+										requiredMessage="#{msgs['ERREUR.TYPE_DIPLOME']}">
+										<f:selectItem itemLabel="== Choix ==" itemValue="" />
+										<f:selectItems value="#{testController.listeTypesDiplome}" />
+										<p:ajax event="change" update="vo,msgs,msgs2,growl"
+											listener="#{testController.resetAnneeEtude}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:5%">
+									<h:outputText value=" " />
+								</p:column>
+							</p:row>
+
+							<p:row rendered="#{!testController.typesDiplomeAutreVide}">
+								<p:column style="width:30%">
+									<h:outputText value="* Type de diplôme : " />
+								</p:column>
+								<p:column style="width:65%">
+									<p:inputText id="typesDiplomeAutre" required="true"
+										disabled="#{testController.etu.transferts.temoinTransfertValide==2}"
+										requiredMessage="#{msgs['ERREUR.TYPE_DIPLOME_AUTRE']}"
+										value="#{testController.etu.transferts.libelleTypeDiplome}" />
+								</p:column>
+								<p:column style="width:5%">
+									<h:outputText value=" " />
+								</p:column>
+							</p:row>
+
+							<p:row rendered="#{!testController.anneeEtudeVide}">
+								<p:column style="width:30%">
+									<h:outputText value="* Niveau : " />
+								</p:column>
+								<p:column style="width:65%"
+									rendered="#{!testController.anneeEtudeVide and !testController.choixDuVoeuParComposanteByPartenaire}">
+									<p:selectOneMenu id="niveauDiplome"
+										value="#{testController.codeNiveau}" required="true"
+										requiredMessage="#{msgs['ERREUR.NIVEAU']}">
+										<f:selectItem itemLabel="== Choix / diplome ==" itemValue="" />
+										<f:selectItems value="#{testController.listeAnneesEtude}" />
+										<!-- 																											<f:ajax event="change" render="vo" -->
+										<!-- 																												listener="#{testController.resetLibelleDiplome}" /> -->
+										<p:ajax event="change" update="vo,msgs,msgs2,growl"
+											listener="#{testController.resetLibelleDiplome}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:65%"
+									rendered="#{!testController.anneeEtudeVide and testController.choixDuVoeuParComposanteByPartenaire}">
+									<p:selectOneMenu id="niveauComposante"
+										value="#{testController.codeNiveau}" required="true"
+										requiredMessage="#{msgs['ERREUR.NIVEAU']}">
+										<f:selectItem itemLabel="== Choix / composante ==" itemValue="" />
+										<f:selectItems value="#{testController.listeAnneesEtude}" />
+										<p:ajax event="change" update="vo,msgs,msgs2,growl"
+											listener="#{testController.resetComposante}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:5%">
+									<h:outputText value=" " />
+								</p:column>
+							</p:row>
+
+							<p:row
+								rendered="#{!testController.libelleDiplomeVide and !testController.choixDuVoeuParComposanteByPartenaire}">
+								<p:column style="width:30%">
+									<h:outputText value="* Diplôme : " />
+								</p:column>
+								<p:column style="width:65%">
+									<p:selectOneMenu id="diplomes"
+										value="#{testController.codeDiplome}" required="true"
+										requiredMessage="#{msgs['ERREUR.DIPLOME']}">
+										<f:selectItem itemLabel="== Choix ==" itemValue="" />
+										<f:selectItems value="#{testController.listeLibellesDiplome}" />
+										<p:ajax event="change" update="vo"
+											listener="#{testController.resetLibelleEtape}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:5%">
+									<h:outputText value=" " />
+								</p:column>
+							</p:row>
+							<p:row
+								rendered="#{!testController.composanteVide and testController.choixDuVoeuParComposanteByPartenaire}">
+								<p:column style="width:30%">
+									<h:outputText value="* Composante : " />
+								</p:column>
+								<p:column style="width:65%">
+									<p:selectOneMenu id="composante"
+										value="#{testController.codeComposante}" required="true"
+										requiredMessage="#{msgs['ERREUR.COMPOSANTE']}">
+										<f:selectItem itemLabel="== Choix ==" itemValue="" />
+										<f:selectItems value="#{testController.listeComposantes}" />
+										<p:ajax event="change" update="vo"
+											listener="#{testController.resetLibelleEtape}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:5%">
+									<h:outputText value=" " />
+								</p:column>
+							</p:row>
+
+							<p:row rendered="#{!testController.libelleEtapeVide}">
+								<p:column style="width:30%">
+									<h:outputText value="* Version d'étape : " />
+								</p:column>
+								<p:column style="width:65%">
+									<p:dataTable var="vet" rowKey="#{vet.codeEtape}"
+										emptyMessage="Aucune version d'étape"
+										selection="#{testController.currentOdf}"
+										selectionMode="single" value="#{testController.odfDataModel}">
+										<p:column width="60">
+											<f:facet name="header">  
+		                   				Code diplome 
+        			    			</f:facet>
+											<h:outputText value="#{vet.codeDiplome}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">  
+		                   				Libellé de version d'étape
+        			    			</f:facet>
+											<h:outputText value="#{vet.libVersionEtape}" />
+										</p:column>
+									</p:dataTable>
+								</p:column>
+								<p:column style="width:5%">
+									<h:outputText value=" " />
+								</p:column>
+							</p:row>
+							
+						</p:panelGrid>
+					</p:fieldset>
+
+				</p:panel>
+			</center>
+
+			<p:dialog id="modalDialog" header="Type de transfert"
+				widgetVar="dlg2" modal="true" height="300">
+				<h:panelGrid columns="1" columnClasses="column" cellpadding="5"
+					styleClass="panel" style="width:70%; text-align:left;">
+					<h:outputText escape="false"
+						value="#{msgs['AIDE.LISTE.ODF.PAR.ETABLISSEMENT']}" />
+				</h:panelGrid>
+			</p:dialog>
+
+			<p:messages id="msgs2" showDetail="false" />
+		</h:form>
+	</ui:define>
+
+	<!-- 	<ui:define name="content"> -->
+	<!-- 		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include> -->
+	<!-- 	</ui:define> -->
+</ui:composition>
+</html>

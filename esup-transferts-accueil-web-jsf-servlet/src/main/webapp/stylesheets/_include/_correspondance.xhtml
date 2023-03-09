@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="formVoeux">
+	<p:messages id="msgs" showDetail="false" />
+	<p:growl id="growl" showDetail="false" sticky="true" />
+
+	<p:panel id="voeux" header="Correspondance">
+
+		<p:spacer height="10px" />
+
+			<p:spacer height="10px" />
+			<p:dataTable id="basic" var="correspondance" emptyMessage="Auncune correspondance"
+				value="#{userController.currentEtudiant.correspondances}" rendered="#{userController.presentBdd}"
+				resizableColumns="true">
+
+				<p:column width="10%">
+					<f:facet name="header">  
+                    Date
+            </f:facet>
+					<h:outputText value="#{correspondance.dateSaisie}">
+						<f:convertDateTime pattern="dd/MM/yyyy à HH:mm:ss"
+							timeZone="#{sessionController.timezone}" />
+					</h:outputText>
+				</p:column>
+
+				<p:column id="modelHeader" width="25%">
+					<f:facet name="header">  
+                    Titre  
+            </f:facet>
+					<h:outputText value="#{correspondance.titre}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">  
+                    Message  
+            </f:facet>
+					<t:div style="overflow: scroll;">
+						<h:outputText escape="false" value="#{correspondance.msg}" />
+					</t:div>
+				</p:column>
+			</p:dataTable>
+
+		<p:spacer height="10px"
+			rendered="#{userController.listeAccueilDecision!=null and userController.currentEtudiant.transferts.temoinTransfertValide==2}" />
+		<p:separator style="width:500px;height:10px"
+			rendered="#{userController.listeAccueilDecision!=null and userController.currentEtudiant.transferts.temoinTransfertValide==2}" />
+
+
+	</p:panel>
+	<p:messages id="msgsBas" showDetail="false" />
+</h:form>
+</html>

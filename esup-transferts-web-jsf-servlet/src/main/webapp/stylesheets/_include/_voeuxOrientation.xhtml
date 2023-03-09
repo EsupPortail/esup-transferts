@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:messages id="msgs" showDetail="false" />
+<p:growl id="growl" showDetail="false" sticky="true" />
+<h:form id="formVoeux">
+	<ui:include src="/stylesheets/_include/_fermetureAppli.xhtml" />
+	<p:panel id="voeux" header="Voeux d'orientation"
+		rendered="#{userController.parametreAppli.bool}">
+		<h:panelGrid columns="2" columnClasses="column" cellpadding="5">
+			<h:panelGrid columns="2" columnClasses="column" cellpadding="5"
+				style="text-align:left !important;">
+				<h:outputText value="Nom de famille : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.nomPatronymique}" />
+
+				<h:outputText value="Nom d'usage : " />
+				<h:outputText value="#{userController.currentEtudiant.nomUsuel}" />
+
+				<h:outputText value="Prénom 1 : " />
+				<h:outputText value="#{userController.currentEtudiant.prenom1}" />
+
+				<h:outputText value="Prénom 2 : " />
+				<h:outputText value="#{userController.currentEtudiant.prenom2}" />
+
+				<h:outputText value="Date de naissance : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.dateNaissance}">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="#{sessionController.timezone}" />
+				</h:outputText>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" columnClasses="column" cellpadding="5"
+				style="margin-left:30%;text-align:left;">
+				<h:outputText value="Centre de gestion : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.libCge} (#{userController.currentEtudiant.codCge})" />
+
+				<h:outputText value="Composante : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.libComposante} (#{userController.currentEtudiant.composante})" />
+
+				<h:outputText value="Dernière I.A : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.libEtapePremiereLocal}" />
+
+				<h:outputText value="Numéro étudiant : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.numeroEtudiant}" />
+
+				<h:outputText value="Numéro I.N.E : " />
+				<h:outputText value="#{userController.currentEtudiant.numeroIne}" />
+
+			</h:panelGrid>
+
+		</h:panelGrid>
+
+		<p:spacer height="10px" />
+
+		<h:panelGrid columns="3" columnClasses="column" cellpadding="5">
+
+			<h:outputText value="* Type de transfert : " />
+			<p:selectOneMenu id="typeTransfert" required="true"
+				requiredMessage="#{msgs['ERREUR.TYPE_TRANSFERT']}"
+				value="#{userController.currentEtudiant.transferts.typeTransfert}">
+				<f:selectItem id="choix" itemLabel="== Choix ==" itemValue="" />
+				<f:selectItem id="p" itemLabel="Transfert partiel" itemValue="P" />
+				<f:selectItem id="t" itemLabel="Transfert total" itemValue="T" />
+				<p:ajax event="change" update="formVoeux" />
+				<!-- 				<f:ajax event="change" render="typeTransfert" /> -->
+			</p:selectOneMenu>
+			<p:commandButton id="modalDialogButton" onclick="PF('dlg2').show();"
+				type="button" icon="ui-icon-help" />
+
+			<h:outputText value="* Département : " />
+			<p:selectOneMenu id="departements" filter="true" filterMatchMode="contains"
+				value="#{userController.currentEtudiant.transferts.dept}"
+				required="true" requiredMessage="#{msgs['ERREUR.DEPARTEMENT']}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeDepartements}" />
+				<!-- 				<f:ajax event="change" render="formVoeux" -->
+				<!-- 					listener="#{userController.resetGeneral}" /> -->
+				<p:ajax event="change" update="formVoeux"
+					listener="#{userController.resetGeneral}" />
+			</p:selectOneMenu>
+			<!-- 			<h:outputText value=" " /> -->
+			<p:commandButton id="modalDialogButton2" onclick="PF('dlg3').show();"
+				type="button" icon="ui-icon-help" />
+
+			<h:outputText value="* Etablissement : "
+				rendered="#{!userController.deptVide}" />
+			<p:selectOneMenu id="etablissements" filter="true" filterMatchMode="contains" 
+				rendered="#{!userController.deptVide}"
+				value="#{userController.currentEtudiant.transferts.rne}"
+				required="true" requiredMessage="#{msgs['ERREUR.ETABLISSEMENT']}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeEtablissements}" />
+				<p:ajax event="change" update=":growl,:msgs,:msgs2,formVoeux"
+					listener="#{userController.resetTypeDiplome}" />
+			</p:selectOneMenu>
+			<h:outputText value=" " rendered="#{!userController.deptVide}" />
+
+			<h:outputText value="* Type de diplôme : "
+				rendered="#{!userController.typesDiplomeVide}" />
+			<p:selectOneMenu id="typesDiplome" filter="true"
+				rendered="#{!userController.typesDiplomeVide}"
+				value="#{userController.codTypDip}" required="true"
+				requiredMessage="#{msgs['ERREUR.TYPE_DIPLOME']}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeTypesDiplome}" />
+				<p:ajax event="change" update="formVoeux"
+					listener="#{userController.resetAnneeEtude}" />
+			</p:selectOneMenu>
+			<h:outputText value=" "
+				rendered="#{!userController.typesDiplomeVide}" />
+
+			<h:outputText value="* Type de diplôme : "
+				rendered="#{!userController.typesDiplomeAutreVide}" />
+			<p:inputText id="typesDiplomeAutre" required="true"
+				requiredMessage="#{msgs['ERREUR.TYPE_DIPLOME_AUTRE']}"
+				rendered="#{!userController.typesDiplomeAutreVide}"
+				value="#{userController.currentEtudiant.transferts.libelleTypeDiplome}" />
+			<h:outputText value=" "
+				rendered="#{!userController.typesDiplomeAutreVide}" />
+
+			<h:outputText value="* Niveau : "
+				rendered="#{!userController.anneeEtudeVide}" />
+			<p:selectOneMenu id="niveauDiplome"
+				rendered="#{!userController.anneeEtudeVide and !userController.choixDuVoeuParComposanteByPartenaire}"
+				value="#{userController.codeNiveau}" required="true"
+				requiredMessage="#{msgs['ERREUR.NIVEAU']}">
+				<f:selectItem itemLabel="== Choix / Diplôme ==" itemValue="" />
+				<f:selectItems value="#{userController.listeAnneesEtude}" />
+				<!-- 				<f:ajax event="change" render="formVoeux" -->
+				<!-- 					listener="#{userController.resetLibelleDiplome}" /> -->
+				<p:ajax event="change" update="formVoeux"
+					listener="#{userController.resetLibelleDiplome}" />
+			</p:selectOneMenu>
+			<p:selectOneMenu id="niveauComposante"
+				rendered="#{!userController.anneeEtudeVide and userController.choixDuVoeuParComposanteByPartenaire}"
+				value="#{userController.codeNiveau}" required="true"
+				requiredMessage="#{msgs['ERREUR.NIVEAU']}">
+				<f:selectItem itemLabel="== Choix / Composante ==" itemValue="" />
+				<f:selectItems value="#{userController.listeAnneesEtude}" />
+				<!-- 				<f:ajax event="change" render="formVoeux" -->
+				<!-- 					listener="#{userController.resetLibelleDiplome}" /> -->
+				<p:ajax event="change" update="formVoeux"
+					listener="#{userController.resetComposante}" />
+			</p:selectOneMenu>
+			<h:outputText value=" " rendered="#{!userController.anneeEtudeVide}" />
+
+			<h:outputText value="* Diplôme : "
+				rendered="#{!userController.libelleDiplomeVide and !userController.choixDuVoeuParComposanteByPartenaire}" />
+			<p:selectOneMenu id="diplomes"
+				rendered="#{!userController.libelleDiplomeVide and !userController.choixDuVoeuParComposanteByPartenaire}"
+				value="#{userController.codeDiplome}" required="true"
+				requiredMessage="#{msgs['ERREUR.DIPLOME']}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeLibellesDiplome}" />
+				<!-- 				<f:ajax event="change" render="formVoeux" -->
+				<!-- 					listener="#{userController.resetLibelleEtape}" /> -->
+				<p:ajax event="change" update="formVoeux"
+					listener="#{userController.resetLibelleEtape}" />
+			</p:selectOneMenu>
+			<h:outputText value=" "
+				rendered="#{!userController.libelleDiplomeVide and !userController.choixDuVoeuParComposanteByPartenaire}" />
+
+			<h:outputText value="* Composante : "
+				rendered="#{!userController.composanteVide and userController.choixDuVoeuParComposanteByPartenaire}" />
+			<p:selectOneMenu id="composante"
+				rendered="#{!userController.composanteVide and userController.choixDuVoeuParComposanteByPartenaire}"
+				value="#{userController.codeComposante}" required="true"
+				requiredMessage="#{msgs['ERREUR.COMPOSANTE']}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeComposantes}" />
+				<!-- 				<p:ajax event="change" update="formVoeux" -->
+				<!-- 					listener="#{userController.resetLibelleDiplome}" /> -->
+				<p:ajax event="change" update="formVoeux"
+					listener="#{userController.resetLibelleEtape}" />
+			</p:selectOneMenu>
+			<h:outputText value=" "
+				rendered="#{!userController.composanteVide and userController.choixDuVoeuParComposanteByPartenaire}" />
+
+			<h:outputText value="* Version d'étape : "
+				rendered="#{!userController.libelleEtapeVide}" />
+			<p:dataTable var="vet" rendered="#{!userController.libelleEtapeVide}" style="width: 600px;"
+				rowKey="#{vet}" emptyMessage="Aucune version d'étape"
+				selection="#{userController.currentOdf}" selectionMode="single"
+				value="#{userController.odfDataModel}">
+				<p:column style="width: 50px;">
+					<f:facet name="header">
+						Code version d'étape
+					</f:facet>
+					<h:outputText value="#{vet.codeVersionEtape}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">  
+		                   				Sélectionnez la formation 
+        			    			</f:facet>
+					<h:outputText value="#{vet.libVersionEtape}" />
+				</p:column>
+			</p:dataTable>
+			<h:outputText value=" "
+				rendered="#{!userController.libelleEtapeVide}" />
+
+		</h:panelGrid>
+
+		<p:spacer height="20px" />
+
+		<h:panelGrid columns="2">
+			<p:commandButton value="Précédent"
+				rendered="#{userController.etudiant}"
+				action="#{userController.goToAdresse}" immediate="true" />
+			<p:commandButton value="Précédent"
+				rendered="#{userController.verifDateNaisApogee}"
+				action="#{userController.goToAdresseApogee}" immediate="true" />
+
+			<p:commandButton value="Suivant"
+				update=":formVoeux,:growl,:msgs,:msgs2"
+				rendered="#{userController.etudiant}"
+				action="#{userController.goToRecapitulatif}">
+				<f:ajax event="click" render="voeux msgs growl" />
+			</p:commandButton>
+			<p:commandButton value="Suivant"
+				update=":formVoeux,:growl,:msgs,:msgs2"
+				rendered="#{userController.verifDateNaisApogee}"
+				action="#{userController.goToRecapitulatifApogee}">
+				<f:ajax event="click" render="voeux msgs growl" />
+			</p:commandButton>
+		</h:panelGrid>
+
+	</p:panel>
+</h:form>
+<p:messages id="msgs2" showDetail="false" />
+<p:dialog id="modalDialog" header="Type de transfert" widgetVar="dlg2"
+	modal="true" height="300">
+	<h:panelGrid columns="1" columnClasses="column" cellpadding="5"
+		style="width:70%; text-align:left;">
+		<!-- 		<h:outputText escape="false" value="#{msgs['AIDE.TYPE_TANSFERT']}" /> -->
+		<h:outputText escape="false"
+			value="#{userController.aideTypeTransfert}" />
+	</h:panelGrid>
+</p:dialog>
+
+<p:dialog id="modalDialog2" header="Département" widgetVar="dlg3"
+	modal="true" height="300">
+	<h:outputText escape="false" value="#{msgs['AIDE.DEPARTEMENT']}" />
+</p:dialog>
+</html>

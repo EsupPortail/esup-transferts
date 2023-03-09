@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:growl id="growl" showDetail="false" />
+		<p:messages id="msgs" showDetail="false" />
+
+		<p:panel
+			rendered="#{!sessionController.currentUser.admin or sessionController.validationAutomatique!='cge'}">
+			<ui:include
+				src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+		</p:panel>
+		<h:form id="validationTransfertDepart"
+			rendered="#{sessionController.currentUser.admin and sessionController.validationAutomatique=='cge'}">
+
+			<!--     <p:contextMenu for="cge" widgetVar="cMenu">      -->
+			<!--         <p:menuitem value="Edit Cell" icon="ui-icon-search" onclick="PF('cgeTable').showCellEditor();return false;"/>     -->
+			<!--         <p:menuitem value="Hide Menu" icon="ui-icon-close" onclick="PF('cMenu').hide()"/>     -->
+			<!--     </p:contextMenu>  -->
+
+			<p:dataTable var="centreDeGest"
+				value="#{managerController.listeCGEMerge}"
+				filteredValue="#{managerController.filteredCGE}"
+				editMode="cell" rendered="#{sessionController.currentUser.admin}"
+				rowsPerPageTemplate="5,10,15,20,25,30,40,50" rows="10"
+				paginator="true" id="cge" styleClass="datatable" style="width:80%;"
+				editable="true">
+
+				<f:facet name="header">  
+										            Type de validation des transferts départ / Centre de gestion
+										        </f:facet>
+
+				<!-- 				<p:ajax event="cellEdit" listener="#{managerController.onCellEditCGE}" -->
+				<!-- 					update=":growl,:msgs,:msgs2,:validationTransfertDepart:cge" /> -->
+
+				<p:column headerText="Année">
+				            #{centreDeGest.annee}  
+				        </p:column>
+
+				<p:column headerText="Code CGE" sortBy="#{centreDeGest.codeCGE}" filterBy="#{centreDeGest.codeCGE}">
+				            #{centreDeGest.codeCGE}  
+				        </p:column>
+
+				<p:column headerText="Libellé CGE" sortBy="#{centreDeGest.libelleCGE}"
+					filterBy="#{centreDeGest.libelleCGE}">
+				            #{centreDeGest.libelleCGE}  
+				        </p:column>
+
+				<p:column headerText="Validation automatique" style="width:25%"
+					sortBy="#{centreDeGest.validAuto}" filterBy="#{centreDeGest.validAuto}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{centreDeGest.validAuto}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:selectOneMenu value="#{centreDeGest.validAuto}"
+								style="width:100%">
+								<f:selectItem itemLabel="oui" itemValue="oui" />
+								<f:selectItem itemLabel="non" itemValue="non" />
+							</h:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Enregistrer" icon="ui-icon-disk"
+						action="#{managerController.addValidationAutoByCGE}"
+						update=":growl,:msgs,:msgs2,:validationTransfertDepart:cge" />
+				</f:facet>
+
+			</p:dataTable>
+			<p:spacer height="10px" />
+			<!-- 					<p:commandButton value="Code sise par défaut" -->
+			<!-- 						update=":messages,:msgs,:msgs2" -->
+			<!-- 						actionListener="#{administrationController.updateDefautCodeSize}" /> -->
+		</h:form>
+		<!-- 			</p:panel> -->
+
+		<p:messages id="msgs2" showDetail="false" />
+	</ui:define>
+
+	<ui:define name="content">
+		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include>
+	</ui:define>
+
+</ui:composition>
+</html>

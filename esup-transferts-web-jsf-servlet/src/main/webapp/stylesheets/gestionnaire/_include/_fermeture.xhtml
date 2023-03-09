@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<!-- <ui:composition template="/stylesheets/gestionnaire/template.xhtml"> -->
+
+<!-- 	<ui:define name="navigation"> -->
+<!-- 		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include> -->
+<!-- 	</ui:define> -->
+
+<!-- 	<ui:define name="corps"> -->
+		<p:growl id="messages" showDetail="false" />
+		<p:messages id="msgs" showDetail="false" />
+		<center>
+			<p:panel rendered="#{!sessionController.currentUser.admin}">
+				<ui:include
+					src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+			</p:panel>		
+			<h:form id="ouvertureAppli"
+				rendered="#{sessionController.currentUser.admin}">
+				<p:panel id="pnl" style="width:80%; text-align:center;"
+					styleClass="panel" header="Ouverture et fermeture de l'application">
+					<p:spacer height="10px" />
+					<p:panelGrid columns="1"
+						rendered="#{administrationController.source=='D'}">
+						<h:outputText value="Transferts départ" />
+					</p:panelGrid>
+					<p:panelGrid columns="1"
+						rendered="#{administrationController.source=='A'}">
+						<h:outputText value="Transferts accueil" />
+					</p:panelGrid>
+					<h:panelGrid columns="2" columnClasses="column" cellpadding="5"
+						style="text-align:left;">
+
+						<h:outputText value="Code Paramètre : " />
+						<h:outputText
+							value="#{administrationController.parametreAppli.codeParametre}" />
+
+						<h:outputText value="* Ouverture application : " />
+						<p:selectBooleanButton
+							value="#{administrationController.parametreAppli.bool}"
+							onLabel="Ouverte" offLabel="Fermée" />
+
+						<h:outputText value="* Commentaire : " />
+						<p:editor id="editor" required="true"
+							requiredMessage="#{msgs['ERREUR.FERMETURE_COMMENTAIRE']}"
+							value="#{administrationController.parametreAppli.commentaire}"
+							width="500" />
+					</h:panelGrid>
+
+					<p:commandButton value="Modifier"
+						update=":ouvertureAppli,:messages,:msgs,:msgs2"
+						action="#{administrationController.addParametre}" />
+			</p:panel>
+			</h:form>
+		</center>
+		<p:messages id="msgs2" showDetail="false" />
+<!-- 	</ui:define> -->
+
+<!-- 	<ui:define name="content"> -->
+<!-- 		<ui:include src="/stylesheets/gestionnaire/_include/_footer.xhtml"></ui:include> -->
+<!-- 	</ui:define> -->
+
+<!-- </ui:composition> -->
+</html>

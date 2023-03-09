@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+	<ui:define name="corps">
+		<p:panel
+			rendered="#{!administrationController.personnel || (!administrationController.droitsArrivee and !sessionController.currentUser.admin)}">
+			<ui:include
+				src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+		</p:panel>
+		<p:spacer height="10px" />
+		<h:form id="display"
+			rendered="#{administrationController.personnel and (administrationController.droitsArrivee || sessionController.currentUser.admin)}">
+			<p:growl id="msgs" showDetail="false" />
+			<p:dataTable var="transferts" styleClass="datatable" id="test2"
+				style="text-align:center;width:80%;"
+				value="#{administrationController.allDemandesTransfertsAccueil}"
+				rows="10" paginator="true" selectionMode="single"
+				rowsPerPageTemplate="5,10,15,20,25,30,35,40,45,50"
+				emptyMessage="Auncune demande de transferts accueil"
+				selection="#{administrationController.currentDemandeTransferts}"
+				filteredValue="#{administrationController.filteredEtudiantAccueil}"
+				rowStyleClass="#{transferts.transferts.temoinTransfertValide == 2 or !sessionController.transfertsAccueil ? 'default' :
+				(sessionController.aujourdhui lt transferts.alertSilenceVautAccord ? 'default' :
+				((sessionController.aujourdhui gt transferts.alertSilenceVautAccord and
+				sessionController.aujourdhui lt transferts.alertDepassementSilenceVautAccord) ? 'alertSilenceVautAccord' : 'alertDepassementSilenceVautAccord'))}">
+
+				<f:facet name="header">  
+            Liste des demandes de transferts accueil #{sessionController.currentAnnee}/#{sessionController.currentAnnee+1} 
+            <p:spacer width="20px" />
+             Total #{administrationController.totalAccueil} demande(s) de transfert accueil.
+        </f:facet>
+
+				<p:column headerText="Dossier" style="width:3%;"
+						  sortBy="#{transferts.transferts.temoinTransfertValide}" id="nb">
+					<p:commandButton icon="ui-icon-unlocked" rendered="#{transferts.transferts.temoinTransfertValide==1}" />
+					<p:commandButton icon="ui-icon-locked" rendered="#{transferts.transferts.temoinTransfertValide==2}" />
+				</p:column>
+
+				<p:column headerText="" style="width:3%;"
+						  sortBy="#{transferts.accueil.from_source}" id="partenaire">
+					<p:commandButton icon="ui-icon-person" rendered="#{transferts.accueil.from_source == 'P'}" />
+				</p:column>
+
+				<p:column headerText="Retour" style="width:3%;"
+						  sortBy="#{transferts.transferts.temoinRetourTransfertAccueil}">
+					<p:commandButton icon="ui-icon-mail-closed" rendered="#{transferts.transferts.temoinOPIWs==1}" />
+					<p:commandButton icon="ui-icon-alert" rendered="#{transferts.transferts.temoinOPIWs==2}" />
+				</p:column>
+
+				<p:column headerText="Date demande"
+					filterBy="#{transferts.transferts.dateDemandeTransfert}"
+					style="text-align:left;width:10%;"
+					sortBy="#{transferts.transferts.dateDemandeTransfert}"
+					filterMatchMode="contains">
+					<h:outputText value="#{transferts.transferts.dateDemandeTransfert}">
+						<f:convertDateTime pattern="dd/MM/yyyy"
+							timeZone="#{sessionController.timezone}" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Composante"
+					filterBy="#{transferts.transferts.odf.codeComposante}"
+					style="text-align:left;"
+					sortBy="#{transferts.transferts.odf.codeComposante}"
+					filterMatchMode="contains">
+            #{transferts.transferts.odf.codeComposante} - #{transferts.transferts.odf.libComposante}  
+        </p:column>
+
+				<p:column headerText="Etape d'inscription"
+					filterBy="#{transferts.transferts.odf.libVersionEtape}"
+					style="text-align:left;"
+					sortBy="#{transferts.transferts.odf.libVersionEtape}"
+					filterMatchMode="contains" id="etapeInscription">  
+            #{transferts.transferts.odf.libVersionEtape}
+        </p:column>
+
+				<p:column headerText="Numéro étudiant"
+					filterBy="#{transferts.numeroEtudiant}"
+					sortBy="#{transferts.numeroEtudiant}" filterMatchMode="contains">
+            #{transferts.numeroEtudiant}  
+        </p:column>
+
+				<p:column headerText="Numéro I.N.E"
+					filterBy="#{transferts.numeroIne}" sortBy="#{transferts.numeroIne}"
+					filterMatchMode="contains">
+            #{transferts.numeroIne}  
+        </p:column>
+
+				<p:column headerText="Nom" filterBy="#{transferts.nomPatronymique}"
+					style="text-align:left;" sortBy="#{transferts.nomPatronymique}"
+					id="nom" filterMatchMode="contains">  
+            #{transferts.nomPatronymique}  
+        </p:column>
+
+				<p:column headerText="Prénom" style="text-align:left;">  
+            #{transferts.prenom1}  
+        </p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Voir la demande" icon="ui-icon-search"
+						update=":display:msgs"
+						action="#{administrationController.goToCurrentDemandeTransfertsAccueil}" />
+					<p:spacer width="20px" />
+					<p:selectBooleanButton
+						value="#{administrationController.switchTraiteNontraite}"
+						onLabel="Toutes les demandes" offLabel="En cours"
+						onIcon="ui-icon-check" offIcon="ui-icon-close">
+						<p:ajax update=":display" oncomplete="true"
+							listener="#{administrationController.addMessage}" />
+					</p:selectBooleanButton>
+				</f:facet>
+			</p:dataTable>
+			<p:spacer height="40" />
+		</h:form>
+		<center>
+			<p:panel header="Légende" toggleable="true" style="width:80%;"
+					 collapsed="true" closable="true" toggleSpeed="500" closeSpeed="500"
+					 widgetVar="panel"
+					 rendered="#{administrationController.personnel and (administrationController.droitsArrivee || sessionController.currentUser.admin)}">
+				<h:panelGrid columns="6" cellpadding="10">
+					<p:panelGrid style="margin-top:20px; width: 100%;">
+						<p:row>
+							<p:column colspan="2" style="text-align: center;color: #0073EA;">Etat du dossier de transfert accueil</p:column>
+						</p:row>
+						<p:row>
+							<p:column>Non traité</p:column>
+							<h:outputText value="" />
+						</p:row>
+						<p:row>
+							<p:column>En cours de traitement</p:column>
+							<p:column><p:commandButton icon="ui-icon-unlocked" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column>Traité</p:column>
+							<p:column><p:commandButton icon="ui-icon-locked" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2" style="text-align: center;color: #0073EA;">Type d'établissement d'accueil</p:column>
+						</p:row>
+						<p:row>
+							<p:column>Partenaire</p:column>
+							<p:column><p:commandButton icon="ui-icon-person" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column>Non partenaire</p:column>
+							<p:column><h:outputText value="" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2" style="text-align: center;color: #0073EA;">Retour envoyé à l'établissement de départ (partenaire)</p:column>
+						</p:row>
+						<p:row>
+							<p:column>Retour envoyé à l'établissement de départ</p:column>
+							<p:column><p:commandButton icon="ui-icon-mail-closed" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column>Problème d'envoi des données à l'établissement de départ</p:column>
+							<p:column><p:commandButton icon="ui-icon-alert" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column>Pas de retour à l'établissement de départ (non partenaire)</p:column>
+							<h:outputText value="" />
+						</p:row>
+						<p:row>
+							<p:column colspan="2" style="text-align: center;color: #0073EA;">Loi silence vaut accord (SVA)</p:column>
+						</p:row>
+						<p:row>
+							<p:column>						<h:outputText
+									value="le delai de #{sessionController.nbJourAvantAlertSilenceVautAccord/7} semaine(s) est écoulé"
+									styleClass="alertSilenceVautAccord">
+								<f:convertNumber pattern="#,0" />
+							</h:outputText></p:column>
+							<p:column>						<h:outputText
+									value="Le delai de #{sessionController.nbMoisAvantAccordSuiteNouvelleLoiSilenceVautAccord} mois est dépassé"
+									styleClass="alertDepassementSilenceVautAccord" /></p:column>
+						</p:row>
+					</p:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+		</center>
+	</ui:define>
+
+	<!-- 	<ui:define name="content"> -->
+	<!-- 		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include> -->
+	<!-- 	</ui:define> -->
+
+</ui:composition>
+</html>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:spacer height="20px" />
+		<p:panel rendered="#{!sessionController.currentUser.admin}">
+			<ui:include
+				src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+		</p:panel>
+		<h:form id="formManagerChoixLicence"
+			rendered="#{sessionController.currentUser.admin}">
+			<p:messages id="msgs" showDetail="false" />
+			<p:growl id="growl" showDetail="false" />
+			<center>
+				<h:outputText rendered="#{managerController.from=='D'}"
+					value="Liste des gestionnaires de transferts départ" />
+				<h:outputText rendered="#{managerController.from=='A'}"
+					value="Liste des gestionnaires de transferts accueil" />
+
+				<p:pickList id="pojoPickList" value="#{managerController.players}" 
+					var="player" converter="#{personnelComposanteConverter}"
+					itemValue="#{player}" itemLabel="#{player.codeComposante}"
+					showSourceFilter="true" showTargetFilter="true"
+					filterMatchMode="contains">
+
+					<f:facet name="sourceCaption">Liste des composantes</f:facet>
+					<f:facet name="targetCaption">#{managerController.personnelChoisi.login}</f:facet>
+
+					<p:column>  
+            #{player.codeComposante} - #{player.libelleComposante} 
+        </p:column>
+				</p:pickList>
+
+				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" rendered="#{managerController.from=='A'}">
+					<h:outputText value="Type de personnel : " />
+					<p:selectOneRadio id="options" required="true"
+						rendered="#{managerController.from=='A'}"
+						value="#{managerController.typePersonnel}">
+						<f:selectItem itemLabel="Direction des études" itemValue="1" />
+						<f:selectItem itemLabel="Gestionnaire secrétariat pédagogique"
+							itemValue="2" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+
+				<p:spacer height="40" />
+
+				<p:commandButton id="retour" value="Retour"
+					rendered="#{managerController.from=='D'}"
+					action="#{managerController.goToListeManagerDepart}"
+					immediate="true" />
+				<p:commandButton id="retour2" value="Retour"
+					rendered="#{managerController.from=='A'}"
+					action="#{managerController.goToListeManagerAccueil}"
+					immediate="true" />
+				<p:spacer width="20" />
+				<p:commandButton id="pojoSubmitdetails" value="Suivant"
+					action="#{managerController.goToDetailDroits}"
+					update="msgs,msgs2,growl" />
+			</center>
+			<p:messages id="msgs2" showDetail="false" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

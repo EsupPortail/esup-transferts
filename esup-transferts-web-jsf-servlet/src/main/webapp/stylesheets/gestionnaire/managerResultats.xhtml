@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:spacer height="20px" />
+		<h:form id="formManagerRecherche">
+			<center>
+				<fieldset style="width: 50%;">
+					<legend>
+						<h:outputText
+							style="color:#0073EA; font-size:20px; font-weight:bold;"
+							value="Liste des personnels trouvés" />
+					</legend>
+					<p:spacer height="20" />
+					<p:dataTable id="listePersonnels" align="center" rows="10" emptyMessage="Aucun résultat"
+						paginator="true" value="#{managerController.personnelsRecherche}"
+						var="personnel">
+
+						<p:column sortBy="#{personnel.displayName}">
+							<f:facet name="header">
+								<h:outputText style="width:100px; display:block;"
+											  value="Identité" />
+							</f:facet>
+							<h:outputText value="#{personnel.displayName}" />
+						</p:column>
+
+						<p:column sortBy="#{personnel.login}">
+							<f:facet name="header">
+								<h:outputText style="width:100px; display:block;"
+									value="UID" />
+							</f:facet>
+							<h:outputText value="#{personnel.login}" />
+						</p:column>
+
+						<p:column sortBy="#{personnel.mail}">
+							<f:facet name="header">
+								<h:outputText style="width:100px; display:block;"
+											  value="Mail" />
+							</f:facet>
+							<h:outputText value="#{personnel.mail}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Choix" />
+							</f:facet>
+							<center>
+								<p:commandLink id="choisir"
+									action="#{managerController.goToManagerChoixLicence}">
+									<f:setPropertyActionListener value="#{personnel}"
+										target="#{managerController.personnelChoisi}" />
+									<h:graphicImage style="border:none;" alt="choix"
+										value="/media/images/arrow_right.png" />
+								</p:commandLink>
+							</center>
+						</p:column>
+					</p:dataTable>
+					<p:spacer height="40" />
+					<p:commandButton id="retour" value="Retour"
+						action="#{managerController.goToManagerRecherche}" immediate="true" />					
+				</fieldset>
+			</center>
+<!-- 			<p:spacer height="30" /> -->
+<!-- 			<div style="padding-left: 300px;"> -->
+<!-- 				<p:commandButton value="#{msgs['GENERAL.RETOUR']}" -->
+<!-- 					action="goToManagerRecherche" immediate="true" /> -->
+<!-- 			</div> -->
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

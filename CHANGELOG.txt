@@ -1,0 +1,171 @@
+------------------------------------------------------------------------
+r460 | farid | 2017-01-16 10:09:35 +0100 (lun. 16 janv. 2017) | 1 ligne
+
+- MAJ des scripts SQL de migration de la v2.3.0 ===> v2.4.0
+------------------------------------------------------------------------
+r461 | farid | 2017-01-16 10:12:04 +0100 (lun. 16 janv. 2017) | 1 ligne
+
+- Ajout des clients Apogée recent
+------------------------------------------------------------------------
+r462 | farid | 2017-01-16 15:46:42 +0100 (lun. 16 janv. 2017) | 1 ligne
+
+- Permettre la récupération de la configuration de l’application d’une campagne sur l’autre (droits utilisateurs, signatures, partenaires)
+------------------------------------------------------------------------
+r463 | farid | 2017-01-16 15:56:57 +0100 (lun. 16 janv. 2017) | 1 ligne
+
+- Ajout de la vue importDonneesAnneesPrecedentes
+------------------------------------------------------------------------
+r464 | farid | 2017-01-16 16:20:44 +0100 (lun. 16 janv. 2017) | 1 ligne
+
+- Ajout d'un render dans la vue d'import des données des années précédentes
+------------------------------------------------------------------------
+r465 | farid | 2017-01-18 09:38:26 +0100 (mer. 18 janv. 2017) | 2 lignes
+
+- Ajout au scheduler le renvoi automatique des demandes de transferts départ en échec
+
+------------------------------------------------------------------------
+r466 | farid | 2017-01-18 10:53:12 +0100 (mer. 18 janv. 2017) | 1 ligne
+
+- Ajout d'une propriété choixDuVoeuParComposante dans le bean WsPub
+------------------------------------------------------------------------
+r467 | farid | 2017-01-18 11:18:52 +0100 (mer. 18 janv. 2017) | 1 ligne
+
+- Lors de la synchro ODF récupérer la présentation par diplôme / composante
+------------------------------------------------------------------------
+r468 | farid | 2017-01-20 13:06:45 +0100 (ven. 20 janv. 2017) | 2 lignes
+
+- Visualisation de l'ODF depuis le module gestionnaire
+- Lors de la synchro ODF récupérer la présentation par diplôme / composante
+------------------------------------------------------------------------
+r469 | farid | 2017-01-24 10:12:55 +0100 (mar. 24 janv. 2017) | 1 ligne
+
+- Modification des IHM pour tenir compte de la présentation de l'ODF (depart, accueil et gestionnaire)
+------------------------------------------------------------------------
+r470 | farid | 2017-01-24 11:01:38 +0100 (mar. 24 janv. 2017) | 1 ligne
+
+- Correction d'une erreur de frappe
+------------------------------------------------------------------------
+r471 | farid | 2017-01-24 16:01:13 +0100 (mar. 24 janv. 2017) | 1 ligne
+
+- Ajout d'une propriété au bean transferts temoinRetourTransfertAccueil
+------------------------------------------------------------------------
+r472 | farid | 2017-01-25 08:13:52 +0100 (mer. 25 janv. 2017) | 1 ligne
+
+- Test feedBack v0.1
+------------------------------------------------------------------------
+r473 | farid | 2017-01-25 08:26:05 +0100 (mer. 25 janv. 2017) | 1 ligne
+
+- Test feedBack v0.2
+------------------------------------------------------------------------
+r474 | farid | 2017-01-25 09:04:41 +0100 (mer. 25 janv. 2017) | 1 ligne
+
+- Test feedBack v0.3
+------------------------------------------------------------------------
+r475 | farid | 2017-01-25 09:30:41 +0100 (mer. 25 janv. 2017) | 1 ligne
+
+- Test feedBack v0.4
+------------------------------------------------------------------------
+r476 | farid | 2017-01-25 10:16:21 +0100 (mer. 25 janv. 2017) | 1 ligne
+
+- Test feedBack v0.5
+------------------------------------------------------------------------
+r477 | farid | 2017-01-25 10:28:10 +0100 (mer. 25 janv. 2017) | 1 ligne
+
+- Test feedBack v0.6
+------------------------------------------------------------------------
+r478 | farid | 2017-01-25 10:35:34 +0100 (mer. 25 janv. 2017) | 1 ligne
+
+- Test feedBack v0.7
+------------------------------------------------------------------------
+r479 | farid | 2017-01-25 10:42:43 +0100 (mer. 25 janv. 2017) | 1 ligne
+
+- Test feedBack v0.8
+------------------------------------------------------------------------
+r480 | farid | 2017-01-25 10:48:48 +0100 (mer. 25 janv. 2017) | 1 ligne
+
+- Test feedBack v0.9
+------------------------------------------------------------------------
+r481 | farid | 2017-01-25 12:51:10 +0100 (mer. 25 janv. 2017) | 1 ligne
+
+- Test feedBack v1.0
+------------------------------------------------------------------------
+r482 | farid | 2017-01-26 13:17:41 +0100 (jeu. 26 janv. 2017) | 2 lignes
+
+- Modification des images indiquant l'état du transfert
+- Modification de la légende
+------------------------------------------------------------------------
+r483 | farid | 2017-01-26 15:12:03 +0100 (jeu. 26 janv. 2017) | 3 lignes
+
+- Correction d'un BUG lors de l'enregistrement d'un transfert accueil (this.currentEtudiant.getTransferts().setTemoinRetourTransfertAccueil(0))
+- Modification des images indiquant l'état du transfert - Modification de la légende v0.2
+- Ajout de la nomenclature "super_gestionnaire" dans la table paramètre
+------------------------------------------------------------------------
+r485 | farid | 2017-03-08 12:51:30 +0100 (mer. 08 mars 2017) | 1 ligne
+
+- Correction d'un BUG lorsque le nom du signataire est vide (ERREUR.NOM_SIGNATAIRE), merci à Alexander Schwarz de l'université de Perpignan
+------------------------------------------------------------------------
+r486 | farid | 2017-03-17 10:00:29 +0100 (ven. 17 mars 2017) | 11 lignes
+
+- Copie du Messages_fr.properties vers Messages_en.properties
+- Ajout du dossier scolaire afin d'informer l'étudiant que ses résultats sont parcelaires (les jury ne sont pas à T), qu'il lui est par conséquent conseillé de patienter
+- Ajout du dossier scolaire sans la partie gestionnaire départ
+- Ajout de la possibilité d'un lancement manuelle en plus du scheduler
+- Ajout dans l'export excel : EXPORT.EXCEL.COLONNE.PERSONNEL_COMPOSANTE.DROIT_ALERT_MAIL_TRANSFERT
+- Ajout dans l'export excel : EXPORT.EXCEL.COLONNE.PERSONNEL_COMPOSANTE.DROIT_ALERT_MAIL_SVA
+- Correction d'un BUG sur le filteredDetailsDroits
+- Ajout de l'envoi d'une alerte aux gestionnaires leur indiquant qu'une nouvelle demande de transfert est arrivée (départ et accueil) et paramétrable par composante et utilisateur
+- Ajout de l'envoi d'une alerte aux gestionnaires concernant la SVA et paramétrable par composante  et utilisateur
+- Ajout de nouvelles nomenclatures
+- Ajout de nouvelles taches planififiées et refonte de la vue administration.xhtml
+------------------------------------------------------------------------
+r487 | farid | 2017-03-17 11:06:32 +0100 (ven. 17 mars 2017) | 1 ligne
+
+- Correction d'un BUG sur la columnDefinition des bean WsPub.java et Transferts.java
+------------------------------------------------------------------------
+r488 | farid | 2017-03-17 13:03:01 +0100 (ven. 17 mars 2017) | 2 lignes
+
+- définition des columnDefinitions INTEGER
+- Modification du mail alertMailDemandeTransfert
+------------------------------------------------------------------------
+r489 | farid | 2017-03-17 15:06:42 +0100 (ven. 17 mars 2017) | 3 lignes
+
+- Correction d'un nullPointerException dans le scheduler lors qu'il n'y a aucun partenaire
+- Affichage des paramètres d'adminitration des transferts accueil même si le module n'est pas installé
+- Modification du paramètre currentAnnee dans les tests unitaires
+------------------------------------------------------------------------
+r490 | farid | 2017-03-17 15:11:59 +0100 (ven. 17 mars 2017) | 1 ligne
+
+- Affichage dans les paramètres d'adminitration d'un libellé module transferts accueil
+------------------------------------------------------------------------
+r491 | farid | 2017-03-17 16:30:43 +0100 (ven. 17 mars 2017) | 1 ligne
+
+- Modification du paramètre currentAnnee dans les tests unitaires
+------------------------------------------------------------------------
+r492 | farid | 2017-03-20 16:57:47 +0100 (lun. 20 mars 2017) | 3 lignes
+
+- mettreajourDonneesOpi_v4 ===> mettreajourDonneesOpi_v5
+- Changement légende liste des OPI's
+- Ajout méthode public EtudiantRef getDemandeTransfertByAnneeAndNumeroIneAndSource(String ine, Integer annee, String source); ===> ajout du paramètre source afin d'éviter les retours multiple départ et accueil
+------------------------------------------------------------------------
+r493 | farid | 2017-03-22 12:47:52 +0100 (mer. 22 mars 2017) | 2 lignes
+
+- Correction d'un BUG d'affichage au niveau du module gestionnaire sur la présentation par diplome ou composante du voeux
+- Ajout d'une nouvelle dépendance maven sur sonar
+------------------------------------------------------------------------
+r495 | farid | 2017-03-23 14:09:15 +0100 (jeu. 23 mars 2017) | 1 ligne
+
+copy de branches vers le trunk
+------------------------------------------------------------------------
+r496 | farid | 2017-03-23 17:38:26 +0100 (jeu. 23 mars 2017) | 1 ligne
+
+- Suppression de la liste des supers gestionnaires dans le fichier config-exemple.properties
+------------------------------------------------------------------------
+r497 | farid | 2017-03-23 17:54:58 +0100 (jeu. 23 mars 2017) | 1 ligne
+
+- Suppression du menu liste des paramètres et importer les données des années précédentes si primo-install et code sise par défaut est null
+------------------------------------------------------------------------
+r498 | farid | 2017-03-24 14:06:53 +0100 (ven. 24 mars 2017) | 2 lignes
+
+- Ajout d'aide supplémentaire
+- Amélioration de la vue liste des paramètres
+------------------------------------------------------------------------

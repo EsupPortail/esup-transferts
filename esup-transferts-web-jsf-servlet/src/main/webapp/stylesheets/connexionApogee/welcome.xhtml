@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/template.xhtml">
+
+	<ui:define name="custom">
+		<ui:include src="/stylesheets/_include/_custom.xhtml"></ui:include>
+	</ui:define>
+
+	<p:panel rendered="#{!sessionController.error}">
+		<ui:define name="navigation">
+			<ui:include src="/stylesheets/_include/_header.xhtml"></ui:include>
+		</ui:define>
+	</p:panel>
+
+
+	<ui:define name="corps">
+		<ui:include src="/stylesheets/_include/_fermetureAppli.xhtml" />
+		<p:spacer height="30px" />
+		<ui:include src="/stylesheets/_include/_informationAppli.xhtml" />
+		<p:spacer height="30px" />
+		<h:form id="apogee" rendered="#{userController.defaultCodeSizeAnnee}">
+			<center>
+				<p:growl id="growl" showDetail="true" />
+				<p:messages id="msgs" showDetail="true" />
+				<p:panel id="pnl2"
+					header="Etudiant (#{msgs['ETABLISSEMENT.NOM']}) - Année #{sessionController.currentAnnee}/#{sessionController.currentAnnee+1}"
+					toggleable="true" style="text-align:left;" styleClass="panel"
+					closable="false" toggleSpeed="500" closeSpeed="2000"
+					widgetVar="panel">
+					<h:panelGrid columns="1" id="p4">
+						<h:outputText
+							value="#{msgs['ETABLISSEMENT.WELCOME.SCOLARITE.TEXT1']} #{sessionController.currentAnnee} - #{sessionController.currentAnnee+1}" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" id="p5">
+						<h:outputText
+							value="#{msgs['ETABLISSEMENT.WELCOME.SCOLARITE.TEXT2']} #{sessionController.currentAnnee-1} - #{sessionController.currentAnnee} :" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" id="p6">
+						<h:outputText
+							value="#{msgs['ETABLISSEMENT.WELCOME.SCOLARITE.TEXT3']}" />
+					</h:panelGrid>
+					<!-- 					<h:panelGrid columns="1" id="p1"> -->
+					<!-- 						<h:outputText value="un &lt;br /&gt; deux" escape="false" /> -->
+					<!-- 					</h:panelGrid> -->
+					<h:panelGrid columns="1" id="p7">
+						<p:commandButton value="Authentification"
+							action="#{userController.goToAuthApogee}" />
+					</h:panelGrid>
+					<p:spacer height="20px" />
+				</p:panel>
+
+				<p:spacer height="20px" />
+				<p:fieldset legend="Conditions d'utilisation" toggleable="true"
+					toggleSpeed="200" style="text-align:left;" styleClass="panel">
+					<h:outputText value="#{msgs['CNIL.TEXT']} : "
+						style="font-weight:bold" />
+				</p:fieldset>
+
+			</center>
+		</h:form>
+
+		<ui:include src="/stylesheets/_include/_pbAnneeCodeSize.xhtml" />
+
+	</ui:define>
+
+	<!-- 	<ui:define name="content"> -->
+	<!-- 		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include> -->
+	<!-- 	</ui:define> -->
+</ui:composition>
+</html>

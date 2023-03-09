@@ -1,0 +1,30 @@
+/* .ui-widget,.ui-widget .ui-widget { */
+/* 	font-size: 70% !important; */
+/* } */
+
+/* .ui-panel-titlebar { */
+/* 	font-size: 130% !important; */
+/* } */
+
+/* .ui-paneltitlebar.ui-widget-header { */
+/* 	font-size: 130% !important; */
+/* } */
+
+/* .custom .ui-panel-titlebar { */
+/* 	font-size: 130% !important; */
+/* } */
+
+.ui-panel-title, .ui-panel-titlebar {
+    text-align: center !important;
+}
+
+.datatable {
+	font-size: 70% !important;
+	width:70%; 
+	text-align:center;
+}
+
+.panel {
+	width:70%;
+	font-size: 80% !important;
+}

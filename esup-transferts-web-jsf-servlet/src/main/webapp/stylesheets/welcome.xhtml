@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/template.xhtml">
+
+	<ui:define name="custom">
+		<ui:include src="/stylesheets/_include/_custom.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="navigation" />
+
+	<ui:define name="corps">
+		<ui:include src="/stylesheets/_include/_fermetureAppli.xhtml" />
+		<p:spacer height="30px" />
+		<ui:include src="/stylesheets/_include/_informationAppli.xhtml" />
+		<p:spacer height="30px" />
+		<p:growl id="messages" showDetail="true" />
+		<h:form id="accueil">
+			<center>
+				<p:panel id="pnl2" styleClass="panel"
+					header="Bienvenue dans l'application de transferts de dossiers étudiants de l'#{msgs['ETABLISSEMENT.NOM']}"
+					toggleable="true" closable="false" toggleSpeed="500"
+					closeSpeed="2000" widgetVar="panel"
+					footer="#{msgs['ETABLISSEMENT.NOM']}">
+					<p:spacer height="10px" />
+					<p:spacer rendered="#{userController.defaultCodeSizeAnnee}" />
+					<h:panelGrid columns="3">
+
+						<p:commandButton action="#{userController.goToCas}"
+							value="Vous êtes inscrit en #{sessionController.currentAnnee-1} - #{sessionController.currentAnnee} (Connexion ENT)" />
+
+						<p:commandButton action="#{userController.goToWelcomeApogee}"
+							value="Vous n'étiez pas inscrit en #{sessionController.currentAnnee-1} - #{sessionController.currentAnnee} (Connexion INE)" />
+
+						<!-- 						<p:commandButton action="#{userController.testEtapes}" -->
+						<!-- 							value="Test libellé étape" /> -->
+
+						<!-- 						<p:commandButton action="#{userController.testEtapes2}" -->
+						<!-- 							value="Test libellé étape" /> -->
+
+						<!-- 						<p:commandButton action="#{userController.testSize}" -->
+						<!-- 							value="Test code size" /> -->
+
+<!-- 						<p:commandButton action="#{administrationController.testWsSiScol}" value="Test WsSiScol" /> -->
+
+						<!-- 						<p:commandButton action="#{administrationController.goToWelcome}" -->
+						<!-- 							title="Save" icon="ui-icon-disk" /> -->
+					</h:panelGrid>
+				</p:panel>
+				
+<!-- 				<p:log  /> -->
+				
+			</center>
+		</h:form>
+	</ui:define>
+
+	<!-- 	<ui:define name="content"> -->
+	<!-- 		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include> -->
+	<!-- 	</ui:define> -->
+
+</ui:composition>
+</html>

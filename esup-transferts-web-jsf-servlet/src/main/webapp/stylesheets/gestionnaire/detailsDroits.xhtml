@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+
+		<p:panel
+			rendered="#{!sessionController.currentUser.admin}">
+			<ui:include
+				src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+		</p:panel>
+		
+		
+		<h:form id="detailsDesDroits" rendered="#{sessionController.currentUser.admin}">
+
+		<p:growl id="growl" showDetail="false" />
+		<p:messages id="msgs" showDetail="false" />
+
+			<p:dataTable var="PCDetailsDroits"
+				value="#{managerController.listeComposantesDetailsDroits}"
+				filteredValue="#{managerController.filteredDetailsDroits}"
+				editMode="cell" rendered="#{sessionController.currentUser.admin}"
+				rowsPerPageTemplate="5,10,15,20,25,30,40,50" rows="10"
+				paginator="true" id="detailsDroits" styleClass="datatable"
+				style="width:80%;" editable="true">
+
+				<f:facet name="header">  
+										            Details des droits
+										        </f:facet>
+				<p:column headerText="Nom">
+				            #{PCDetailsDroits.displayName}  
+				        </p:column>
+
+				<p:column headerText="Identifiant">
+				            #{PCDetailsDroits.uid}  
+				        </p:column>
+
+				<p:column headerText="Mail">
+					#{PCDetailsDroits.mailPersonnel}
+				</p:column>
+
+				<p:column headerText="Code composante" filterBy="#{PCDetailsDroits.codeComposante}" sortBy="#{PCDetailsDroits.codeComposante}">
+				            #{PCDetailsDroits.codeComposante}  
+				        </p:column>
+
+				<p:column headerText="Libellé composante">
+				            #{PCDetailsDroits.libelleComposante}  
+				        </p:column>
+
+				<p:column headerText="Année">
+				            #{PCDetailsDroits.annee}  
+				        </p:column>
+
+				<p:column headerText="Suppression">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{PCDetailsDroits.droitSuppression}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:selectOneMenu value="#{PCDetailsDroits.droitSuppression}"
+								style="width:100%">
+								<f:selectItem itemLabel="oui" itemValue="oui" />
+								<f:selectItem itemLabel="non" itemValue="non" />
+							</h:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Edition PDF">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{PCDetailsDroits.droitEditionPdf}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:selectOneMenu value="#{PCDetailsDroits.droitEditionPdf}"
+								style="width:100%">
+								<f:selectItem itemLabel="oui" itemValue="oui" />
+								<f:selectItem itemLabel="non" itemValue="non" />
+							</h:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Déverrouiller">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{PCDetailsDroits.droitDeverrouiller}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:selectOneMenu value="#{PCDetailsDroits.droitDeverrouiller}"
+								style="width:100%">
+								<f:selectItem itemLabel="oui" itemValue="oui" />
+								<f:selectItem itemLabel="non" itemValue="non" />
+							</h:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Avis" rendered="#{managerController.from=='D'}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{PCDetailsDroits.droitAvis}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:selectOneMenu value="#{PCDetailsDroits.droitAvis}"
+								style="width:100%">
+								<f:selectItem itemLabel="oui" itemValue="oui" />
+								<f:selectItem itemLabel="non" itemValue="non" />
+							</h:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Avis Définitif" rendered="#{managerController.from=='D'}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{PCDetailsDroits.droitAvisDefinitif}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:selectOneMenu value="#{PCDetailsDroits.droitAvisDefinitif}"
+											 style="width:100%">
+								<f:selectItem itemLabel="oui" itemValue="oui" />
+								<f:selectItem itemLabel="non" itemValue="non" />
+							</h:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Décision" rendered="#{managerController.from=='A'}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{PCDetailsDroits.droitDecision}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:selectOneMenu value="#{PCDetailsDroits.droitDecision}"
+								style="width:100%">
+								<f:selectItem itemLabel="oui" itemValue="oui" />
+								<f:selectItem itemLabel="non" itemValue="non" />
+							</h:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+                <p:column headerText="Alert mail demande transfert">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{PCDetailsDroits.alertMailDemandeTransfert}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{PCDetailsDroits.alertMailDemandeTransfert}"
+                                             style="width:100%">
+                                <f:selectItem itemLabel="oui" itemValue="oui" />
+                                <f:selectItem itemLabel="non" itemValue="non" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+				<p:column headerText="Alert mail SVA">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{PCDetailsDroits.alertMailSva}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:selectOneMenu value="#{PCDetailsDroits.alertMailSva}"
+											 style="width:100%">
+								<f:selectItem itemLabel="oui" itemValue="oui" />
+								<f:selectItem itemLabel="non" itemValue="non" />
+							</h:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Précedent"
+						actionListener="#{managerController.goToManagerChoixLicence}"
+						immediate="true" />
+					<p:spacer width="20" />
+					<p:commandButton value="Enregistrer" icon="ui-icon-disk"
+						actionListener="#{managerController.addPersonnelComposante}"
+						update=":detailsDesDroits:growl,:detailsDesDroits:msgs,:detailsDesDroits:msgs2,:detailsDesDroits:detailsDroits" />					
+				</f:facet>
+
+			</p:dataTable>
+			<p:spacer height="10px" />
+			<p:messages id="msgs2" showDetail="false" />
+		</h:form>
+		
+	</ui:define>
+
+	<ui:define name="content">
+		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include>
+	</ui:define>
+
+</ui:composition>
+</html>

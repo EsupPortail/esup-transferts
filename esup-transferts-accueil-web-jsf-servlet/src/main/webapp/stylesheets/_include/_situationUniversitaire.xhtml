@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="situationUniversitaire">
+	<ui:include src="/stylesheets/_include/_fermetureAppli.xhtml" />
+	<p:panel id="voeux" header="Situation universitaire"
+		rendered="#{userController.parametreAppli.bool}">
+		<p:messages id="msgs" showDetail="false" />
+		<p:growl id="growl" showDetail="false" sticky="true" />
+
+		<p:fieldset legend="Etat civil" toggleable="true" toggleSpeed="200"
+			collapsed="true">
+			<h:panelGrid columns="2" columnClasses="column" cellpadding="5">
+				<h:outputText value="Numéro étudiant : "
+					rendered="#{userController.currentEtudiant.bddScol==1}" />
+				<h:outputText
+					value="#{userController.currentEtudiant.numeroEtudiant}"
+					rendered="#{userController.currentEtudiant.bddScol==1}" />
+
+				<h:outputText value="Numéro I.N.E : " />
+				<h:outputText value="#{userController.currentEtudiant.numeroIne}" />
+
+				<h:outputText value="Nom de famille : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.nomPatronymique}" />
+
+				<h:outputText value="Nom d'usage : " />
+				<h:outputText value="#{userController.currentEtudiant.nomUsuel}" />
+
+				<h:outputText value="Prénom 1 : " />
+				<h:outputText value="#{userController.currentEtudiant.prenom1}" />
+
+				<h:outputText value="Prénom 2 : " />
+				<h:outputText value="#{userController.currentEtudiant.prenom2}" />
+
+				<h:outputText value="Date de naissance : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.dateNaissance}"
+					rendered="#{userController.currentEtudiant!=null}">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="#{sessionController.timezone}" />
+				</h:outputText>
+
+
+				<p:spacer height="10px" />
+				<p:spacer height="10px" />
+
+			</h:panelGrid>
+		</p:fieldset>
+		<p:spacer height="20px" />
+		<h:panelGrid columns="3" columnClasses="column" cellpadding="5">
+
+			<h:outputText value="* Nationalité : " />
+			<p:selectOneMenu id="nationalite" filter="true"
+				value="#{userController.currentEtudiant.accueil.codePaysNat}"
+				required="true" requiredMessage="#{msgs['ERREUR.NATIONALITE']}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeNationalite}" />
+			</p:selectOneMenu>
+			<h:outputText value=" " />
+
+			<h:outputText value="* Année du Baccalauréat : " />
+			<p:inputText id="annee_bac" size="4" maxlength="4" required="true"
+				requiredMessage="#{msgs['ERREUR.ANNEE_BAC']}"
+				value="#{userController.currentEtudiant.accueil.anneeBac}" />
+			<p:commandButton id="modalDialogButton5" onclick="PF('dlg5').show();"
+				type="button" icon="ui-icon-help" />
+
+			<h:outputText value="* Série du baccalauréat : " />
+			<p:selectOneMenu id="serieBac" filter="true"
+				value="#{userController.currentEtudiant.accueil.codeBac}"
+				required="true" requiredMessage="#{msgs['ERREUR.SERIE_BAC']}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeBacOuEqu}" />
+			</p:selectOneMenu>
+			<h:outputText value=" " />
+
+			<h:outputText value="* Département de l'université de départ : " />
+			<p:selectOneMenu id="departements" filter="true"
+				value="#{userController.currentEtudiant.accueil.codeDepUnivDepart}"
+				required="true" requiredMessage="#{msgs['ERREUR.DEPARTEMENT']}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeDepartements}" />
+				<p:ajax event="change"
+					update="situationUniversitaire:etablissements"
+					listener="#{userController.resetGeneral}" />
+			</p:selectOneMenu>
+			<p:commandButton id="modalDialogButton2" onclick="PF('dlg2').show();"
+				type="button" icon="ui-icon-help" />
+
+
+			<h:outputText value="* Nom de l'université de départ : " />
+			<p:selectOneMenu id="etablissements"
+				value="#{userController.currentEtudiant.accueil.codeRneUnivDepart}"
+				required="true" requiredMessage="#{msgs['ERREUR.ETABLISSEMENT']}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeEtablissements}" />
+				<p:ajax event="change"
+					update="situationUniversitaire:etablissements,situationUniversitaire:msgs,situationUniversitaire:msgs2,situationUniversitaire:growl,situationUniversitaire:bouton"
+					listener="#{userController.verifEtablissementPartenaire}" />
+			</p:selectOneMenu>
+			<h:outputText value=" " />
+
+			<h:outputText
+				value="* Avez-vous effectué une validation d'étude ou une demande de candidature ? " />
+			<p:selectOneMenu id="validationOuCandidature"
+				value="#{userController.currentEtudiant.accueil.validationOuCandidature}"
+				required="true"
+				requiredMessage="#{msgs['ERREUR.VALIDATION_OU_CANDIDATURE']}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItem itemLabel="Non spécifié" itemValue="0" />
+				<f:selectItem itemLabel="Oui" itemValue="1" />
+				<f:selectItem itemLabel="Non" itemValue="2" />
+			</p:selectOneMenu>
+			<p:commandButton id="modalDialogButton4" onclick="PF('dlg4').show();"
+				type="button" icon="ui-icon-help" />
+
+			<h:outputText value=" SITUATION UNIVERSITAIRE ANTERIEURE" />
+			<p:separator style="width:100%;height:20px" />
+			<p:commandButton id="modalDialogButton3" onclick="PF('dlg3').show();"
+				type="button" icon="ui-icon-help" />
+
+		</h:panelGrid>
+
+		<p:dataTable id="dataSituationUniv" var="situationUniv"
+			value="#{userController.sudm}"
+			emptyMessage="Aucune situation universitaire antérieure saisie"
+			selection="#{userController.selectedSituationUniv}">
+
+			<f:facet name="header">  
+            Veuillez détailler votre cursus universitaire (dans la limite des 7 dernières années) 
+        </f:facet>
+
+			<p:column selectionMode="single" style="width:18px" />
+
+			<p:column headerText="Année"
+				rendered="#{situationUniv.annee.idAccueilAnnee!=0}">  
+            #{situationUniv.annee.libelle}  
+        </p:column>
+
+			<p:column headerText="Année"
+				rendered="#{situationUniv.annee.idAccueilAnnee==0}">  
+            #{situationUniv.libAccueilAnnee}  
+        </p:column>
+
+			<p:column headerText="Libellé">  
+            #{situationUniv.libelle}  
+        </p:column>
+
+			<p:column headerText="Résultat"
+				rendered="#{situationUniv.resultat.idAccueilResultat!=0}">  
+            #{situationUniv.resultat.libelle}  
+        </p:column>
+
+			<p:column headerText="Résultat"
+				rendered="#{situationUniv.resultat.idAccueilResultat==0}">  
+            #{situationUniv.libAccueilResultat}  
+        </p:column>
+
+			<f:facet name="footer">
+
+			</f:facet>
+
+
+		</p:dataTable>
+		<center>
+			<p:commandButton
+				update=":situationUniversitaire,situationUniversitaire:growl,:situationUniversitaire:msgs,:situationUniversitaire:msgs2"
+				id="viewButton" value="Suppression" icon="ui-icon-close"
+				action="#{userController.deleteSelectedSituationUniv}" />
+		</center>
+		<p:spacer height="20px" />
+
+		<h:panelGrid columns="7" columnClasses="column" cellpadding="5">
+
+			* Année : <p:selectOneMenu id="annee"
+				value="#{userController.currentCleAccueilAnnee}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeAccueilAnnee}" />
+				<f:selectItems value="#{autoCompleteBean.players}" var="player"
+					itemLabel="#{player.name}" itemValue="#{player}" />
+			</p:selectOneMenu>
+
+			* Libellé : <p:inputText id="libelle" size="50" maxlength="50"
+				value="#{userController.currentSituationUniv.libelle}">
+				<!-- 				<f:ajax event="change" render="input_etranger" /> -->
+			</p:inputText>
+
+
+			* Résultat : <p:selectOneMenu id="resultat"
+				value="#{userController.currentCleAccueilResultat}">
+				<f:selectItem itemLabel="== Choix ==" itemValue="" />
+				<f:selectItems value="#{userController.listeAccueilResultat}" />
+			</p:selectOneMenu>
+
+			<p:commandButton value="Ajouter"
+				update="situationUniversitaire,growl,msgs,msgs2"
+				rendered="#{!userController.maxSU}"
+				action="#{userController.ajouterSituationUniv}" />
+
+
+		</h:panelGrid>
+
+		<p:spacer height="20px" />
+
+		<h:panelGrid columns="2" id="bouton">
+			<p:commandButton value="Précédent" immediate="true"
+				rendered="#{userController.verifDateNaisApogee}"
+				action="#{userController.goToAdresseApogee}" />
+			<p:commandButton value="Suivant" id="suivant"
+				update="situationUniversitaire,growl,msgs,msgs2"
+				rendered="#{userController.verifDateNaisApogee and !userController.etabPartenaireSaisieDepart}"
+				action="#{userController.goToVoeuxOrientationApogee}">
+				<f:ajax event="click" render="voeux msgs growl" />
+			</p:commandButton>
+		</h:panelGrid>
+		<p:messages id="msgs2" showDetail="false" />
+	</p:panel>
+</h:form>
+<p:dialog id="modalDialog" header="Département" widgetVar="dlg2"
+	modal="true" height="300">
+	<h:outputText escape="false" value="#{msgs['AIDE.DEPARTEMENT']}" />
+</p:dialog>
+<p:dialog id="modalDialog3" header="Situation universitaire antérieure"
+	widgetVar="dlg3" modal="true" height="300">
+	<h:outputText escape="false"
+		value="#{msgs['AIDE.SITUATION_UNIVERSITAIRE_ANTERIEURE']}" />
+</p:dialog>
+<p:dialog id="modalDialog4"
+	header="Validation d'étude ou une demande de candidature"
+	widgetVar="dlg4" modal="true" height="300">
+	<h:outputText escape="false" value="#{msgs['AIDE.VALIDATION_ETUDE']}" />
+</p:dialog>
+<p:dialog id="modalDialog5" header="Série du baccalauréat"
+	widgetVar="dlg5" modal="true" height="300">
+	<h:outputText escape="false" value="#{msgs['AIDE.ANNEE_BACCALAUREAT']}" />
+</p:dialog>
+</html>

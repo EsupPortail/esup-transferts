@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+
+		<p:messages id="msgs" showDetail="true" />
+		<p:growl id="growl" showDetail="true" />
+		<center>
+			<p:panel rendered="#{!sessionController.currentUser.admin}">
+				<ui:include
+					src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+			</p:panel>
+		</center>
+		<h:form id="form" rendered="#{sessionController.currentUser.admin}">
+
+			<p:spacer height="20px" />
+
+			<p:dataTable var="car" value="#{partenaireController.partenaires}" emptyMessage="Aucun établissement partenaire"
+				rowsPerPageTemplate="5,10,15,20,25,30" rows="10" paginator="true"
+				id="partenaire" styleClass="datatable"
+				style="width:80%; text-align:center;" editable="true">
+
+				<f:facet name="header">  
+            Liste des établissements partenaires
+        </f:facet>
+
+				<p:ajax event="rowEdit" listener="#{partenaireController.onEdit}"
+					update=":growl,:msgs,:msgs2" />
+				<p:ajax event="rowEditCancel" oncomplete="PF('confirmation').show()"
+					listener="#{partenaireController.setOnCancel}" />
+
+				<p:column headerText="Online" style="width:7%;"
+					sortBy="#{car.online}" id="nb">
+					<h:graphicImage alt="avisSaisie" title="Online"
+						value="/media/images/tick.png" rendered="#{car.online==1}" />
+					<h:graphicImage alt="avisSaisie" title="Indisponible"
+						value="/media/images/exit.png" rendered="#{car.online==0}" />
+				</p:column>
+
+				<p:column headerText="Synchro Odf" style="width:7%;"
+					sortBy="#{car.syncOdf}" id="nb2">
+					<h:graphicImage alt="Indisponible" title="Indisponible"
+						value="/media/images/exit.png" rendered="#{car.syncOdf==0}" />
+					<h:graphicImage alt="MAJ ok" title="Ok"
+						value="/media/images/tick.png" rendered="#{car.syncOdf==1}" />
+					<h:graphicImage alt="MAJ dispo" title="MAJ dispo"
+						value="/media/images/maj.png" rendered="#{car.syncOdf==2}" />
+					<h:graphicImage alt="Aucune odf" title="Aucune odf"
+						value="/media/images/alert.png" rendered="#{car.syncOdf==3}" />
+				</p:column>
+
+				<p:column headerText="Version application" style="width:125px">
+					<h:outputText value="#{car.versionApplication}" />
+				</p:column>
+
+				<p:column headerText="Affichage de l'ODF" style="width:125px">
+							<h:outputText value="Composante" rendered="#{car.choixDuVoeuParComposante}"/>
+							<h:outputText value="Diplome" rendered="#{!car.choixDuVoeuParComposante}"/>
+				</p:column>
+
+				<p:column headerText="RNE" style="width:125px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{car.rne}" />
+						</f:facet>
+						<f:facet name="input">
+							<!-- 									<p:inputText value="#{car.rne}" style="width:100%" /> -->
+							<h:outputText value="#{car.rne}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="libellé Etab" style="width:125px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{car.libEtab}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="libEtab" value="#{car.libEtab}"
+								style="width:100%" label="libEtab" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Email fonctionnel" style="width:125px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{car.mailCorrespondantFonctionnel}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="mailFonctionnel"
+								value="#{car.mailCorrespondantFonctionnel}" style="width:100%"
+								label="mailFonctionnel">
+								<f:validator binding="#{mailValidator}" />
+							</p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Email technique" style="width:125px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{car.mailCorrespondantTechnique}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="mailTechnique" rendered="#{administrationController.personnel and sessionController.currentAnnee!=null and sessionController.currentUser.informaticien}"
+								value="#{car.mailCorrespondantTechnique}" style="width:100%"
+								label="mailTechnique">
+								<f:validator binding="#{mailValidator}" />
+							</p:inputText>
+							<h:outputText rendered="#{administrationController.personnel and sessionController.currentAnnee!=null and !sessionController.currentUser.informaticien}"
+										 value="#{car.mailCorrespondantTechnique}" style="width:100%"
+										 label="mailTechnique">
+								</h:outputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="url" style="width:125px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{car.url}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="url" value="#{car.url}" style="width:100%" rendered="#{administrationController.personnel and sessionController.currentAnnee!=null and sessionController.currentUser.informaticien}"
+								label="url" />
+							<h:outputText value="#{car.url}" style="width:100%" rendered="#{administrationController.personnel and sessionController.currentAnnee!=null and !sessionController.currentUser.informaticien}"
+										 label="url" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="identifiant" style="width:125px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{car.identifiant}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="identifiant" value="#{car.identifiant}" rendered="#{administrationController.personnel and sessionController.currentAnnee!=null and sessionController.currentUser.informaticien}"
+								style="width:100%" label="identifiant" />
+							<h:outputText value="#{car.identifiant}" rendered="#{administrationController.personnel and sessionController.currentAnnee!=null and !sessionController.currentUser.informaticien}"
+										 style="width:100%" label="identifiant" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="password" style="width:125px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{car.password}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="password" value="#{car.password}" rendered="#{administrationController.personnel and sessionController.currentAnnee!=null and sessionController.currentUser.informaticien}"
+								style="width:100%" label="password" />
+							<h:outputText value="#{car.password}" rendered="#{administrationController.personnel and sessionController.currentAnnee!=null and !sessionController.currentUser.informaticien}"
+										 style="width:100%" label="password" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Options" style="width:50px">
+					<p:rowEditor />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+		<p:spacer height="20" />
+		<center>
+			<h:form id="form2" rendered="#{sessionController.currentUser.informaticien}">
+				<p:panel id="avis" header="Ajouter un partenaire" toggleable="true"
+					style="width:80%;" collapsed="true" closable="true"
+					toggleSpeed="500" closeSpeed="500" widgetVar="avis">
+					<h:panelGrid columns="2" columnClasses="column" cellpadding="5"
+						style="text-align:left;">
+						<h:outputText value="* R.N.E : " />
+						<p:inputText value="#{partenaireController.currentPartenaire.rne}"
+							required="true" id="rne" maxlength="8"
+							requiredMessage="#{msgs['ERREUR.PARTENAIRE.RNE']}" />
+						<h:outputText value="* Libellé établissement : " />
+						<p:inputText
+							value="#{partenaireController.currentPartenaire.libEtab}"
+							required="true" id="libEtab"
+							requiredMessage="#{msgs['ERREUR.PARTENAIRE.LIBETAB']}" />
+						<h:outputText value="* Mail du contact fonctionnel : " />
+						<p:inputText
+							value="#{partenaireController.currentPartenaire.mailCorrespondantFonctionnel}"
+							required="true" id="mailCorrespondantFonctionnel"
+							requiredMessage="#{msgs['ERREUR.PARTENAIRE.MAIL']}">
+							<f:validator binding="#{mailValidator}" />
+						</p:inputText>
+						<h:outputText value="* Mail du contact technique : " />
+						<p:inputText
+							value="#{partenaireController.currentPartenaire.mailCorrespondantTechnique}"
+							required="true" id="mailCorrespondantTechnique"
+							requiredMessage="#{msgs['ERREUR.PARTENAIRE.MAIL']}">
+							<f:validator binding="#{mailValidator}" />
+						</p:inputText>
+						<h:outputText value="* U.R.L : " />
+						<p:inputText value="#{partenaireController.currentPartenaire.url}"
+							required="true" id="url"
+							requiredMessage="#{msgs['ERREUR.PARTENAIRE.URL']}" />
+						<h:outputText value="* Identifiant : " />
+						<p:inputText
+							value="#{partenaireController.currentPartenaire.identifiant}"
+							required="true" id="identifiant"
+							requiredMessage="#{msgs['ERREUR.PARTENAIRE.IDENTIFIANT']}" />
+						<h:outputText value="* Password : " />
+						<p:inputText
+							value="#{partenaireController.currentPartenaire.password}"
+							required="true" id="password"
+							requiredMessage="#{msgs['ERREUR.PARTENAIRE.PASSWORD']}" />
+					</h:panelGrid>
+					<p:commandButton value="Enregistrer"
+						update=":growl,:msgs,:msgs2,:form,:form2"
+						actionListener="#{partenaireController.addPartenaire}" />
+				</p:panel>
+			</h:form>
+		</center>
+		<p:messages id="msgs2" showDetail="true" />
+
+		<p:confirmDialog
+			message="L'établissement partenaire sera supprimé et un champ de texte libre sera proposé lors de la saisie du voeux. Souhaitez-vous vraiment supprimer cet établissement partenaire ?"
+			header="Confirmation" severity="alert" widgetVar="confirmation">
+			<p:commandButton value="Oui"  rendered="#{sessionController.currentUser.informaticien}"
+				update=":growl,:msgs,:msgs2,:form:partenaire"
+				oncomplete="PF('confirmation').hide()"
+				action="#{partenaireController.onCancel}" />
+			<p:commandButton value="Non" onclick="PF('confirmation').hide()"
+				type="button" />
+		</p:confirmDialog>
+
+
+	</ui:define>
+</ui:composition>
+</html>

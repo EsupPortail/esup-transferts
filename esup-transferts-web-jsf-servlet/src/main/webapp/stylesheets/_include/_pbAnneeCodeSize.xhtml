@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+		<center>
+			<p:panel id="erreur" header="Informations"
+				rendered="#{!userController.defaultCodeSizeAnnee}" toggleable="true"
+				style="text-align:center;" styleClass="panel" closable="false"
+				toggleSpeed="500" closeSpeed="2000" widgetVar="panel">
+				<fieldset>
+					<legend>
+						<h:graphicImage alt="WARNING"
+							value="/media/images/warning_40px.png" />
+					</legend>
+					<div>
+						<h:outputText style="font-size:25px;font-weight:bold;"
+							value="#{msgs['UNAUTHORIZED.REFUSED']}" />
+					</div>
+					<p:spacer height="8" />
+					<div>
+						<h:outputText style="font-size:16px;"
+							value="#{msgs['ERREUR.AUTORISATION_ANNEE_CODE_SIZE']}" />
+					</div>
+					<div>
+						<h:outputText style="font-size:16px;"
+							value="#{msgs['ERREUR.INTERDIT_BU']}" />
+					</div>
+				</fieldset>
+			</p:panel>
+		</center>
+</ui:composition>

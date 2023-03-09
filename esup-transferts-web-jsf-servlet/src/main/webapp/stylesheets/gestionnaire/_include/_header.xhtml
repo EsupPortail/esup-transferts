@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="idle">
+	<p:dialog id="idleDialog"
+		header="Votre session a expiré, veuillez vous réidentifier en cliquant sur l'image"
+		widgetVar="idleDialog" modal="true" fixedCenter="true"
+		closable="false" draggable="false" resizable="false"
+		appendToBody="true" height="100" width="400">
+		<h:outputText value="" />
+		<center>
+			<p:commandLink id="nonAjax" actionListener="go_exception"
+				ajax="false">
+				<h:graphicImage alt="avisSaisie" title="Session expirée" width="100"
+					height="100" value="/media/images/identification.gif" />
+			</p:commandLink>
+		</center>
+	</p:dialog>
+</h:form>
+
+<h:form id="header">
+	<p:ajaxStatus>
+		<f:facet name="start">
+<!-- 			<p:graphicImage value="/media/images/ajaxloadingbar.gif" /> -->
+		</f:facet>
+	</p:ajaxStatus>
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onerror="PF('idleDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		 closable="false"
+		resizable="false" showHeader="false">
+<!-- 		<p:graphicImage value="/media/images/ajaxloadingbar.gif" /> -->
+<!-- 		<p:graphicImage value="/media/images/loading_spinner.gif" /> -->
+		<p:graphicImage value="/media/images/loading140.gif" />
+	</p:dialog>
+
+	<p:growl id="messages" />
+
+	<center>
+		<p:megaMenu autoDisplay="false" styleClass="panel"
+			rendered="#{administrationController.currentUserLogin!=null}"
+			style="text-align:center;width:80%;">
+
+			<p:submenu label="Transferts départ" icon="ui-icon-folder-open"
+				rendered="#{administrationController.personnel and sessionController.currentAnnee!=null and (administrationController.droitsDepart || sessionController.currentUser.admin)}">
+				<p:column>
+					<p:submenu label="Transferts départ">
+						<p:menuitem value="Liste des demandes"
+							action="#{administrationController.goToTransfertsDepart}" />
+						<p:menuitem value="Validation en masse"
+							action="#{administrationController.goToValideMasseTransfertsDepart}" />
+						<p:menuitem value="Exporter les demandes (XSL)"
+							action="#{administrationController.exportDemandeTransferts}" />
+					</p:submenu>
+				</p:column>
+				<p:column>
+					<p:submenu label="Messages"
+						rendered="#{sessionController.currentUser.admin}">
+						<p:menuitem value="Message d'information"
+							rendered="#{sessionController.currentUser.admin}"
+							action="#{administrationController.goToInformationAppliDepart}" />
+ 						<p:menuitem value="Fermeture de l'application"
+							rendered="#{sessionController.currentUser.admin and !sessionController.planningFermeturesAuto}"
+							action="#{administrationController.goToFermetureAppliDepart}" /> 
+						<p:menuitem value="Fermeture de l'application"
+							rendered="#{sessionController.currentUser.admin and sessionController.planningFermeturesAuto}"
+							action="#{scheduleController.goToFermetureAppliSchedulerDepart}"> 
+						<!-- <c:set var="User" value="#{productDAO.findByCode('code')}" scope="request" />	--> 
+						</p:menuitem>							
+					</p:submenu>
+					<p:submenu label="Validation automatique"
+						rendered="#{sessionController.currentUser.admin and sessionController.validationAutomatique!=''}">
+						<p:menuitem value="Composantes"
+							rendered="#{sessionController.currentUser.admin and sessionController.validationAutomatique=='composante'}"
+							action="#{managerController.goToValidationComposantesAutoTransfertsDepart}" />
+						<p:menuitem value="Centre de Gestion"
+							rendered="#{sessionController.currentUser.admin and sessionController.validationAutomatique=='cge'}"
+							action="#{managerController.goToValidationCGEAutoTransfertsDepart}" />
+					</p:submenu>
+				</p:column>
+				<p:column>
+					<p:submenu label="Paramètres départ">
+						<p:menuitem value="Visualisation de l'ODF"
+							action="#{testController.goToTest}" />
+						<p:menuitem value="Droits des utilisateurs"
+							rendered="#{sessionController.currentUser.admin}"
+							action="#{managerController.goToListeManagerDepart}" />
+						<p:menuitem value="Liste des signatures"
+							rendered="#{sessionController.currentUser.admin}"
+							action="#{fileUploadController.goToSignatureDepart}" />
+					</p:submenu>
+				</p:column>
+			</p:submenu>
+
+			<p:submenu label="Transferts accueil" icon="ui-icon-folder-open"
+				rendered="#{administrationController.personnel  and sessionController.currentAnnee!=null and (administrationController.droitsArrivee || sessionController.currentUser.admin)}">
+				<p:column>
+					<p:submenu label="Transferts accueil">
+						<p:menuitem value="Liste des demandes"
+							action="#{administrationController.goToTransfertsAccueil}" />
+						<p:menuitem value="Validation en masse"
+							rendered="#{!sessionController.transfertsAccueil}"
+							action="#{administrationController.goToValideMasseTransfertsAccueil}" />
+						<p:menuitem value="Exporter les demandes (XSL)"
+							action="#{administrationController.exportDemandeTransfertsAccueil}" />
+					</p:submenu>
+				</p:column>
+				<p:column>
+					<p:submenu label="Messages"
+						rendered="#{sessionController.currentUser.admin and sessionController.transfertsAccueil}">
+						<p:menuitem value="Message d'information"
+							rendered="#{sessionController.currentUser.admin and sessionController.transfertsAccueil}"
+							action="#{administrationController.goToInformationAppliAccueil}" />
+						<p:menuitem value="Fermeture de l'application"
+							rendered="#{sessionController.currentUser.admin and sessionController.transfertsAccueil and !sessionController.planningFermeturesAuto}"
+							action="#{administrationController.goToFermetureAppliAccueil}" />
+						<p:menuitem value="Fermeture de l'application"
+							rendered="#{sessionController.currentUser.admin and sessionController.transfertsAccueil and sessionController.planningFermeturesAuto}"
+							action="#{scheduleController.goToFermetureAppliSchedulerAccueil}" /> 
+					</p:submenu>
+				</p:column>
+				<p:column>
+					<p:submenu label="Paramètres accueil" rendered="#{sessionController.currentUser.admin or sessionController.transfertsAccueil}">
+						<p:menuitem value="Visualisation de l'ODF"
+							rendered="#{sessionController.transfertsAccueil}"
+							action="#{testController.goToTest2}" />
+						<p:menuitem value="Droits des utilisateurs"
+							rendered="#{sessionController.currentUser.admin}"
+							action="#{managerController.goToListeManagerAccueil}" />
+						<p:menuitem value="Liste des signatures "
+							rendered="#{sessionController.currentUser.admin}"
+							action="#{fileUploadController.goToSignatureAccueil}" />
+					</p:submenu>
+				</p:column>
+			</p:submenu>
+
+			<p:submenu label="Paramétrage" icon="ui-icon-key"
+				rendered="#{administrationController.personnel and (administrationController.droitsDepart || administrationController.droitsArrivee || sessionController.currentUser.admin)}">
+				<p:column>
+					<p:submenu label="Campagnes"
+						rendered="#{sessionController.currentUser.admin}">
+						<p:menuitem value="Campagne en cours"
+							action="#{administrationController.goToChangeCodeSize}" />
+					</p:submenu>
+					<p:submenu label="Historiques"
+						rendered="#{sessionController.currentAnnee!=null}">
+						<p:menuitem value="Liste des campagnes"
+							action="#{administrationController.goToChangeAnnee}" />
+					</p:submenu>
+				</p:column>
+
+				<p:column>
+					<p:submenu rendered="#{sessionController.currentAnnee!=null}"
+						label="Offre de formation" icon="ui-icon-help">
+						<p:menuitem value="Mise à jour de l'ODF"
+							rendered="#{sessionController.currentUser.admin}"
+							action="#{odfController.goToSynchroOdf}" />
+						<p:menuitem value="Exporter l'ODF (XSL)"
+							action="#{odfController.exportXlsODF}" />
+					</p:submenu>
+					<p:submenu label="Etablissement partenaire"
+						rendered="#{sessionController.currentUser.admin and sessionController.currentAnnee!=null}">
+						<p:menuitem value="Partenaires"
+							action="#{partenaireController.goToPartenaires}" />
+					</p:submenu>
+				</p:column>
+				<p:column rendered="#{sessionController.currentUser.admin and sessionController.currentAnnee!=null}">
+					<p:submenu rendered="#{sessionController.currentUser.admin and sessionController.currentAnnee!=null}"
+						label="Préférences" icon="ui-icon-help">
+						<p:menuitem value="Liste des paramètres"
+							rendered="#{sessionController.currentUser.admin and sessionController.currentAnnee!=null}"
+							action="#{administrationController.goToAdministration}" />
+					</p:submenu>
+				</p:column>
+				<p:column rendered="#{sessionController.currentUser.informaticien and sessionController.currentAnnee!=null}">
+					<p:submenu rendered="#{sessionController.currentUser.informaticien and sessionController.currentAnnee!=null}"
+							   label="Importer" icon="ui-icon-help">
+						<p:menuitem value="Données années précédentes"
+									rendered="#{sessionController.currentUser.informaticien and sessionController.currentAnnee!=null}"
+									action="#{administrationController.goToImportDonneesAnneesPrecedentes}" />
+					</p:submenu>
+				</p:column>
+			</p:submenu>
+
+			<p:submenu label="Statistiques" icon="ui-icon-calculator"
+				rendered="#{sessionController.currentAnnee!=null and sessionController.currentUser.admin and administrationController.personnel}">
+				<p:column>
+					<p:submenu label="Statistiques"
+						rendered="#{sessionController.currentUser.admin}">
+						<p:menuitem value="Liste des statistiques"
+							action="#{administrationController.goToStats}" />
+					</p:submenu>
+				</p:column>
+			</p:submenu>
+
+			<p:submenu label="OPI" icon="ui-icon-arrowreturnthick-1-s"
+				rendered="#{sessionController.currentAnnee!=null and sessionController.currentUser.admin and administrationController.personnel}">
+				<p:column>
+					<p:submenu rendered="#{sessionController.currentUser.admin}"
+						label="Partenaires">
+						<p:menuitem value="Données OPI"
+							rendered="#{sessionController.currentUser.admin}"
+							action="#{administrationController.goToTransfertsArriveFromDepart}" />
+					</p:submenu>
+				</p:column>
+				<p:column>
+					<p:submenu rendered="#{sessionController.currentUser.admin}"
+						label="Transfert accueil">
+						<p:menuitem value="Données OPI"
+							rendered="#{sessionController.currentUser.admin}"
+							action="#{administrationController.goToTransfertsArriveFromAccueil}" />
+					</p:submenu>
+				</p:column>
+			</p:submenu>
+
+			<p:menuitem value="A propos" rendered="#{sessionController.currentAnnee!=null and administrationController.personnel}" action="#{administrationController.goToAPropos}" icon="ui-icon-info" />
+
+			<p:menuitem value="Déconnexion"
+				rendered="#{sessionController.boutonDeconnexion}"
+				action="#{sessionController.logout}" icon="ui-icon-power" />
+
+			<p:menuitem
+				value="Année #{sessionController.currentAnnee}/#{sessionController.currentAnnee+1}"
+				style="position:absolute;right:0;top:45px;font-weight:bold;font-size: 16px;"
+				url="#" icon="ui-icon-alert" />
+
+			<p:menuitem
+				value="Connecté en tant que : #{administrationController.currentUserLogin}"
+				url="#" style="position:absolute;right:0;top:0;" />
+			<p:menuitem value="Super Gestionnaire" url="#"
+				style="position:absolute;right:0;top:35%;"
+				rendered="#{sessionController.currentUser.admin and !sessionController.currentUser.informaticien}" />
+			<p:menuitem value="Informaticien" url="#"
+						style="position:absolute;right:0;top:35%;"
+						rendered="#{sessionController.currentUser.admin and sessionController.currentUser.informaticien}" />
+			<p:menuitem value="Gestionnaire" url="#"
+						style="position:absolute;right:0;top:15px;"
+						rendered="#{!sessionController.currentUser.admin}" />
+		</p:megaMenu>
+	</center>
+
+	<!-- 	<h:commandButton value="Florian" action="go_exception" /> -->
+
+</h:form>
+<p:spacer height="30px" />
+</html>
+
+

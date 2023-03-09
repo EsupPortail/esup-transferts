@@ -1,3 +1,21 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+logs/
+target/
+appli/
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -9,3 +27,15 @@ buildNumber.properties
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
+
+# Départ
+esup-transferts-web-jsf-servlet/src/main/resources/log4j.properties
+esup-transferts-web-jsf-servlet/src/main/resources/properties/config.properties
+esup-transferts-web-jsf-servlet/src/main/resources/properties/i18n/bundles/*
+
+# Accueil
+esup-transferts-accueil-web-jsf-servlet/src/main/resources/log4j.properties
+esup-transferts-accueil-web-jsf-servlet/src/main/resources/properties/config.properties
+esup-transferts-accueil-web-jsf-servlet/src/main/resources/properties/i18n/bundles/*
+
+esup-transferts-utils/src/main/java/fr/univartois/wsclient/apogee

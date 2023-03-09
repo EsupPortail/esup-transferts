@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+	<ui:define name="corps">
+		<p:panel
+			rendered="#{!administrationController.personnel || (!administrationController.droitsDepart and !sessionController.currentUser.admin)}">
+			<ui:include
+				src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+		</p:panel>
+
+		<p:spacer height="10px" />
+		<h:form id="multiple"
+			rendered="#{administrationController.personnel and (administrationController.droitsDepart || sessionController.currentUser.admin)}">
+			<p:growl id="msgs" showDetail="false" />
+			<p:dataTable var="transferts" styleClass="datatable" id="test"
+				style="width:80%;"
+				value="#{administrationController.allDemandesTransferts}" rows="10"
+				paginator="true" rowsPerPageTemplate="5,10,15,20,25,30,35,40,45,50"
+				emptyMessage="Auncune demande de transferts départ"
+				selection="#{administrationController.selectedDemandeTransferts}"
+				filteredValue="#{administrationController.filteredEtudiantDepartMultiple}"
+				rowSelectMode="add">
+
+				<f:facet name="header">
+						Liste des demandes de transferts départ	#{sessionController.currentAnnee}/#{sessionController.currentAnnee+1} 
+					</f:facet>
+				<p:column selectionMode="multiple" style="width:18px" />
+
+				<p:column headerText="Dossier" style="width:3%;"
+						  sortBy="#{transferts.transferts.temoinTransfertValide}" id="nb">
+					<h:outputText value="" rendered="#{transferts.transferts.temoinTransfertValide==0 || transferts.transferts.temoinTransfertValide==null}" />
+					<p:commandButton icon="ui-icon-unlocked" rendered="#{transferts.transferts.temoinTransfertValide==1}" />
+					<p:commandButton icon="ui-icon-locked" rendered="#{transferts.transferts.temoinTransfertValide==2}" />
+				</p:column>
+
+				<p:column headerText="Transfert" style="width:4%;"
+						  sortBy="#{transferts.transferts.temoinOPIWs}">
+					<h:outputText value="" rendered="#{transferts.transferts.temoinOPIWs==0}" />
+					<p:commandButton icon="ui-icon-mail-closed" rendered="#{transferts.transferts.temoinOPIWs==1}" />
+					<p:commandButton icon="ui-icon-alert" rendered="#{transferts.transferts.temoinOPIWs==2}" />
+				</p:column>
+
+				<p:column headerText="Retour" style="width:3%;"
+						  sortBy="#{transferts.transferts.temoinRetourTransfertAccueil}">
+					<h:outputText value="" rendered="#{transferts.transferts.temoinRetourTransfertAccueil==0}" />
+					<p:commandButton icon="ui-icon-check" rendered="#{transferts.transferts.temoinRetourTransfertAccueil==1}" />
+					<p:commandButton icon="ui-icon-closethick" rendered="#{transferts.transferts.temoinRetourTransfertAccueil==2}" />
+				</p:column>
+
+				<p:column headerText="Composante actuelle" filterBy="#{transferts.composante}"
+					style="text-align:left;" sortBy="#{transferts.composante}"
+					filterMatchMode="contains">
+            #{transferts.composante}  
+        </p:column>
+
+				<p:column headerText="Dernière IA" filterBy="#{transferts.libEtapePremiereLocal}"
+					style="text-align:left;" sortBy="#{transferts.libEtapePremiereLocal}"
+					id="derniereIA">  
+            #{transferts.libEtapePremiereLocal}  
+        </p:column>
+
+				<p:column headerText="Numéro étudiant" filterBy="#{transferts.numeroEtudiant}"
+					sortBy="#{transferts.numeroEtudiant}">
+            #{transferts.numeroEtudiant}  
+        </p:column>
+
+				<p:column headerText="Numéro I.N.E" filterBy="#{transferts.numeroIne}"
+					sortBy="#{transferts.numeroIne}">
+            #{transferts.numeroIne}  
+        </p:column>
+
+				<p:column headerText="Nom" filterBy="#{transferts.nomPatronymique}"
+					style="text-align:left;" sortBy="#{transferts.nomPatronymique}" id="nom">  
+            #{transferts.nomPatronymique}  
+        </p:column>
+
+				<p:column headerText="Prénom" style="text-align:left;">  
+            #{transferts.prenom1}  
+        </p:column>
+				<f:facet name="footer">
+            Total #{administrationController.totalDepart} demande(s) de transfert départ.  
+        </f:facet>
+			</p:dataTable>
+
+			<p:spacer height="20" />
+			<center>
+				<p:panel id="avis" header="Saisie d'un avis" toggleable="true"
+					style="width:80%;" collapsed="false" closable="true"
+					toggleSpeed="500" closeSpeed="500" widgetVar="avis">
+					<h:panelGrid columns="4" columnClasses="column" cellpadding="5"
+						style="text-align:left;">
+
+						<h:outputText value="Date du jour : " />
+						<h:outputText id="dateDuJour"
+							value="#{administrationController.dateDuJour}" />
+						<p:spacer />
+						<p:spacer />
+
+						<h:outputText value="Etat du dossier : " />
+						<p:selectOneMenu id="etatDossier"
+							value="#{administrationController.currentAvis.idEtatDossier}"
+							required="true" requiredMessage="#{msgs['ERREUR.ETAT_DOSSIER']}">
+							<f:selectItem itemLabel="== Choix ==" itemValue="" />
+							<f:selectItems
+								value="#{administrationController.listeEtatsDossier}" />
+						</p:selectOneMenu>
+						<h:outputText value="Motif : " />
+						<p:inputText id="motifEtatDossier" size="50"
+							value="#{administrationController.currentAvis.motifEtatDossier}" />
+
+						<h:outputText value="Localisation du dossier : " />
+						<p:selectOneMenu id="localisationDossier"
+							value="#{administrationController.currentAvis.idLocalisationDossier}"
+							required="true"
+							requiredMessage="#{msgs['ERREUR.LOCALISATION_DOSSIER']}">
+							<f:selectItem itemLabel="== Choix ==" itemValue="" />
+							<f:selectItems
+								value="#{administrationController.listeLocalisationDossier}" />
+						</p:selectOneMenu>
+						<h:outputText value="Motif : " />
+						<p:inputText id="motifLocalisationDossier" size="50"
+							value="#{administrationController.currentAvis.motifLocalisationDossier}" />
+
+						<h:outputText value="Décision : " />
+						<p:selectOneMenu id="decisionDossier"
+							value="#{administrationController.currentAvis.idDecisionDossier}"
+							required="true"
+							requiredMessage="#{msgs['ERREUR.DECISION_DOSSIER']}">
+							<f:selectItem itemLabel="== Choix ==" itemValue="" />
+							<f:selectItems
+								value="#{administrationController.listeDecisionsDossier}" />
+						</p:selectOneMenu>
+						<h:outputText value="Motif : " />
+						<p:inputText id="motifDecisionDossier" size="50"
+							value="#{administrationController.currentAvis.motifDecisionDossier}" />
+					</h:panelGrid>
+					<p:spacer height="20" />
+						<p:commandButton
+							value="Valider"
+							actionListener="#{administrationController.addAvisOuDecisionMultiple}"
+							update=":multiple:msgs,:multiple:test">
+							<p:confirm header="Confirmation"
+								message="Attention, la validation en masse peut prendre quelques minutes..."
+								icon="ui-icon-alert" />
+						</p:commandButton>
+				</p:panel>
+				<p:confirmDialog global="true" showEffect="fade"
+					hideEffect="explode">
+					<p:commandButton value="Oui" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Non" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</center>
+		</h:form>
+		<p:spacer height="20" />
+		<center>
+			<p:panel header="Légende" toggleable="true" style="width:80%;"
+					 collapsed="true" closable="true" toggleSpeed="500" closeSpeed="500"
+					 widgetVar="panel"
+					 rendered="#{administrationController.personnel and (administrationController.droitsDepart || sessionController.currentUser.admin)}">
+				<h:panelGrid columns="6" cellpadding="10">
+					<p:panelGrid style="margin-top:20px; width: 100%;">
+						<p:row>
+							<p:column colspan="2" style="text-align: center;color: #0073EA;">Etat du dossier de transfert départ</p:column>
+						</p:row>
+						<p:row>
+							<p:column>Non traité</p:column>
+							<h:outputText value="" />
+						</p:row>
+						<p:row>
+							<p:column>En cours de traitement</p:column>
+							<p:column><p:commandButton icon="ui-icon-unlocked" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column>Traité</p:column>
+							<p:column><p:commandButton icon="ui-icon-locked" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2" style="text-align: center;color: #0073EA;">Transmission des données à l'établissement d'accueil (partenaire)</p:column>
+						</p:row>
+						<p:row>
+							<p:column>Données transmises à l'établissement d'accueil</p:column>
+							<p:column><p:commandButton icon="ui-icon-mail-closed" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column>Problème d'envoi des données à l'établissement d'accueil</p:column>
+							<p:column><p:commandButton icon="ui-icon-alert" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column>Etablissement d'accueil (non partenaire)</p:column>
+							<h:outputText value="" />
+						</p:row>
+						<p:row>
+							<p:column colspan="2" style="text-align: center;color: #0073EA;">Retour de l'établissement d'accueil (partenaire)</p:column>
+						</p:row>
+						<p:row>
+							<p:column>Transfert accueil accepté</p:column>
+							<p:column><p:commandButton icon="ui-icon-check" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column>Transfert accueil refusé</p:column>
+							<p:column><p:commandButton icon="ui-icon-closethick" /></p:column>
+						</p:row>
+						<p:row>
+							<p:column>Pas de retour de l'établissement d'accueil (non partenaire)</p:column>
+							<h:outputText value="" />
+						</p:row>
+						<p:row>
+							<p:column colspan="2" style="text-align: center;color: #0073EA;">Loi silence vaut accord (SVA)</p:column>
+						</p:row>
+						<p:row>
+							<p:column>						<h:outputText
+									value="le delai de #{sessionController.nbJourAvantAlertSilenceVautAccord/7} semaine(s) est écoulé"
+									styleClass="alertSilenceVautAccord">
+								<f:convertNumber pattern="#,0" />
+							</h:outputText></p:column>
+							<p:column>						<h:outputText
+									value="Le delai de #{sessionController.nbMoisAvantAccordSuiteNouvelleLoiSilenceVautAccord} mois est dépassé"
+									styleClass="alertDepassementSilenceVautAccord" /></p:column>
+						</p:row>
+					</p:panelGrid>
+				</h:panelGrid>
+			</p:panel>
+		</center>
+	</ui:define>
+</ui:composition>
+</html>

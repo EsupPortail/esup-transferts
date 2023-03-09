@@ -1,0 +1,51 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+	<persistence-unit name="manager1" transaction-type="RESOURCE_LOCAL">
+	    <class>org.esupportail.transferts.domain.beans.User</class>
+		<class>org.esupportail.transferts.domain.beans.EtudiantRef</class>
+		<class>org.esupportail.transferts.domain.beans.EtudiantRefPK</class>
+		<class>org.esupportail.transferts.domain.beans.AdresseRef</class>
+		<class>org.esupportail.transferts.domain.beans.Transferts</class>
+		<class>org.esupportail.transferts.domain.beans.WsPub</class>
+		<class>org.esupportail.transferts.domain.beans.WsPubPK</class>
+		<class>org.esupportail.transferts.domain.beans.Avis</class>
+		<class>org.esupportail.transferts.domain.beans.EtatDossier</class>
+		<class>org.esupportail.transferts.domain.beans.LocalisationDossier</class>
+		<class>org.esupportail.transferts.domain.beans.DecisionDossier</class>
+		<class>org.esupportail.transferts.domain.beans.Fichier</class>
+		<class>org.esupportail.transferts.domain.beans.FichierPK</class>
+		<class>org.esupportail.transferts.domain.beans.CodeSizeAnnee</class>
+		<class>org.esupportail.transferts.domain.beans.Parametres</class>		
+		<class>org.esupportail.transferts.domain.beans.OffreDeFormationsDTO</class>
+		<class>org.esupportail.transferts.domain.beans.OffreDeFormationPK</class>	
+		<class>org.esupportail.transferts.domain.beans.PersonnelComposante</class>
+		<class>org.esupportail.transferts.domain.beans.PersonnelComposantePK</class>	
+		<class>org.esupportail.transferts.domain.beans.Composante</class>
+		<class>org.esupportail.transferts.domain.beans.ComposantePK</class>	
+		<class>org.esupportail.transferts.domain.beans.CGE</class>
+		<class>org.esupportail.transferts.domain.beans.CGEPK</class>
+		<class>org.esupportail.transferts.domain.beans.DatasExterne</class>
+		<class>org.esupportail.transferts.domain.beans.DatasExternePK</class>
+		<!-- OPI -->
+		<class>org.esupportail.transferts.domain.beans.IndOpi</class>
+		<class>org.esupportail.transferts.domain.beans.VoeuxIns</class>
+		<!-- ACCUEIL -->
+		<class>org.esupportail.transferts.domain.beans.AccueilAnnee</class>
+		<class>org.esupportail.transferts.domain.beans.AccueilResultat</class>	
+		<class>org.esupportail.transferts.domain.beans.SituationUniversitaire</class>	
+		<class>org.esupportail.transferts.domain.beans.InfosAccueil</class>
+		<class>org.esupportail.transferts.domain.beans.AccueilDecision</class>
+		<class>org.esupportail.transferts.domain.beans.Test</class>
+		<class>org.esupportail.transferts.domain.beans.Versions</class>
+		<class>org.esupportail.transferts.domain.beans.TestUnitaireEtudiantRef</class>
+		<class>org.esupportail.transferts.domain.beans.Correspondance</class>
+		<class>org.esupportail.transferts.domain.beans.Fermeture</class>
+		<class>org.esupportail.transferts.domain.beans.SequenceOpi</class>
+		<class>org.esupportail.transferts.domain.beans.WebService</class>
+		<properties>
+			<property name="hibernate.ejb.naming_strategy" value="org.esupportail.transferts.dao.NamingStrategy"/>
+		</properties>
+	</persistence-unit>
+</persistence>

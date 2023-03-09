@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:growl id="messages" showDetail="false" />
+		<p:messages id="msgs" showDetail="false" />
+		<center>
+			<p:panel rendered="#{!sessionController.currentUser.admin}">
+				<ui:include
+					src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+			</p:panel>
+			<p:panel id="pnl" styleClass="panel"
+				style="width:80%; text-align:center;"
+				rendered="#{sessionController.currentUser.admin}"
+				header="Code sise #{sessionController.currentAnnee}/#{sessionController.currentAnnee+1}">
+				<p:spacer height="10px" />
+
+				<h:form id="codeSize"
+					rendered="#{sessionController.currentUser.admin}">
+					<h:panelGrid columns="2" columnClasses="column" cellpadding="5"
+						style="text-align:left;">
+
+						<h:outputText value="* Année : " />
+						<p:inputText
+							value="#{administrationController.codeSizeAnnee.annee}"
+							required="true" maxlength="4"
+							requiredMessage="#{msgs['ERREUR.CODE_SISE_ANNEE']}">
+							<f:validateLength minimum="4" maximum="4" />
+						</p:inputText>
+
+						<h:outputText value="* Code sise : " />
+						<p:inputText
+							value="#{administrationController.codeSizeAnnee.code}"
+							required="true" maxlength="1"
+							requiredMessage="#{msgs['ERREUR.CODE_SISE_CODE']}" />
+					</h:panelGrid>
+
+					<p:commandButton value="Enregistrer"
+						update=":size,:codeSize,:messages,:msgs,:msgs2"
+						actionListener="#{administrationController.addCodeSize}" />
+				</h:form>
+				<p:spacer height="30px" />
+
+				<h:form id="size" rendered="#{sessionController.currentUser.admin}">
+					<p:dataTable var="cs"
+						value="#{administrationController.codeSizeDataModel}"
+						rowKey="#{cs.annee}" rows="5" emptyMessage="Aucun code size"
+						paginator="true"
+						selection="#{administrationController.selectedCodeSizeAnnee}">
+						<f:facet name="header">  
+										            Choisir le code sise par défaut
+										        </f:facet>
+						<p:column selectionMode="single" />
+						<p:column headerText="Année">
+				            #{cs.annee}  
+				        </p:column>
+						<p:column headerText="Code Sise">
+				            #{cs.code}  
+				        </p:column>
+					</p:dataTable>
+					<p:spacer height="30px" />
+
+					<p:commandButton value="Code sise par défaut"
+						action="#{administrationController.updateDefautCodeSize}"
+						update=":size,:messages,:msgs,:msgs2">
+						<p:confirm header="Confirmation"
+							message="Attention... Le code SISE et l'année par défaut correspondent à la campagne en cours"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+
+				</h:form>
+					<p:confirmDialog global="true" showEffect="fade"
+						hideEffect="explode">
+						<p:commandButton value="Oui" type="button"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="Non" type="button"
+							styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
+			</p:panel>
+		</center>
+		<p:messages id="msgs2" showDetail="false" />
+	</ui:define>
+
+	<ui:define name="content">
+		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include>
+	</ui:define>
+
+</ui:composition>
+</html>

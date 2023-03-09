@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:growl id="messages" showDetail="false" />
+		<p:messages id="msgs" showDetail="false" />
+		<center>
+			<p:panel rendered="#{!sessionController.currentUser.admin}">
+				<ui:include
+					src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+			</p:panel>
+			<p:panel id="pnl3" style="width:80%; text-align:center;"
+				rendered="#{sessionController.currentUser.admin}" styleClass="panel"
+				header="Liste des signature accueil #{sessionController.currentAnnee}/#{sessionController.currentAnnee+1}">
+				<h:form id="upload" enctype="multipart/form-data"
+					rendered="#{sessionController.currentUser.admin}"
+					acceptcharset="ISO-8859-1">
+					<p:panelGrid columns="1"
+						rendered="#{fileUploadController.source=='D'}">
+						<h:outputText value="Transferts départ" />
+					</p:panelGrid>
+					<p:panelGrid columns="1"
+						rendered="#{fileUploadController.source=='A'}">
+						<h:outputText value="Transferts accueil" />
+					</p:panelGrid>
+					<h:panelGrid columns="3" columnClasses="column" cellpadding="5"
+						style="text-align:left;">
+						<h:outputText value="* Sélectionner votre fichier : " />
+						<p:fileUpload value="#{fileUploadController.file}" mode="simple"
+							sizeLimit="5000000" allowTypes="/(\.|\/)(gif|jpe?g)$/"
+							required="true" id="Fichier"
+							requiredMessage="#{msgs['ERREUR.FICHIER_SIGNATURE']}"
+							update=":messages,:sign,:msgs,:msgs2" />
+						<!-- 						<p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}" -->
+						<!-- 							value="#{fileUploadController.file}" required="true" -->
+						<!-- 							mode="advanced" update=":messages,:sign,:msgs,:msgs2" -->
+						<!-- 							sizeLimit="5000000" allowTypes="/(\.|\/)(gif|jpe?g)$/" /> -->
+						<h:outputText
+							value="(Seules les images *.jpg et *.gif apparaîtront dans le fichier PDF)" />
+
+						<h:outputText value="* Nom du signataire : " />
+						<p:inputText value="#{fileUploadController.fichier.nomSignataire}"
+							required="true"
+							requiredMessage="#{msgs['ERREUR.NOM_SIGNATAIRE']}" /> (exemple: Président de l'université)
+
+					<h:outputText
+							value="Informations en-tête correspondant à la signature : " />
+						<p:separator style="height:10px" />
+						<p:separator style="height:10px" />
+
+						<h:outputText value="* Libellé : " />
+						<p:inputText value="#{fileUploadController.fichier.libelle}"
+							required="true" id="Libelle"
+							requiredMessage="#{msgs['ERREUR.LIBELLE_SIGNATURE']}" /> (exemple: Direction des Etudes)
+					
+					<h:outputText value="* Adresse : " />
+						<p:inputText value="#{fileUploadController.fichier.adresse}"
+							required="true" id="Adresse"
+							requiredMessage="#{msgs['ERREUR.ADRESSE_SIGNATURE']}" /> (exemple: 9 rue du temple)
+					
+										<h:outputText value="Boîte postale : " />
+						<p:inputText value="#{fileUploadController.fichier.boitePostale}"
+							id="Boite_postale" /> (exemple: BP 10665)
+					
+										<h:outputText value="* Code postal : " />
+						<p:inputText value="#{fileUploadController.fichier.codePostal}"
+							required="true" id="Code_postal"
+							requiredMessage="#{msgs['ERREUR.CODE_POSTALE_SIGNATURE']}" /> (exemple: 62030 Arras Cedex)					
+					</h:panelGrid>
+
+					<p:commandButton value="Envoyer sur le serveur" ajax="false"
+						actionListener="#{fileUploadController.handleFileUpload}" />
+				</h:form>
+				<p:spacer height="30px" />
+				<h:form id="sign">
+					<p:fieldset id="signature" legend="Signature" toggleable="true"
+						collapsed="false" toggleSpeed="200">
+						<p:dataTable var="signature" style="width:800px;"
+							value="#{fileUploadController.listeFichiers2}" rows="5"
+							emptyMessage="Aucune signature" paginator="true"
+							selection="#{fileUploadController.selectedFichier}">
+							<f:facet name="header">  
+				            Choisir la signature par défaut
+				        </f:facet>
+							<p:column selectionMode="single" />
+							<p:column headerText="Nom">
+				            #{signature.nom}  
+				        </p:column>
+							<p:column headerText="Nom du signataire">
+				            #{signature.nomSignataire}  
+				        </p:column>
+							<p:column style="width:10%">
+								<p:commandButton id="selectButton" update=":upload,:sign,:messages,:msgs,:msgs2" action="#{fileUploadController.deleteFichier}"
+									icon="ui-icon-close" title="View">
+									<f:setPropertyActionListener value="#{signature}"
+										target="#{fileUploadController.selectedFichierDelete}" />
+									<p:confirm header="Confirmation"
+										message="La signature sera supprimée uniquement si elle n'est pas rattachée à une demande de transferts. Souhaitez-vous vraiment supprimer cette signature ?"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</p:fieldset>
+
+					<p:confirmDialog global="true" showEffect="fade"
+						hideEffect="explode">
+						<p:commandButton value="Oui" type="button"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="Non" type="button"
+							styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
+					<p:spacer height="30" />
+					<p:commandButton value="Signature par défaut"
+						update=":sign,:messages,:msgs,:msgs2"
+						action="#{fileUploadController.updateDefautFichier}" />
+
+				</h:form>
+
+			</p:panel>
+		</center>
+		<p:messages id="msgs2" showDetail="false" />
+	</ui:define>
+
+	<ui:define name="content">
+		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include>
+	</ui:define>
+
+</ui:composition>
+</html>

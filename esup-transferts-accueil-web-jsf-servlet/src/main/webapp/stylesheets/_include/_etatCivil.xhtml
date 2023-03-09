@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:form id="formEtatCivil">
+	<p:panel id="etatCivil" header="Etat Civil"
+		rendered="#{userController.parametreAppli.bool}">
+		<p:growl id="growl" showDetail="false" />
+		<p:messages id="msgs" showDetail="false" />
+		<h:panelGrid columns="2" columnClasses="column" cellpadding="5">
+			<h:outputText value="Numéro étudiant : "
+				rendered="#{userController.currentEtudiant.bddScol==1}" />
+			<h:outputText rendered="#{userController.currentEtudiant.bddScol==1}"
+				value="#{userController.currentEtudiant.numeroEtudiant}" />
+
+			<h:outputText value="Numéro I.N.E : " />
+			<h:outputText value="#{userController.currentEtudiant.numeroIne}" />
+
+			<h:outputText value="* Nom de famille : " />
+			<h:outputText rendered="#{userController.currentEtudiant.bddScol==1}"
+				value="#{userController.currentEtudiant.nomPatronymique}" />
+			<p:inputText id="nomPatronymique" size="40" maxlength="30"
+				rendered="#{userController.currentEtudiant.bddScol==0}"
+				required="true" requiredMessage="#{msgs['ERREUR.NOM_PATRONYMIQUE']}"
+				value="#{userController.currentEtudiant.nomPatronymique}" />
+
+			<h:outputText value="Nom d'usage : " />
+			<h:outputText value="#{userController.currentEtudiant.nomUsuel}"
+				rendered="#{userController.currentEtudiant.bddScol==1}" />
+			<p:inputText id="nomUsuel" size="40" maxlength="30"
+				rendered="#{userController.currentEtudiant.bddScol==0}"
+				value="#{userController.currentEtudiant.nomUsuel}" />
+
+			<h:outputText value="* Prénom 1 : " />
+			<h:outputText value="#{userController.currentEtudiant.prenom1}"
+				rendered="#{userController.currentEtudiant.bddScol==1}" />
+			<p:inputText id="prenom1" size="40" maxlength="20" required="true"
+				rendered="#{userController.currentEtudiant.bddScol==0}"
+				requiredMessage="#{msgs['ERREUR.PRENOM1']}"
+				value="#{userController.currentEtudiant.prenom1}" />
+
+			<h:outputText value="Prénom 2 : " />
+			<h:outputText value="#{userController.currentEtudiant.prenom2}"
+				rendered="#{userController.currentEtudiant.bddScol==1}" />
+			<p:inputText id="prenom2" size="40" maxlength="20"
+				rendered="#{userController.currentEtudiant.bddScol==0}"
+				value="#{userController.currentEtudiant.prenom2}" />
+
+			<h:outputText value="Date de naissance : " />
+			<h:outputText value="#{userController.currentEtudiant.dateNaissance}"
+				rendered="#{userController.currentEtudiant!=null}">
+				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="#{sessionController.timezone}" />
+			</h:outputText>
+		</h:panelGrid>
+		<h:panelGrid columns="1"
+			rendered="#{userController.verifDateNaisApogee}">
+			<p:commandButton value="Suivant" update="growl,msgs,msgs2"
+				action="#{userController.goToAdresseApogee}" />
+		</h:panelGrid>
+		<p:messages id="msgs2" showDetail="false" />
+	</p:panel>
+</h:form>
+</html>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+		<center>
+			<p:panel id="info" header="Informations"
+				rendered="#{!userController.parametreAppliInfosAccueil.bool}" toggleable="true"
+				style="text-align:center;" styleClass="panel" closable="false"
+				toggleSpeed="500" closeSpeed="2000" widgetVar="panel">
+				<fieldset>
+					<legend>
+						<h:graphicImage alt="WARNING"
+							value="/media/images/info.png" />
+					</legend>
+					<div>
+						<h:outputText style="font-size:16px;font-weight:bold;" escape="false"  
+							value="#{userController.parametreAppliInfosAccueil.commentaire}" />
+					</div>
+					<p:spacer height="8" />
+				</fieldset>
+			</p:panel>
+		</center>
+</ui:composition>

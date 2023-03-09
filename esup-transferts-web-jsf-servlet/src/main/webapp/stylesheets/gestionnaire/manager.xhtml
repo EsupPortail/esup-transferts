@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:spacer height="20px" />
+		<p:panel rendered="#{!sessionController.currentUser.admin}">
+			<ui:include
+				src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+		</p:panel>
+
+		<h:form id="formManager"
+			rendered="#{sessionController.currentUser.admin}">
+			<p:growl id="growl" showDetail="false" />
+			<p:messages id="msgs" showDetail="false" />
+			<center>
+				<p:dataTable id="listePersonnels" align="center" rows="10" 
+					styleClass="datatable" style="text-align:center;width:50%;"
+					value="#{managerController.users}" var="personnel" paginator="true">
+					<f:facet name="header">
+						<h:outputText rendered="#{managerController.from=='D'}"
+							value="Liste des gestionnaires de transferts départ" />
+						<h:outputText rendered="#{managerController.from=='A'}"
+							value="Liste des gestionnaires de transferts accueil" />
+					</f:facet>
+
+					<p:column sortBy="#{personnel.login}" filterBy="#{personnel.login}" filterMatchMode="contains">
+						<f:facet name="header">
+							<h:outputText style="width:100px; display:block;" value="UID" />
+						</f:facet>
+						<center>
+							<h:outputText value="#{personnel.login}" />
+						</center>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText style="width:100px; display:block;"
+								value="Identité"/>
+						</f:facet>
+						<center>
+							<h:outputText value="#{personnel.displayName}" />
+						</center>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Consulter les composantes" />
+						</f:facet>
+						<center>
+							<p:commandLink id="choisir"
+								action="#{managerController.goToManagerChoixLicence}">
+								<f:setPropertyActionListener value="#{personnel}"
+									target="#{managerController.personnelChoisi}" />
+								<!-- 								<f:setPropertyActionListener value="#{true}" -->
+								<!-- 									target="#{managerController.retourDirect}" /> -->
+								<h:graphicImage style="border:none;" alt="choix"
+									value="/media/images/arrow_right.png" />
+							</p:commandLink>
+						</center>
+					</p:column>
+				</p:dataTable>
+
+				<p:spacer height="20" />
+				<h:panelGrid columns="3" align="center">
+					<p:commandButton value="Ajouter un gestionnaire"
+						action="goToManagerRecherche">
+					</p:commandButton>
+
+					<p:commandButton value="Exporter les droits"
+						rendered="#{managerController.from=='D'}"
+						action="#{administrationController.exportListeDroitsDepart}" />
+
+					<p:commandButton value="Exporter les droits"
+						rendered="#{managerController.from=='A'}"
+						action="#{administrationController.exportListeDroitsAccueil}" />
+
+					<p:commandButton value="Mettre à jour les infos LDAP (email)"
+									 action="#{managerController.updateInfosLdap}" update="growl msgs msgs2"/>
+
+				</h:panelGrid>
+			</center>
+			<p:messages id="msgs2" showDetail="false" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

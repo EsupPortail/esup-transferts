@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+	<ui:define name="navigation">
+				<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+<!-- 		<p:panel -->
+<!-- 			rendered="#{sessionController.currentUser.admin and !sessionController.planningFermeturesAuto}" -->
+<!-- 			style="text-align:left;border:0;font-size: 90% !important;width: 100%;"> -->
+
+			<c:if test="#{sessionController.currentUser.admin and !sessionController.planningFermeturesAuto}">
+            	<ui:include src="/stylesheets/gestionnaire/_include/_fermeture.xhtml"></ui:include>
+        	</c:if>
+
+			<c:if test="#{sessionController.currentUser.admin and sessionController.planningFermeturesAuto}">
+            	<ui:include src="/stylesheets/gestionnaire/_include/_fermetureScheduler.xhtml"></ui:include>
+        	</c:if>
+			
+<!-- 		</p:panel> -->
+		
+<!-- 		<p:panel -->
+<!-- 			rendered="#{sessionController.currentUser.admin and sessionController.planningFermeturesAuto}" -->
+<!-- 			style="text-align:left;border:0;" styleClass="panel"> -->
+<!-- 			<ui:include -->
+<!-- 				src="/stylesheets/gestionnaire/_include/_fermetureScheduler.xhtml"></ui:include> -->
+<!-- 		</p:panel> -->
+	</ui:define>
+
+	<ui:define name="content">
+		<ui:include src="/stylesheets/gestionnaire/_include/_footer.xhtml"></ui:include>
+	</ui:define>
+</ui:composition>
+</html>

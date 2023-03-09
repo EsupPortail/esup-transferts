@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:spacer height="20px" />
+		<p:panel rendered="#{!administrationController.personnel || (administrationController.source eq 'D' and !administrationController.droitsDepart and !sessionController.currentUser.admin) || (administrationController.source eq 'A' and !administrationController.droitsArrivee and !sessionController.currentUser.admin)}">
+			<ui:include
+					src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+		</p:panel>
+		<p:growl id="messages" showDetail="false" />
+		<p:messages id="msgs" showDetail="false" />
+		<h:form id="formImportDroitsUtilisateurs" rendered="#{administrationController.personnel and (administrationController.source eq 'D' and administrationController.droitsDepart || sessionController.currentUser.admin) || (administrationController.source eq 'A' and administrationController.droitsArrivee || sessionController.currentUser.admin)}">
+			<center>
+				<p:fieldset legend="Import des droits utilisateurs" toggleable="true" toggleSpeed="200"
+							styleClass="panel" style="width:80%; text-align:center;">
+					<h:panelGrid columns="4" columnClasses="column" cellpadding="5" rendered="#{administrationController.listeAnneesWithoutCurrentAnnee!=null}">
+						<h:outputText value="Doits des utilisateurs a importer de" />
+						<p:selectOneMenu id="droitsUtilisateurs" required="true"
+										 requiredMessage="#{msgs['ERREUR.IMPORT_FROM_ANNEE']}"
+										 value="#{administrationController.selectedCurrentAnneeDroitUtilisateursACopier}">
+							<f:selectItem itemLabel="== Choix ==" />
+							<f:selectItems value="#{administrationController.listeAnneesWithoutCurrentAnnee}" />
+						</p:selectOneMenu>
+						<h:outputText value="vers #{sessionController.currentAnnee}" />
+						<p:commandButton value="Importer" style="text-align: right;"
+										 update="formImportDroitsUtilisateurs,:messages,:msgs,:msgs2"
+										 action="#{administrationController.addDroitsUtilisateursFromImport}" >
+							<p:confirm header="Confirmation"
+									   message="Les droits utilisateurs de l'année sélectionnée vont être importés sur l'année #{sessionController.currentAnnee}"
+									   icon="ui-icon-alert" />
+						</p:commandButton>
+					</h:panelGrid>
+					<h:panelGrid rendered="#{administrationController.listeAnneesWithoutCurrentAnnee==null}">
+						<h:outputText value="Auncun élement à importer vers #{sessionController.currentAnnee}" />
+					</h:panelGrid>
+				</p:fieldset>
+			</center>
+		</h:form>
+
+		<h:form id="formImportSignatures" rendered="#{administrationController.personnel and (administrationController.source eq 'D' and administrationController.droitsDepart || sessionController.currentUser.admin) || (administrationController.source eq 'A' and administrationController.droitsArrivee || sessionController.currentUser.admin)}">
+			<center>
+				<p:fieldset legend="Import des signatures" toggleable="true" toggleSpeed="200"
+							styleClass="panel" style="width:80%; text-align:center;">
+					<h:panelGrid columns="4" columnClasses="column" cellpadding="5" rendered="#{administrationController.listeAnneesWithoutCurrentAnnee!=null}">
+						<h:outputText value="Signatures a importer de" />
+						<p:selectOneMenu id="signatures" required="true"
+										 requiredMessage="#{msgs['ERREUR.IMPORT_FROM_ANNEE']}"
+										 value="#{administrationController.selectedCurrentAnneeSignaturesACopier}">
+							<f:selectItem itemLabel="== Choix ==" />
+							<f:selectItems value="#{administrationController.listeAnneesWithoutCurrentAnnee}" />
+						</p:selectOneMenu>
+						<h:outputText value="vers #{sessionController.currentAnnee}" />
+						<p:commandButton value="Importer"
+										 update="formImportSignatures,:messages,:msgs,:msgs2"
+										 action="#{administrationController.addSignaturesFromImport}">
+							<p:confirm header="Confirmation"
+									   message="Les signatures de l'année sélectionnée vont être importés sur l'année #{sessionController.currentAnnee}"
+									   icon="ui-icon-alert" />
+						</p:commandButton>
+					</h:panelGrid>
+					<h:panelGrid rendered="#{administrationController.listeAnneesWithoutCurrentAnnee==null}">
+						<h:outputText value="Auncun élement à importer vers #{sessionController.currentAnnee}" />
+					</h:panelGrid>
+				</p:fieldset>
+			</center>
+		</h:form>
+
+		<h:form id="formImportPartenaires" rendered="#{administrationController.personnel and (administrationController.source eq 'D' and administrationController.droitsDepart || sessionController.currentUser.admin) || (administrationController.source eq 'A' and administrationController.droitsArrivee || sessionController.currentUser.admin)}">
+			<center>
+				<p:fieldset legend="Import des partenaires" toggleable="true" toggleSpeed="200"
+							styleClass="panel" style="width:80%; text-align:center;">
+					<h:panelGrid columns="4" columnClasses="column" cellpadding="5" rendered="#{administrationController.listeAnneesWithoutCurrentAnnee!=null}">
+						<h:outputText value="Partenaires à importer de" />
+						<p:selectOneMenu id="partenaires" required="true"
+										 requiredMessage="#{msgs['ERREUR.IMPORT_FROM_ANNEE']}"
+										 value="#{administrationController.selectedCurrentAnneePartenairesACopier}">
+							<f:selectItem itemLabel="== Choix ==" />
+							<f:selectItems value="#{administrationController.listeAnneesWithoutCurrentAnnee}" />
+						</p:selectOneMenu>
+						<h:outputText value="vers #{sessionController.currentAnnee}" />
+						<p:commandButton value="Importer"
+										 update="formImportPartenaires,:messages,:msgs,:msgs2"
+										 action="#{administrationController.addPartenairesFromImport}">
+							<p:confirm header="Confirmation"
+									   message="Les partenaires de l'année sélectionnée vont être importés sur l'année #{sessionController.currentAnnee}"
+									   icon="ui-icon-alert" />
+						</p:commandButton>
+					</h:panelGrid>
+					<h:panelGrid rendered="#{administrationController.listeAnneesWithoutCurrentAnnee==null}">
+						<h:outputText value="Auncun élement à importer vers #{sessionController.currentAnnee}" />
+					</h:panelGrid>
+				</p:fieldset>
+			</center>
+		</h:form>
+
+		<p:messages id="msgs2" showDetail="false" />
+
+		<p:confirmDialog global="true" showEffect="fade"
+						 hideEffect="explode">
+			<p:commandButton value="Oui" type="button"
+							 styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="Non" type="button"
+							 styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>
+</html>

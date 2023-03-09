@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+		<center>
+			<fieldset style="width: 40%; height: 105px;">
+				<legend>
+					<h:graphicImage alt="WARNING"
+						value="/media/images/warning_40px.png" />
+				</legend>
+				<div>
+					<h:outputText style="font-size:25px;font-weight:bold;"
+						value="#{msgs['UNAUTHORIZED.REFUSED']}" />
+				</div>
+				<p:spacer height="8" />
+				<div>
+					<h:outputText style="font-size:16px;"
+						value="#{msgs['UNAUTHORIZED.MESSAGE']}" />
+				</div>
+			</fieldset>
+		</center>
+</ui:composition>

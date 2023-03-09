@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:panel rendered="#{!administrationController.personnel || (administrationController.source eq 'D' and !administrationController.droitsDepart and !sessionController.currentUser.admin) || (administrationController.source eq 'A' and !administrationController.droitsArrivee and !sessionController.currentUser.admin)}">
+			<ui:include
+				src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
+		</p:panel>
+		<h:form id="annee" rendered="#{administrationController.personnel and (administrationController.source eq 'D' and administrationController.droitsDepart || sessionController.currentUser.admin) || (administrationController.source eq 'A' and administrationController.droitsArrivee || sessionController.currentUser.admin)}">
+			<p:growl id="messages" showDetail="false" />
+			<p:messages id="msgs" showDetail="false" />
+			<center>
+				<!-- 				<p:panel id="pnl3" style="width:80%; text-align:center;border:none;"> -->
+				<p:fieldset legend="Année" toggleable="true" toggleSpeed="200"
+					styleClass="panel" style="width:80%; text-align:center;">
+					<h:outputText value="Le changement d'année permet de visualiser les demandes pour l'année sélectionnée" />
+					<h:panelGrid columns="2" columnClasses="column" cellpadding="5">
+						<p:selectOneMenu id="pays" required="true"
+							requiredMessage="#{msgs['ERREUR.CHANGEMENT_ANNEE']}"
+							value="#{sessionController.currentAnnee}">
+							<f:selectItem itemLabel="== Choix ==" />
+							<f:selectItems value="#{administrationController.listeAnnees}" />
+						</p:selectOneMenu>
+						<p:commandButton icon="ui-icon-search" 
+							update="annee,:annee:messages,:annee:msgs,:annee:msgs2,:header"
+							action="#{administrationController.changeAnnee}" />
+					</h:panelGrid>
+				</p:fieldset>
+				<!-- 				</p:panel> -->
+			</center>
+			<p:messages id="msgs2" showDetail="false" />
+		</h:form>
+	</ui:define>
+
+	<!-- 	<ui:define name="content"> -->
+	<!-- 		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include> -->
+	<!-- 	</ui:define> -->
+
+</ui:composition>
+</html>

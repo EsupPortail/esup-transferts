@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/stylesheets/template.xhtml">
+
+
+	<ui:define name="navigation">
+		<center>
+			<p:panel rendered="#{!sessionController.error}"
+				style="text-align:left;" styleClass="panel">
+				<ui:include src="/stylesheets/_include/_header.xhtml"></ui:include>
+			</p:panel>
+		</center>
+	</ui:define>
+
+	<ui:define name="corps">
+		<ui:include src="/stylesheets/_include/_fermetureAppli.xhtml" />
+		<p:spacer height="30px" />
+		<ui:include src="/stylesheets/_include/_informationAppli.xhtml" />
+		<p:spacer height="30px" />
+		<!-- 		<p:spacer height="30px" /> -->
+		<!-- 		<h:outputText value="" rendered="#{userController.resetWelcome}" /> -->
+		<h:form id="apogee" rendered="#{userController.defaultCodeSizeAnnee}">
+			<center>
+				<p:panel id="pnl2" header="Connexion étudiant (#{msgs['ETABLISSEMENT.NOM']})"
+					toggleable="true" style="text-align:left;" styleClass="panel"
+					closable="false" toggleSpeed="500" closeSpeed="2000"
+					widgetVar="panel">
+					<p:growl id="growl" showDetail="false" />
+					<p:messages id="msgs" showDetail="false" />
+					<p:fieldset legend="Authentification">
+						<h:panelGrid columns="3" cellpadding="5">
+							<h:outputText value="* Numéro I.N.E" />
+							<p:inputText id="ine" required="true" autocomplete="false"
+								requiredMessage="#{msgs['ERREUR.INE']}"
+								value="#{userController.ineApogee}" />
+							<h:outputText value=" " />
+							<h:outputText value="* Date de naissance" />
+							<p:inputMask value="#{userController.dateNaissanceApogee}"
+								autocomplete="false" required="true" mask="99/99/9999"
+								requiredMessage="#{msgs['ERREUR.DATE_DE_NAISSANCE']}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" timeZone="#{sessionController.timezone}" />
+							</p:inputMask>
+							<h:outputText value="Format JJ/MM/AAAA" />
+						</h:panelGrid>
+						<p:commandButton value="Connexion" ajax="false"
+							update=":apogee:growl,:apogee:msgs,:apogee:msgs2"
+							action="#{userController.authApogee}" />
+					</p:fieldset>
+					<p:spacer height="20px" />
+					<p:messages id="msgs2" showDetail="false" />
+				</p:panel>
+			</center>
+
+		</h:form>
+
+		<ui:include src="/stylesheets/_include/_pbAnneeCodeSize.xhtml" />
+
+	</ui:define>
+
+	<ui:define name="content">
+		<ui:include src="/stylesheets/_include/_footer.xhtml"></ui:include>
+	</ui:define>
+
+</ui:composition>
+</html>

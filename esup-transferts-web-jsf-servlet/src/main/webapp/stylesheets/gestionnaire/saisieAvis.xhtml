@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:spacer height="20px" />
+		<h:form id="infos">
+			<p:messages id="msgs" showDetail="false" />
+			<p:growl id="growl" showDetail="false" sticky="true" />
+
+			<center>
+				<p:panel id="adresse" styleClass="panel"
+					style="width:80%;text-align:left;"
+					header="Demande de Transferts départ #{sessionController.currentAnnee}/#{sessionController.currentAnnee+1}">
+					<p:fieldset legend="Etat civil" toggleable="true" toggleSpeed="200">
+						<p:panelGrid
+							style="text-align:left;width:100%; border-style: hidden !important;">
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Nom de famille : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.nomPatronymique}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Date de la demande : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.transferts.dateDemandeTransfert}">
+										<f:convertDateTime pattern="dd/MM/yyyy à HH:mm:ss"
+											timeZone="#{sessionController.timezone}" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Nom d'usage : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.nomUsuel}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Numéro étudiant : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.numeroEtudiant}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Prénom 1 : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.prenom1}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Numéro I.N.E : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.numeroIne}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Prénom 2 : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.prenom2}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Centre de gestion : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.libCge} (#{administrationController.currentDemandeTransferts.codCge})" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Date de naissance : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.dateNaissance}">
+										<f:convertDateTime pattern="dd/MM/yyyy"
+											timeZone="#{sessionController.timezone}" />
+									</h:outputText>
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Composante : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.libComposante} (#{administrationController.currentDemandeTransferts.composante})" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Dernière I.A : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.libEtapePremiereLocal}" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:fieldset>
+					<p:spacer height="10px" />
+					<p:separator style="width:500px;height:10px" />
+
+					<p:fieldset id="listeAvisDetails" legend="liste des avis pour : #{administrationController.currentOdf.libVersionEtape}#{administrationController.currentDemandeTransferts.transferts.libelleTypeDiplome}"
+						styleClass="panel" collapsed="true" toggleable="true"
+						style="width:700px;" toggleSpeed="200">
+						
+						<p:dataList emptyMessage="Aucun avis"
+							value="#{administrationController.listeAvisByNumeroEtudiantAndAnnee}"
+							var="avis2" paginator="true" rows="5" effectSpeed="fast"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15">
+
+							<f:facet name="header">  
+            Liste des avis  
+        </f:facet>
+
+							<p:column>
+								<p:commandLink update=":infos:avisDetail"
+									oncomplete="PF('avisDialog').show()" title="View Detail">
+									<p:graphicImage value="/media/images/search.png" />
+									<f:setPropertyActionListener value="#{avis2}"
+										target="#{administrationController.selectedAvis}" />
+								</p:commandLink>
+
+								<h:outputText value="#{avis2.numeroEtudiant}"
+									style="margin-left:10px">
+								</h:outputText>
+
+								<h:outputText value="#{avis2.dateSaisie}"
+									style="margin-left:10px">
+									<!-- 									<f:converter -->
+									<!-- 										converterId="XMLGregorianCalendarConverterDateTime" /> -->
+								</h:outputText>
+
+							</p:column>
+						</p:dataList>
+
+						<p:dialog header="Détail de l'avis" widgetVar="avisDialog"
+							modal="true" showEffect="fade">
+							<p:outputPanel id="avisDetail">
+
+								<p:graphicImage value="/media/images/search.png" />
+
+								<h:panelGrid columns="2" cellpadding="5">
+									<h:outputLabel for="numEtu" value="Numéro étudiant : " />
+									<h:outputText id="numEtu"
+										value="#{administrationController.selectedAvis.numeroEtudiant}" />
+
+									<h:outputLabel for="dateSaisie" value="Date de saisie : " />
+									<h:outputText id="dateSaisie"
+										value="#{administrationController.selectedAvis.dateSaisie}">
+										<!-- 										<f:converter -->
+										<!-- 											converterId="XMLGregorianCalendarConverterDateTime" /> -->
+									</h:outputText>
+
+									<h:outputLabel for="idEtatDossier" value="Etat du dossier : " />
+									<h:outputText id="idEtatDossier"
+										value="#{administrationController.selectedAvis.libEtatDossier}" />
+
+									<h:outputLabel for="motifEtatDossier" value="Motif : " />
+									<h:outputText id="motifEtatDossier"
+										value="#{administrationController.selectedAvis.motifEtatDossier}" />
+
+									<h:outputLabel for="idLocalisationDossier"
+										value="Localisation du dossier : " />
+									<h:outputText id="idLocalisationDossier"
+										value="#{administrationController.selectedAvis.libLocalisationDossier}" />
+
+									<h:outputLabel for="motifLocalisationDossier" value="Motif : " />
+									<h:outputText id="motifLocalisationDossier"
+										value="#{administrationController.selectedAvis.motifLocalisationDossier}" />
+
+									<h:outputLabel for="idDecisionDossier" value="Décision : " />
+									<h:outputText id="idDecisionDossier"
+										value="#{administrationController.selectedAvis.libDecisionDossier}" />
+
+									<h:outputLabel for="motifDecisionDossier" value="Motif : " />
+									<h:outputText id="motifDecisionDossier"
+										value="#{administrationController.selectedAvis.motifDecisionDossier}" />
+
+								</h:panelGrid>
+							</p:outputPanel>
+						</p:dialog>
+					</p:fieldset>
+
+					<p:spacer height="10px" />
+					<p:separator style="width:500px;height:10px" />
+				</p:panel>
+			</center>
+		</h:form>
+		<h:form id="currentAvis">
+			<center>
+				<p:panel id="adresse2" header="Saisie d'un avis" styleClass="panel"
+					style="width:80%; text-align:center;">
+					<p:fieldset id="avis" legend="Avis" toggleable="true"
+						toggleSpeed="200">
+						<!-- 						<h:panelGrid columns="4" columnClasses="column" cellpadding="5" -->
+						<!-- 							style="text-align:left;"> -->
+						<p:panelGrid
+							style="text-align:left;width:100%; border-style: hidden !important;">
+							<p:row>
+								<p:column style="width:20%">
+									<h:outputText value="Date du jour : " />
+								</p:column>
+								<p:column style="width:80%" colspan="2">
+									<h:outputText id="dateDuJour"
+										value="#{administrationController.dateDuJour}" />
+								</p:column>
+								<!-- 								<p:column style="width:40%"></p:column> -->
+							</p:row>
+
+							<p:row>
+								<p:column style="width:20%">
+									<h:outputText value="Etat du dossier : " />
+								</p:column>
+								<p:column style="width:30%">
+									<p:selectOneMenu id="etatDossier"
+										disabled="#{administrationController.currentDemandeTransferts.transferts.temoinTransfertValide==2}"
+										value="#{administrationController.currentAvis.idEtatDossier}"
+										required="true"
+										requiredMessage="#{msgs['ERREUR.ETAT_DOSSIER']}">
+										<f:selectItem itemLabel="== Choix ==" itemValue="" />
+										<f:selectItems
+											value="#{administrationController.listeEtatsDossier}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Motif : " />
+									<p:inputText id="motifEtatDossier" size="50"
+										disabled="#{administrationController.currentDemandeTransferts.transferts.temoinTransfertValide==2}"
+										value="#{administrationController.currentAvis.motifEtatDossier}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column style="width:20%">
+									<h:outputText value="Localisation du dossier : " />
+								</p:column>
+								<p:column style="width:30%">
+									<p:selectOneMenu id="localisationDossier"
+										disabled="#{administrationController.currentDemandeTransferts.transferts.temoinTransfertValide==2}"
+										value="#{administrationController.currentAvis.idLocalisationDossier}"
+										required="true"
+										requiredMessage="#{msgs['ERREUR.LOCALISATION_DOSSIER']}">
+										<f:selectItem itemLabel="== Choix ==" itemValue="" />
+										<f:selectItems
+											value="#{administrationController.listeLocalisationDossier}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Motif : " />
+									<p:inputText id="motifLocalisationDossier" size="50"
+										disabled="#{administrationController.currentDemandeTransferts.transferts.temoinTransfertValide==2}"
+										value="#{administrationController.currentAvis.motifLocalisationDossier}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column style="width:20%">
+									<h:outputText value="Décision : " />
+								</p:column>
+								<p:column style="width:30%">
+									<p:selectOneMenu id="decisionDossier"
+										disabled="#{administrationController.currentDemandeTransferts.transferts.temoinTransfertValide==2}"
+										value="#{administrationController.currentAvis.idDecisionDossier}"
+										required="true"
+										requiredMessage="#{msgs['ERREUR.DECISION_DOSSIER']}">
+										<f:selectItem itemLabel="== Choix ==" itemValue="" />
+										<f:selectItems
+											value="#{administrationController.listeDecisionsDossier}" />
+										<!-- 						<p:ajax event="blur" update="commune,msgs,msgs2,growl"  /> -->
+										<p:ajax event="change" update=":currentAvis:bouton" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Motif : " />
+									<p:inputText id="motifDecisionDossier" size="50"
+										disabled="#{administrationController.currentDemandeTransferts.transferts.temoinTransfertValide==2}"
+										value="#{administrationController.currentAvis.motifDecisionDossier}" />
+								</p:column>
+							</p:row>
+
+						</p:panelGrid>
+					</p:fieldset>
+
+					<p:spacer height="20px" />
+					<h:panelGrid columns="2" id="bouton">
+						<p:commandButton value="Retour" immediate="true"
+							action="#{administrationController.goToCurrentDemandeTransferts}" />
+						<p:commandButton value="Enregistrer l'avis"
+							rendered="#{((sessionController.currentUser.admin) or (administrationController.droitPC!=null and administrationController.droitPC.droitAvis=='oui')) and ((administrationController.currentAvis.idDecisionDossier != 2 and administrationController.currentAvis.idDecisionDossier != 1) or (administrationController.droitPC.droitAvisDefinitif=='non' and !sessionController.currentUser.admin)) and administrationController.currentDemandeTransferts.transferts.temoinTransfertValide!=2}"
+							action="#{administrationController.addAvis}"
+							update=":infos:msgs,:currentAvis:msgs2,:infos:growl,:infos:listeAvisDetails,:currentAvis:avis,:currentAvis:bouton" />
+						<p:commandButton
+							value="Enregistrer l'avis Favorable ou défavorable"
+							rendered="#{((sessionController.currentUser.admin) or (administrationController.droitPC!=null and administrationController.droitPC.droitAvisDefinitif=='oui')) and (administrationController.currentAvis.idDecisionDossier == 2 or administrationController.currentAvis.idDecisionDossier == 1) and administrationController.currentDemandeTransferts.transferts.temoinTransfertValide!=2 }"
+							actionListener="#{administrationController.addAvisFavorable}"
+							update=":infos:msgs,:currentAvis:msgs2,:infos:growl,:infos:listeAvisDetails,:currentAvis:avis,:currentAvis:bouton">
+							<p:confirm header="Confirmation"
+								message="Attention, la saisie d'un avis favorable ou défavorable enverra un mél à l'étudiant et lui permettra d'imprimer sa demande de transferts"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+						<!--<p:commandButton value="test : (#{administrationController.droitPC.droitAvis}) === (#{sessionController.currentUser.admin})" immediate="true"-->
+										 <!--action="#{administrationController.goToCurrentDemandeTransferts}" />-->
+					</h:panelGrid>
+				</p:panel>
+			</center>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+				<p:commandButton value="Oui" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Non" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+
+			<p:messages id="msgs2" showDetail="false" />
+		</h:form>
+	</ui:define>
+
+	<ui:define name="content">
+		<ui:include src="/stylesheets/gestionnaire/_include/_footer.xhtml"></ui:include>
+	</ui:define>
+
+
+</ui:composition>
+</html>

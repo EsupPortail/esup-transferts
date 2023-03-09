@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:form>
+	<p:spacer height="20px" />
+	<h:outputText rendered="#{userController.verifDateNaisApogee}"
+		value="Connecté en tant que : #{userController.currentEtudiant.nomPatronymique} (Transferts année #{sessionController.currentAnnee}/#{sessionController.currentAnnee+1}) "
+		style="float:right;" />
+	<!-- 			<p:commandButton value="Déconnexion" rendered="#{userController.verifDateNaisApogee and sessionController.boutonDeconnexion}" -->
+	<!-- 				action="#{userController.goToWelcomeApogee}"> -->
+	<!-- 			</p:commandButton>				 -->
+	<!-- 	<p:spacer height="20px" /> -->
+
+	<p:tabMenu activeIndex="#{param.i}"
+		rendered="#{userController.verifDateNaisApogee and sessionController.boutonDeconnexion and userController.presentBdd}">
+		<p:menuitem value="Accueil" outcome="goToRecapitulatifApogee"
+			icon="ui-icon-star">
+			<f:param name="i" value="0" />
+		</p:menuitem>
+		<p:menuitem value="Correspondance" outcome="goToCorrespondance"
+			icon="ui-icon-search">
+			<f:param name="i" value="1" />
+		</p:menuitem>
+		<p:menuitem value="Imprimer les formulaires"
+			rendered="#{userController.presentBdd and (userController.currentEtudiant.transferts.temoinTransfertValide==2 || sessionController.editionPdfAccueilSansDecision)}"
+			action="#{userController.imprimerDemandeTransfert}"
+			icon="ui-icon-search">
+			<f:param name="i" value="1" />
+		</p:menuitem>
+		<p:menuitem value="Déconnexion" outcome="goToWelcomeApogee"
+			icon="ui-icon-document">
+			<f:param name="i" value="2" />
+		</p:menuitem>
+	</p:tabMenu>
+
+	<p:ajaxStatus>
+		<f:facet name="start">
+			<!-- 			<p:graphicImage value="/media/images/ajaxloadingbar.gif" /> -->
+		</f:facet>
+	</p:ajaxStatus>
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		onerror="PF('idleDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		closable="false" resizable="false" showHeader="false">
+		<!-- 		<p:graphicImage value="/media/images/ajaxloadingbar.gif" /> -->
+		<!-- 		<p:graphicImage value="/media/images/loading_spinner.gif" /> -->
+		<p:graphicImage value="/media/images/loading140.gif" />
+	</p:dialog>
+
+</h:form>
+
+</html>
+
+

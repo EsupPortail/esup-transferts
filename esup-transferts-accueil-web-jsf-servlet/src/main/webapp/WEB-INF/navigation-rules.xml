@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+<!-- 
+	/properties/jsf/navigation-rules.xml
+	The configuration file of Java Server Faces that gives 
+	the navigation rules between views.
+	This file is referenced by /webapp/WEB-INF/web.xml. 
+	It should not be modified but by the developers. 
+-->
+
+<faces-config>
+
+	
+	<navigation-rule>
+		<description>Gestion des exceptions</description>
+		<navigation-case>
+			<from-outcome>go_exception</from-outcome>
+			<to-view-id>/stylesheets/exceptions/exception.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToWelcomeApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/welcome.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToAuthApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/authApogee.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToEtatCivilApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/etatCivil.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToAdresseApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/adresse.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToSituationUniversitaire</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/situationUniversitaire.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>		
+		<navigation-case>
+			<from-outcome>goToVoeuxOrientationApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/voeuxOrientation.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>	
+		<navigation-case>
+			<from-outcome>goToRecapitulatifApogee</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/recapitulatif.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>goToCorrespondance</from-outcome>
+			<to-view-id>/stylesheets/connexionApogee/correspondance.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>			
+	</navigation-rule>
+
+</faces-config>

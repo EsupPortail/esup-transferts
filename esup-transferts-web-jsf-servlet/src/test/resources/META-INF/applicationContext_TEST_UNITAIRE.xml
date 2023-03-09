@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:META-INF/defaults_TEST_UNITAIRE.properties</value>
+			</list>
+		</property>
+	</bean>
+
+<!-- 	<import resource="classpath*:META-INF/esup-transferts-domain-services-auth.xml" /> -->
+	<import resource="classpath*:META-INF/esup-transferts-domain-services-domain.xml" />
+<!-- 	<import resource="classpath*:META-INF/esup-transferts-domain-services-ldap.xml" /> -->
+
+<!-- 	<import resource="classpath*:META-INF/i18n/i18n.xml" /> -->
+<!-- 	<import resource="classpath*:META-INF/smtp/smtp.xml" /> -->
+<!-- 	<import resource="classpath*:META-INF/misc/abstractBeans.xml" /> -->
+	<import resource="classpath*:META-INF/web/controllers.xml" />
+
+</beans>

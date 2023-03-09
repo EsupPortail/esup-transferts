@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:form>
+	<p:panel id="etatCivil" header="Etat Civil"
+		rendered="#{userController.parametreAppli.bool}">
+		<p:growl id="growl" showDetail="false" />
+		<p:messages id="msgs" showDetail="false" />
+		<h:panelGrid columns="2" columnClasses="column" cellpadding="5">
+			<h:panelGrid columns="2" columnClasses="column" cellpadding="5"
+				style="text-align:left !important;">
+				<h:outputText value="Nom de famille : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.nomPatronymique}" />
+
+				<h:outputText value="Nom d'usage : " />
+				<h:outputText value="#{userController.currentEtudiant.nomUsuel}" />
+
+				<h:outputText value="Prénom 1 : " />
+				<h:outputText value="#{userController.currentEtudiant.prenom1}" />
+
+				<h:outputText value="Prénom 2 : " />
+				<h:outputText value="#{userController.currentEtudiant.prenom2}" />
+
+				<h:outputText value="Date de naissance : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.dateNaissance}">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="#{sessionController.timezone}" />
+				</h:outputText>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" columnClasses="column" cellpadding="5"
+				style="margin-left:30%;text-align:left;width: 100%;">
+				<h:outputText value="Centre de gestion : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.libCge} (#{userController.currentEtudiant.codCge})" />
+
+				<h:outputText value="Composante : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.libComposante} (#{userController.currentEtudiant.composante})" />
+
+				<h:outputText value="Dernière I.A : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.libEtapePremiereLocal}" />
+
+				<h:outputText value="Numéro étudiant : " />
+				<h:outputText
+					value="#{userController.currentEtudiant.numeroEtudiant}" />
+
+				<h:outputText value="Numéro I.N.E : " />
+				<h:outputText value="#{userController.currentEtudiant.numeroIne}" />
+			</h:panelGrid>
+		</h:panelGrid>
+
+		<BR /><BR />
+		<p:treeTable value="#{userController.root}" var="document" rendered="#{not empty userController.root}">
+			<f:facet name="header">
+				Dossier universitaire *
+			</f:facet>
+			<p:column headerText="Libellé">
+				<h:outputText value="#{document.name}" />
+			</p:column>
+			<p:column headerText="Mention">
+				<h:outputText value="#{document.size}" />
+			</p:column>
+			<p:column headerText="Résultat">
+				<h:outputText value="#{document.type}" />
+			</p:column>
+		</p:treeTable>
+		<BR /><BR />
+		<h:outputText value="* Il est conseillé d'attendre la délibération des jurys avant d'effectuer votre demande de transferts" style="font-style: italic"/>
+		<BR /><BR />
+
+		<h:panelGrid columns="1"
+			rendered="#{userController.currentEtudiant.numeroEtudiant!=null and !sessionController.error and userController.etudiant}">
+			<p:commandButton value="Suivant"
+				action="#{userController.goToAdresse}" />
+		</h:panelGrid>
+		<h:panelGrid columns="1"
+			rendered="#{userController.verifDateNaisApogee}">
+			<p:commandButton value="Suivant"
+				action="#{userController.goToAdresseApogee}" />
+		</h:panelGrid>
+		<p:messages id="msgs2" showDetail="false" />
+	</p:panel>
+</h:form>
+</html>

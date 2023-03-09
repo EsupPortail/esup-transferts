@@ -1,0 +1,53 @@
+<!-- <beans xmlns="http://www.springframework.org/schema/beans" -->
+<!-- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" -->
+<!-- xsi:schemaLocation="http://www.springframework.org/schema/beans -->
+<!-- http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"> -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<bean id="businessManager"
+		class="org.esupportail.transferts.web.scheduler.BusinessManager">
+		<property name="smtpService" ref="smtpService" />
+		<property name="domainService" ref="domainService" />
+		<property name="domainServiceScolarite" ref="domainServiceScolarite" />
+		<property name="i18nService" ref="i18nService" />
+		<property name="currentRne" value="${etab.rne}" />
+		<property name="transfertsAccueil" value="${transferts.accueil}" />
+		<property name="timeOutConnexionWs" value="${timeOutConnexionWs}" />
+		<property name="nbJourAvantAlertSilenceVautAccord" value="${nb.jour.avant.alert.silence.vaut.accord}" />
+		<property name="nbMoisAvantAccordSuiteNouvelleLoiSilenceVautAccord"
+			value="${nb.mois.avant.accord.suite.nouvelle.loi.silence.vaut.accord}" />
+<!-- 		<property name="majOdfAutoForScheduler" value="${maj.odf.auto.for.scheduler}" /> -->
+
+	</bean>
+
+	<bean id="QuartzJob" class="org.esupportail.transferts.web.scheduler.QuartzJob">
+		<property name="businessManager" ref="businessManager" />
+	</bean>
+
+	<bean name="jobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="QuartzJob" />
+		<property name="targetMethod" value="execute" />
+	</bean>
+
+	<bean id="jobCronScheduler" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jobDetail" />
+		<property name="cronExpression" value="${scheduler.cronExpression}" />
+	</bean>
+
+	<bean id="schedulerBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		lazy-init="false">
+		<property name="triggers">
+			<list>
+				<ref bean="jobCronScheduler" />
+			</list>
+		</property>
+	</bean>
+
+
+</beans>

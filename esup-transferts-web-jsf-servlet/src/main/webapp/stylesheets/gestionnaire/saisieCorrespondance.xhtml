@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+
+	<ui:define name="navigation">
+		<ui:include src="/stylesheets/gestionnaire/_include/_header.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="corps">
+		<p:spacer height="20px" />
+		<h:form id="form_correspondance">
+			<center>
+				<p:panel id="etat_civil" styleClass="panel"
+					style="width:80%;text-align:left;"
+					header="Demande de Transferts accueil #{sessionController.currentAnnee}/#{sessionController.currentAnnee+1}">
+					<p:messages id="msgs" showDetail="false" />
+					<p:growl id="growl" showDetail="false" sticky="true" />
+					<p:fieldset legend="Etat civil" toggleable="true" toggleSpeed="200">
+						<p:panelGrid
+							style="text-align:left;width:100%; border-style: hidden !important;">
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText
+										value="Nom de famille : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.nomPatronymique}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Date de la demande : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.transferts.dateDemandeTransfert}">
+										<f:convertDateTime pattern="dd/MM/yyyy à HH:mm:ss"
+											timeZone="#{sessionController.timezone}" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Nom d'usage : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.nomUsuel}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Numéro étudiant : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.numeroEtudiant}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Prénom 1 : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.prenom1}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:outputText value="Numéro I.N.E : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.numeroIne}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Prénom 2 : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.prenom2}" />
+								</p:column>
+								<p:column style="width:50%">
+									<h:graphicImage alt="Reprise d'étude"
+										title="Aucune inscription administrative universitaire"
+										value="/media/images/warning_40px.png" width="20px"
+										height="20px"
+										rendered="#{administrationController.repriseEtudes}" />
+									<p:spacer width="10px" />
+									<h:outputText
+										value="Aucune inscription administrative universitaire en #{sessionController.currentAnnee-sessionController.regleGestionTE02}/#{sessionController.currentAnnee-sessionController.regleGestionTE02+1}"
+										rendered="#{administrationController.repriseEtudes}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value="Date de naissance : " />
+									<h:outputText
+										value="#{administrationController.currentDemandeTransferts.dateNaissance}">
+										<f:convertDateTime pattern="dd/MM/yyyy"
+											timeZone="#{sessionController.timezone}" />
+									</h:outputText>
+								</p:column>
+								<p:column style="width:50%">
+									<h:graphicImage alt="Candidature" title="Candidature"
+										value="/media/images/warning_40px.png" width="20px"
+										height="20px"
+										rendered="#{administrationController.interditNiveau2}" />
+									<p:spacer width="10px" />
+									<h:outputText
+										value="#{administrationController.texteInterditNiveau2}"
+										escape="false"
+										rendered="#{administrationController.interditNiveau2}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:50%">
+									<h:outputText value=" " />
+									<h:outputText value=" " />
+								</p:column>
+								<p:column style="width:50%">
+									<h:graphicImage alt="Post Bac" title="PostBac"
+										value="/media/images/warning_40px.png" width="20px"
+										height="20px"
+										rendered="#{administrationController.interditNiveau3}" />
+									<p:spacer width="10px" />
+									<h:outputText
+										value="Admission PostBac (#{administrationController.texteInterditNiveau3})"
+										escape="false"
+										rendered="#{administrationController.interditNiveau3}" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:fieldset>
+
+					<p:spacer height="10px" />
+					<p:separator style="width:500px;height:10px" />
+
+					<p:fieldset id="listeAvisDetails"
+						legend="liste des correspondances" toggleable="true"
+						toggleSpeed="200">
+						<p:spacer height="10px" />
+						<p:dataTable id="basic" var="correspondance" emptyMessage="Auncune correspondance"
+							value="#{administrationController.listeCorrespondances}"
+							resizableColumns="true">
+
+							<p:column width="10%">
+								<f:facet name="header">  
+                    Date
+            </f:facet>
+								<h:outputText value="#{correspondance.dateSaisie}">
+									<f:convertDateTime pattern="dd/MM/yyyy à HH:mm:ss"
+										timeZone="#{sessionController.timezone}" />
+								</h:outputText>
+							</p:column>
+
+							<p:column id="modelHeader" width="25%">
+								<f:facet name="header">  
+                    Titre  
+            </f:facet>
+								<h:outputText value="#{correspondance.titre}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">  
+                    Message
+            	</f:facet>
+								<t:div style="overflow: scroll;">
+									<h:outputText escape="false" value="#{correspondance.msg}" />
+								</t:div>
+							</p:column>
+						</p:dataTable>
+					</p:fieldset>
+
+					<p:messages id="msgs2" showDetail="false" />
+
+
+					<p:spacer height="20px" />
+					<h:panelGrid columns="2" id="bouton1">
+						<p:commandButton value="Retour" immediate="true" rendered="#{administrationController.source=='D'}"
+							action="#{administrationController.goToCurrentDemandeTransferts}" />
+					</h:panelGrid>
+					<h:panelGrid columns="2" id="bouton2">
+						<p:commandButton value="Retour" immediate="true" rendered="#{administrationController.source=='A'}"
+							action="#{administrationController.goToCurrentDemandeTransfertsAccueil}" />
+					</h:panelGrid>
+
+				</p:panel>
+			</center>
+
+
+
+		</h:form>
+	</ui:define>
+
+	<ui:define name="content">
+		<ui:include src="/stylesheets/gestionnaire/_include/_footer.xhtml"></ui:include>
+	</ui:define>
+
+
+</ui:composition>
+</html>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:t="http://myfaces.apache.org/tomahawk"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/stylesheets/gestionnaire/template.xhtml">
+
+	<ui:define name="corps">
+		<p:spacer height="20px" />
+		<h:form id="ws">
+			<p:messages id="msgs" showDetail="false" />
+			<p:growl id="growl" showDetail="false" sticky="true" />
+			<p:panelGrid
+					style="text-align:left;width:100%; border-style: hidden !important;">
+				<p:row>
+					<p:column style="width:25%">
+						<h:outputText value="*URL :  " />
+					</p:column>
+					<p:column style="width:25%">
+						<h:inputText
+								value="#{administrationController.currentWs.url}" size="50" required="true" requiredMessage="L'URL est obligatoire" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:25%">
+						<h:outputText value="*Identifiant :  " />
+					</p:column>
+					<p:column style="width:25%">
+						<h:inputText
+								value="#{administrationController.currentWs.identifiant}" required="true" requiredMessage="L'identifiant est obligatoire" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:25%">
+						<h:outputText value="*Mot de passe :  " />
+					</p:column>
+					<p:column style="width:25%">
+						<p:password id="pwd" value="#{administrationController.currentWs.pwd}" feedback="true" redisplay="true" />
+						<!--<h:inputText-->
+								<!--value="#{administrationController.currentWs.pwd}" />-->
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:25%">
+						<h:outputText value="*Class JAVA : "  />
+					</p:column>
+					<p:column style="width:25%">
+						<p:inplace id="package" editor="true" emptyLabel="exemple : artois.domain.DomainServiceBu">
+							<p:inputText value="#{administrationController.currentWs.nomClassJava}" label="text" size="40" required="true" requiredMessage="Le nom de la class JAVA est obligatoire" />
+						</p:inplace>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:25%">
+						<h:outputText value="*Nom Méthode getAll : "  />
+					</p:column>
+					<p:column style="width:25%">
+						<p:inplace id="getAll" editor="true" emptyLabel="exemple : getAll">
+							<p:inputText value="#{administrationController.currentWs.nomMethodeJavaGetAll}" label="text" size="40" required="true" requiredMessage="Le nom de la méthode getAll est obligatoire" />
+						</p:inplace>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:25%">
+						<h:outputText value="*Nom Méthode getById : "  />
+					</p:column>
+					<p:column style="width:25%">
+						<p:inplace id="getById" editor="true" emptyLabel="exemple : getAllById">
+							<p:inputText value="#{administrationController.currentWs.nomMethodeJavaGetById}" label="text" size="40" required="true" requiredMessage="Le nom de la méthode getAllById est obligatoire" />
+						</p:inplace>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:50%;text-align: center;padding-top: 3%" colspan="2">
+						<p:commandButton value="Enregistrer" actionListener="#{administrationController.updateWebService}" update="growl"/>
+						<p:commandButton value="Tester" actionListener="#{administrationController.testWebservice}" update="growl"/>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<p:messages id="msgs2" showDetail="false" />
+		</h:form>
+	</ui:define>
+
+	<ui:define name="content">
+		<ui:include src="/stylesheets/gestionnaire/_include/_footer.xhtml"></ui:include>
+	</ui:define>
+
+
+</ui:composition>
+</html>

@@ -1,0 +1,6 @@
+- Fusion des 2 modules étudiant et gestionnaire
+- Test d'utilisation du JNDI OK
+- Ajout de l'authentification au niveau de l'appel du WS de l'établissement d'accueil (voir identifiant & mot de passe dans la table WSPUB)
+- Ajout de la fonctionnalité de suppression d'une signature si celle-ci n'est pas rattachée à une demande de transferts.
+- Ajout de la synchronisation de l'offre de formations APOGEE vers l'offre de formations proposée au transferts 
+- Ajout d'un datatable reprenant l'état du WS de chaque établissement partenaires ainsi que de la recuperation en local de son offre de formation au travers des WS 

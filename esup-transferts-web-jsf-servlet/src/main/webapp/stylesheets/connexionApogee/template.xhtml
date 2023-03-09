@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<f:view locale="#{sessionController.locale}">
+	<h:head>
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache" />
+		<meta http-equiv="expires" content="0" />
+		<style type="text/css">
+			/* @import url("/media/style/esup-transferts.css"); */
+			@import	url("#{sessionController.htmlCssStyle}media/style/esup-transferts.css");
+		</style>
+		<title><h:outputText value="#{applicationService.name}" />
+		</title>
+		<ui:repeat value="#{tagsConfigurator.stylesheets}" var="path">
+			<t:stylesheet path="#{path}" />
+		</ui:repeat>
+		<ui:repeat value="#{tagsConfigurator.scripts}" var="path">
+			<script type="text/javascript" src="#{path}" />
+		</ui:repeat>
+		<h:outputScript name="jsf.js" library="javax.faces" target="head" />
+	</h:head>
+	<h:body>
+		<div id="body">
+			<div class="app-body">
+				<ui:insert name="navigation" />
+				<!-- 				<p:spacer height="20px" /> -->
+				<ui:insert name="corps" />
+				<div class="app-content">
+					<br />
+					<ui:insert name="content" />
+				</div>
+				<div style="clear: both;" />
+			</div>
+		</div>
+	</h:body>
+</f:view>
+</html>

@@ -37,3 +37,5 @@ esup-transferts-web-jsf-servlet/src/main/resources/properties/i18n/bundles/*
 esup-transferts-accueil-web-jsf-servlet/src/main/resources/log4j.properties
 esup-transferts-accueil-web-jsf-servlet/src/main/resources/properties/config.properties
 esup-transferts-accueil-web-jsf-servlet/src/main/resources/properties/i18n/bundles/*
+
+esup-transferts-utils/src/main/java/fr/univartois/wsclient/apogee

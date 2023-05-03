@@ -32,7 +32,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
-				<version>2.5</version>
+				<version>2.6</version>
 				<executions>
 					<execution>
 						<id>apogee-wsdl-etudiant-metier</id>
@@ -144,10 +144,12 @@
 					</execution>
 				</executions>
 				<configuration>
+					<bindingDirectory>${project.basedir}/src/main/resources/jaxb/</bindingDirectory>
+					<bindingFiles>jaxb_bindings.xjb</bindingFiles>
 					<verbose>false</verbose>
 					<sourceDestDir>${basedir}/src/main/java</sourceDestDir>
 					<args>
-						<arg>-B-XautoNameResolution</arg>
+						<arg>-B-XautoNameResolution -target 2.2</arg>
 					</args>
 				</configuration>
 			</plugin>
@@ -192,6 +194,12 @@
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 			<version>2.4.2</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-ri</artifactId>
+			<version>2.3.3</version>
+			<type>pom</type>
 		</dependency>
 	</dependencies>
 </project>

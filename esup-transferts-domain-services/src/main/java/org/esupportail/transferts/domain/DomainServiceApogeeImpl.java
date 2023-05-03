@@ -268,7 +268,8 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 				logger.debug("adresseFixe -->"+adresseFixe.toString());
 
 				fr.univartois.wsclient.apogee.etudiant.CommuneDTO2 communeDTO = adresseFixe.getCommune();
-				logger.debug("communeDTO -->"+communeDTO.toString());
+				if (logger.isDebugEnabled() && communeDTO!=null) logger.debug("communeDTO -->"+communeDTO.toString());
+                else if(logger.isDebugEnabled() && communeDTO==null) logger.debug("communeDTO --> la commune est null");
 
 				fr.univartois.wsclient.apogee.etudiant.PaysDTO paysDTO = adresseFixe.getPays();
 				logger.debug("paysDTO -->"+paysDTO.toString());
@@ -876,11 +877,11 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 						for(int i=0;i<ccgOri.length;i++) {
 							logger.debug("--> le.getListComposanteCentreGestion()[i].getCodCentreGestion()-->"+ccgOri[i].getCodCentreGestion()
 									+"\n--> ccgOri[i].getLibCentreGestion()-->"+ccgOri[i].getLibCentreGestion());
-							VersionEtapeDTO3[] versionEtapeDTO21 = le.getListVersionEtape() != null
-									? le.getListVersionEtape().getItem().toArray(new VersionEtapeDTO3[0])
-									: new VersionEtapeDTO3[0];
+							VersionEtapeDTO32[] versionEtapeDTO21 = le.getListVersionEtape() != null
+									? le.getListVersionEtape().getItem().toArray(new VersionEtapeDTO32[0])
+									: new VersionEtapeDTO32[0];
 
-							for(VersionEtapeDTO3 ve : versionEtapeDTO21) {
+							for(VersionEtapeDTO32 ve : versionEtapeDTO21) {
 								if(ccgOri[i].getCodComposante().equals(ve.getComposante().getCodComposante())) {
 									logger.debug("ve.getLibWebVet() --> "+ve.getLibWebVet());
 

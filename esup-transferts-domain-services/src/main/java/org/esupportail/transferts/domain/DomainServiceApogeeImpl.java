@@ -877,11 +877,11 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 						for(int i=0;i<ccgOri.length;i++) {
 							logger.debug("--> le.getListComposanteCentreGestion()[i].getCodCentreGestion()-->"+ccgOri[i].getCodCentreGestion()
 									+"\n--> ccgOri[i].getLibCentreGestion()-->"+ccgOri[i].getLibCentreGestion());
-							VersionEtapeDTO3[] versionEtapeDTO21 = le.getListVersionEtape() != null
-									? le.getListVersionEtape().getItem().toArray(new VersionEtapeDTO3[0])
-									: new VersionEtapeDTO3[0];
+							VersionEtapeDTO32[] versionEtapeDTO21 = le.getListVersionEtape() != null
+									? le.getListVersionEtape().getItem().toArray(new VersionEtapeDTO32[0])
+									: new VersionEtapeDTO32[0];
 
-							for(VersionEtapeDTO3 ve : versionEtapeDTO21) {
+							for(VersionEtapeDTO32 ve : versionEtapeDTO21) {
 								if(ccgOri[i].getCodComposante().equals(ve.getComposante().getCodComposante())) {
 									logger.debug("ve.getLibWebVet() --> "+ve.getLibWebVet());
 

@@ -10,6 +10,18 @@
 		maxElementsOnDisk="10000" eternal="false" timeToIdleSeconds="1800"
 		timeToLiveSeconds="1800" overflowToDisk="true" />
 
+	<cache name="etablissements" maxElementsInMemory="10000"
+		   maxElementsOnDisk="10000" eternal="false" timeToIdleSeconds="1800"
+		   timeToLiveSeconds="1800" overflowToDisk="true" />
+
+	<cache name="typesEtablissements" maxElementsInMemory="10"
+		   eternal="false" timeToIdleSeconds="1800"
+		   timeToLiveSeconds="1800" overflowToDisk="false" />
+
+	<cache name="typesDiplomes" maxElementsInMemory="100"
+		   eternal="false" timeToIdleSeconds="1800"
+		   timeToLiveSeconds="1800" overflowToDisk="false" />
+
 	<defaultCache maxElementsInMemory="10000"
 		maxElementsOnDisk="10000" eternal="false" timeToIdleSeconds="1800"
 		timeToLiveSeconds="1800" overflowToDisk="true" />

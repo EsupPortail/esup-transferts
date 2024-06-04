@@ -931,7 +931,7 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 				+ "\n############################################################################################");
 		try {
 			for(IndOpi opi : listeOpis) {
-				DonneesOpiDTO9 donneesOpiDTO = new DonneesOpiDTO9();
+				DonneesOpiDTO10 donneesOpiDTO = new DonneesOpiDTO10();
 
 				/*Initialisation de l'objet DonneesOpiDTO2 d'apogee a partir de l'objet OPI de esup-transferts*/
 				/*#################### MAJOpiAdresseDTO - Adresse Fixe #################### */
@@ -1067,7 +1067,7 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 				donneesOpiDTO.setDac(opiDacDTO);
 
 				/*#################### MAJOpiBacDTO ####################*/
-				MAJOpiBacDTO opiBacDTO = new MAJOpiBacDTO();
+				MAJOpiBacDTO2 opiBacDTO = new MAJOpiBacDTO2();
 				opiBacDTO.setCodBac(opi.getCodBac());
 				opiBacDTO.setCodEtb(opi.getCodEtbBac());
 				opiBacDTO.setCodDep(opi.getCodDep());
@@ -1120,7 +1120,7 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 				majOpiDacDTO.setCodNif(1);
 				donneesOpiDTO.setDac(majOpiDacDTO);
 				try {
-					getOpiMetierService().mettreajourDonneesOpiV9(donneesOpiDTO);
+					getOpiMetierService().mettreajourDonneesOpiV10(donneesOpiDTO);
 				} catch (Exception e) {
 					listeErreurs.add(opi);
 					logger.error(e);

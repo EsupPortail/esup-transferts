@@ -715,14 +715,14 @@ public class AdministrationController extends AbstractContextAwareController {
 
 		List<PersonnelComposante> lPc=null;
 		List<EtudiantRef> lEtu=new ArrayList<EtudiantRef>();
-		String chaineComposante=null;
+		List<String> currentCodesComposantes = new ArrayList<>();
 		try {
 			lPc = getDomainService().getListeComposantesByUidAndSourceAndAnnee(getSessionController().getCurrentUser().getLogin(), getSource(), getSessionController().getCurrentAnnee());
 			if(lPc!=null && !lPc.isEmpty())
 			{
 				for(PersonnelComposante pc : lPc)
 				{
-					chaineComposante+=pc.getCodeComposante()+",";
+					currentCodesComposantes.add(pc.getCodeComposante());
 				}
 			}
 		} catch (Exception e) {
@@ -737,9 +737,8 @@ public class AdministrationController extends AbstractContextAwareController {
 			{
 				try {
 					if((lPc!=null
-							&& chaineComposante!=null
-							&& !"".equals(chaineComposante)
-							&& chaineComposante.contains(etu.getTransferts().getOdf().getCodeComposante())
+							&& !currentCodesComposantes.isEmpty()
+							&& currentCodesComposantes.contains(etu.getTransferts().getOdf().getCodeComposante())
 					) || getSessionController().getCurrentUser().isAdmin())
 						lEtu.add(etu);
 				} catch (Exception e) {
@@ -990,14 +989,14 @@ public class AdministrationController extends AbstractContextAwareController {
 
 		List<PersonnelComposante> lPc=null;
 		List<EtudiantRef> lEtu=new ArrayList<EtudiantRef>();
-		String chaineComposante=null;
+		List<String> currentCodesComposantes = new ArrayList<>();
 		try {
 			lPc = getDomainService().getListeComposantesByUidAndSourceAndAnnee(getSessionController().getCurrentUser().getLogin(), getSource(), getSessionController().getCurrentAnnee());
 			if(lPc!=null && !lPc.isEmpty())
 			{
 				for(PersonnelComposante pc : lPc)
 				{
-					chaineComposante+=pc.getCodeComposante()+",";
+					currentCodesComposantes.add(pc.getCodeComposante());
 				}
 			}
 		} catch (Exception e) {
@@ -1011,9 +1010,8 @@ public class AdministrationController extends AbstractContextAwareController {
 			{
 				try {
 					if((lPc!=null
-							&& chaineComposante!=null
-							&& !"".equals(chaineComposante)
-							&& chaineComposante.contains(etu.getComposante())
+							&& !currentCodesComposantes.isEmpty()
+							&& currentCodesComposantes.contains(etu.getComposante())
 					) || getSessionController().getCurrentUser().isAdmin())
 						lEtu.add(etu);
 				} catch (Exception e) {
@@ -2318,14 +2316,14 @@ public class AdministrationController extends AbstractContextAwareController {
 
 		setSource("A");
 		List<PersonnelComposante> lPc=null;
-		String chaineComposante=null;
+		List<String> currentCodesComposantes = new ArrayList<>();
 		try {
 			lPc = getDomainService().getListeComposantesByUidAndSourceAndAnnee(getSessionController().getCurrentUser().getLogin(), getSource(), getSessionController().getCurrentAnnee());
 			if(lPc!=null)
 			{
 				for(PersonnelComposante pc : lPc)
 				{
-					chaineComposante+=pc.getCodeComposante()+",";
+					currentCodesComposantes.add(pc.getCodeComposante());
 				}
 			}
 		} catch (Exception e) {
@@ -2352,15 +2350,14 @@ public class AdministrationController extends AbstractContextAwareController {
 						etu.setAlertSilenceVautAccord(GestionDate.ajouterJour(etu.getTransferts().getDateDemandeTransfert(), getSessionController().getNbJourAvantAlertSilenceVautAccord()));
 						if (logger.isDebugEnabled())
 							try {
-								logger.debug("admin - switchTraiteNontraite - chaineComposante --> "+getSessionController().getCurrentUser().isAdmin()+" - "+switchTraiteNontraite+" - "+chaineComposante);
+								logger.debug("admin - switchTraiteNontraite - currentCodesComposantes --> "+getSessionController().getCurrentUser().isAdmin()+" - "+switchTraiteNontraite+" - "+currentCodesComposantes);
 							} catch (Exception e1) {
 								logger.error(e1);
 							}
 						try {
 							if((lPc!=null
-									&& chaineComposante!=null
-									&& !"".equals(chaineComposante)
-									&& chaineComposante.contains(etu.getTransferts().getOdf().getCodeComposante())
+									&& !currentCodesComposantes.isEmpty()
+									&& currentCodesComposantes.contains(etu.getTransferts().getOdf().getCodeComposante())
 							) || getSessionController().getCurrentUser().isAdmin())
 								lEtu2.add(etu);
 						} catch (Exception e) {
@@ -2400,15 +2397,14 @@ public class AdministrationController extends AbstractContextAwareController {
 
 						if (logger.isDebugEnabled())
 							try {
-								logger.debug("admin - switchTraiteNontraite - chaineComposante --> "+getSessionController().getCurrentUser().isAdmin()+" - "+switchTraiteNontraite+" - "+chaineComposante);
+								logger.debug("admin - switchTraiteNontraite - currentCodesComposantes --> "+getSessionController().getCurrentUser().isAdmin()+" - "+switchTraiteNontraite+" - "+currentCodesComposantes);
 							} catch (Exception e1) {
 								logger.error(e1);
 							}
 						try {
 							if((lPc!=null
-									&& chaineComposante!=null
-									&& !"".equals(chaineComposante)
-									&& chaineComposante.contains(etu.getTransferts().getOdf().getCodeComposante())
+									&& !currentCodesComposantes.isEmpty()
+									&& currentCodesComposantes.contains(etu.getTransferts().getOdf().getCodeComposante())
 							) || getSessionController().getCurrentUser().isAdmin())
 								lEtu2.add(etu);
 						} catch (Exception e) {
@@ -2434,7 +2430,7 @@ public class AdministrationController extends AbstractContextAwareController {
 		}
 		setSource("D");
 		List<PersonnelComposante> lPc=null;
-		String chaineComposante=null;
+		List<String> currentCodesComposantes = new ArrayList<>();
 		try {
 			lPc = getDomainService().getListeComposantesByUidAndSourceAndAnnee(getSessionController().getCurrentUser().getLogin(), getSource(), getSessionController().getCurrentAnnee());
 			if(lPc!=null)
@@ -2442,9 +2438,9 @@ public class AdministrationController extends AbstractContextAwareController {
 				for(PersonnelComposante pc : lPc)
 				{
 					if(this.isDroitAvisDefinitifTransfertDepartMultiple() && pc.getDroitAvisDefinitif()!=null && "oui".equalsIgnoreCase(pc.getDroitAvisDefinitif()))
-						chaineComposante+=pc.getCodeComposante()+",";
+						currentCodesComposantes.add(pc.getCodeComposante());
 					else if(!this.isDroitAvisDefinitifTransfertDepartMultiple())
-						chaineComposante+=pc.getCodeComposante()+",";
+						currentCodesComposantes.add(pc.getCodeComposante());
 				}
 			}
 		} catch (Exception e) {
@@ -2486,15 +2482,14 @@ public class AdministrationController extends AbstractContextAwareController {
 						}
 						if (logger.isDebugEnabled())
 							try {
-								logger.debug("admin - switchTraiteNontraite - chaineComposante --> "+getSessionController().getCurrentUser().isAdmin()+" - "+switchTraiteNontraite+" - "+chaineComposante);
+								logger.debug("admin - switchTraiteNontraite - currentCodesComposantes --> "+getSessionController().getCurrentUser().isAdmin()+" - "+switchTraiteNontraite+" - "+currentCodesComposantes);
 							} catch (Exception e1) {
 								logger.error(e1);
 							}
 						try {
 							if((lPc!=null
-									&& chaineComposante!=null
-									&& !"".equals(chaineComposante)
-									&& chaineComposante.contains(etu.getComposante())
+									&& !currentCodesComposantes.isEmpty()
+									&& currentCodesComposantes.contains(etu.getComposante())
 							) || getSessionController().getCurrentUser().isAdmin())
 								lEtu2.add(etu);
 						} catch (Exception e) {
@@ -2553,15 +2548,14 @@ public class AdministrationController extends AbstractContextAwareController {
 						}
 						if (logger.isDebugEnabled())
 							try {
-								logger.debug("admin - switchTraiteNontraite - chaineComposante --> "+getSessionController().getCurrentUser().isAdmin()+" - "+switchTraiteNontraite+" - "+chaineComposante);
+								logger.debug("admin - switchTraiteNontraite - currentCodesComposantes --> "+getSessionController().getCurrentUser().isAdmin()+" - "+switchTraiteNontraite+" - "+currentCodesComposantes);
 							} catch (Exception e1) {
 								logger.error(e1);
 							}
 						try {
 							if((lPc!=null
-									&& chaineComposante!=null
-									&& !"".equals(chaineComposante)
-									&& chaineComposante.contains(etu.getComposante())
+									&& !currentCodesComposantes.isEmpty()
+									&& currentCodesComposantes.contains(etu.getComposante())
 							) || getSessionController().getCurrentUser().isAdmin())
 								lEtu2.add(etu);
 						} catch (Exception e) {

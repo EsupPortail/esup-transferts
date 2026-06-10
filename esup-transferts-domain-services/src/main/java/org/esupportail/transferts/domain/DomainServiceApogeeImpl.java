@@ -118,7 +118,7 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 		etudiant.setNumeroEtudiant(supannEtuId);
 		try {
 			// Recuperation des infos de l'etudiant dans Apogee
-			InfoAdmEtuDTO3 infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV3(supannEtuId);
+			InfoAdmEtuDTO4 infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV4(supannEtuId);
 
 			logger.debug("Numero etudiant -->"+etudiant.getNumeroEtudiant());
 			BlocageDTO[] listeBlocagesDTO = infoAdmEtuDTO.getListeBlocages() != null
@@ -143,8 +143,8 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 			NationaliteDTO nationaliteDTO = infoAdmEtuDTO.getNationaliteDTO();
 			logger.debug("nationaliteDTO -->"+nationaliteDTO);
 
-			IndBacDTO[] indBac = infoAdmEtuDTO.getListeBacs() != null
-					? infoAdmEtuDTO.getListeBacs().getItem().toArray(new IndBacDTO[0]) : new IndBacDTO[0];
+			IndBacDTO2[] indBac = infoAdmEtuDTO.getListeBacs() != null
+					? infoAdmEtuDTO.getListeBacs().getItem().toArray(new IndBacDTO2[0]) : new IndBacDTO2[0];
 			logger.debug("indBac -->"+indBac.length);
 
 			infosAccueil.setAnneeBac(indBac[0].getAnneeObtentionBac());
@@ -246,7 +246,7 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 
 			// Recuperation des infos de l'etudiant dans Apogee
 			logger.debug("ine===>" + ine + "<===");
-			InfoAdmEtuDTO3 infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV3(String.valueOf(identifiantEtudiant.getCodEtu()));
+			InfoAdmEtuDTO4 infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV4(String.valueOf(identifiantEtudiant.getCodEtu()));
 
 			if(infoAdmEtuDTO != null)
 				logger.debug("===>if(identifiantEtudiant!=null && infoAdmEtuDTO!=null)<==="
@@ -277,8 +277,8 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 				NationaliteDTO nationaliteDTO = infoAdmEtuDTO.getNationaliteDTO();
 				logger.debug("nationaliteDTO -->"+nationaliteDTO.toString());
 
-				IndBacDTO[] indBac = infoAdmEtuDTO.getListeBacs() != null
-						? infoAdmEtuDTO.getListeBacs().getItem().toArray(new IndBacDTO[0]) : new IndBacDTO[0];
+				IndBacDTO2[] indBac = infoAdmEtuDTO.getListeBacs() != null
+						? infoAdmEtuDTO.getListeBacs().getItem().toArray(new IndBacDTO2[0]) : new IndBacDTO2[0];
 				logger.debug("indBac -->"+indBac.length);
 
 				infosAccueil.setAnneeBac(indBac[0].getAnneeObtentionBac());
@@ -524,12 +524,12 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 	@Override
 	public TrBac getBaccalaureat(String supannEtuId){
 		try {
-			InfoAdmEtuDTO3 infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV3(supannEtuId);
-			IndBacDTO[] indBacDTO = infoAdmEtuDTO.getListeBacs() != null
-					? infoAdmEtuDTO.getListeBacs().getItem().toArray(new IndBacDTO[0]) : new IndBacDTO[0];
+			InfoAdmEtuDTO4 infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV4(supannEtuId);
+			IndBacDTO2[] indBacDTO = infoAdmEtuDTO.getListeBacs() != null
+					? infoAdmEtuDTO.getListeBacs().getItem().toArray(new IndBacDTO2[0]) : new IndBacDTO2[0];
 
 			if (logger.isDebugEnabled())
-				for (IndBacDTO b : indBacDTO) logger.debug("indBacDTO.length = " + indBacDTO.length
+				for (IndBacDTO2 b : indBacDTO) logger.debug("indBacDTO.length = " + indBacDTO.length
 						+ "\nindBacDTO[i].getLibelleBac() --> " + b.getLibelleBac()
 						+ "\nindBacDTO[i].getDepartementBac().getLibDept() --> " + b.getDepartementBac().getLibDept()
 						+ "\nindBacDTO[i].getEtbBac().getLibEtb() --> " + b.getEtbBac().getLibEtb()
@@ -555,9 +555,9 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 	@Override
 	public TrInfosAdmEtu getInfosAdmEtu(String supannEtuId){
 		// Recuperation des infos de l'etudiant dans Apogee
-		InfoAdmEtuDTO3 infoAdmEtuDTO;
+		InfoAdmEtuDTO4 infoAdmEtuDTO;
 		try {
-			infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV3(supannEtuId);
+			infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV4(supannEtuId);
 
 			NationaliteDTO nationaliteDTO = infoAdmEtuDTO.getNationaliteDTO();
 
@@ -779,9 +779,9 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 		logger.debug("getInfosOpi(String numeroEtudiant)");
 		VoeuxIns voeuxIns = new VoeuxIns();
 		IndOpi indOpi = new IndOpi();
-		InfoAdmEtuDTO3 infoAdmEtuDTO;
+		InfoAdmEtuDTO4 infoAdmEtuDTO;
 		try {
-			infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV3(numeroEtudiant);
+			infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV4(numeroEtudiant);
 			/*OPI*/
 			indOpi.setCodPayNat(infoAdmEtuDTO.getNationaliteDTO().getCodeNationalite());
 			indOpi.setCodEtb(infoAdmEtuDTO.getEtbPremiereInscUniv().getCodeEtb());
@@ -812,8 +812,8 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 			indOpi.setDaaEtrSup(infoAdmEtuDTO.getAnneePremiereInscEtr());
 
 			/*OPI_BAC*/
-			IndBacDTO[] listeBacs = infoAdmEtuDTO.getListeBacs() != null
-					? infoAdmEtuDTO.getListeBacs().getItem().toArray(new IndBacDTO[0]) : new IndBacDTO[0];
+			IndBacDTO2[] listeBacs = infoAdmEtuDTO.getListeBacs() != null
+					? infoAdmEtuDTO.getListeBacs().getItem().toArray(new IndBacDTO2[0]) : new IndBacDTO2[0];
 			indOpi.setCodBac(listeBacs[0].getCodBac());
 			indOpi.setCodEtbBac(listeBacs[0].getEtbBac().getCodeEtb());
 			indOpi.setCodDep(listeBacs[0].getDepartementBac().getCodeDept());
@@ -1188,7 +1188,7 @@ public class DomainServiceApogeeImpl implements DomainServiceScolarite {
 					null,null,ine,null,null,null,null,null,null);
 
 			// Recup infos à partir des identifiants
-			InfoAdmEtuDTO3 infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV3(String.valueOf(identifiantEtudiant.getCodEtu()));
+			InfoAdmEtuDTO4 infoAdmEtuDTO = getEtudiantMetierService().recupererInfosAdmEtuV4(String.valueOf(identifiantEtudiant.getCodEtu()));
 
 			logger.debug("ine --> " + ine);
 

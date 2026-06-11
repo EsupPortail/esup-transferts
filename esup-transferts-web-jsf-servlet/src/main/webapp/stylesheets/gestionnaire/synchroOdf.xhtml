@@ -20,7 +20,7 @@
 				src="/stylesheets/gestionnaire/_include/_unauthorized.xhtml"></ui:include>
 		</p:panel>
 		<h:form id="formOdf" rendered="#{sessionController.currentUser.admin}">
-			<p:growl id="msgs" showDetail="false" />
+			<p:growl id="msgs" showDetail="true" />
 			<center>
 				<p:dataTable id="multiOdf" var="odf" styleClass="datatableOdf"
 					emptyMessage="Aucune formation"
